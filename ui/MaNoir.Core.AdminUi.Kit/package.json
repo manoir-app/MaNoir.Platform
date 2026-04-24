@@ -63,6 +63,8 @@
     "vite-plugin-dts": "^4.5.4"
   },
   "optionalDependencies": {
+    "lightningcss-linux-x64-gnu": "1.32.0",
+    "lightningcss-win32-x64-msvc": "1.32.0",
     "@rolldown/binding-linux-x64-gnu": "1.0.0-rc.17",
     "@rolldown/binding-win32-x64-msvc": "1.0.0-rc.17"
   }
