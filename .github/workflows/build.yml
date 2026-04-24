@@ -127,6 +127,9 @@ jobs:
         working-directory: ui/MaNoir.Core.AdminUi.Kit
         run: npm run build
 
+      - name: Create npm artifact directory
+        run: mkdir -p artifacts/npm
+
       - name: Pack npm artifact
         working-directory: ui/MaNoir.Core.AdminUi.Kit
         run: npm pack --pack-destination ../../artifacts/npm
