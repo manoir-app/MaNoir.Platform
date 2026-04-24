@@ -1,13 +1,23 @@
 using MaNoir.Core.AdminUi.Hosting;
 using MaNoir.Core.Api;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace MaNoir.Core.AdminUi;
 
-builder.AddMaNoirCoreAdminUiHosting();
-builder.Services.AddMaNoirCoreApi();
+public static class Program
+{
+	public static void Main(string[] args)
+	{
+		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+		builder.AddMaNoirCoreAdminUiHosting();
+		builder.Services.AddMaNoirCoreApi();
 
-app.MapMaNoirCoreApi();
+		WebApplication app = builder.Build();
 
-app.Run();
+		app.MapMaNoirCoreApi();
+
+		app.Run();
+	}
+}
