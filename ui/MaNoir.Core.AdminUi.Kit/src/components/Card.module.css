@@ -1,0 +1,13 @@
+.root {
+  background: rgba(255, 255, 255, 0.64);
+  border: 1px solid var(--mn-color-line);
+  border-radius: var(--mn-radius-lg);
+  box-shadow: var(--mn-shadow-soft);
+  color: var(--mn-color-ink);
+  padding: var(--mn-space-5);
+}
+
+.attention {
+  background: var(--mn-color-danger-soft);
+  border-color: rgba(178, 58, 49, 0.18);
+}

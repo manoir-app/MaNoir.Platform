@@ -1,0 +1,35 @@
+.root {
+  align-items: center;
+  color: var(--mn-color-ink-muted);
+  display: inline-flex;
+  font-size: 0.66rem;
+  font-weight: 500;
+  gap: 0.45rem;
+  letter-spacing: 0.14em;
+  min-height: auto;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.dot {
+  background: currentColor;
+  border-radius: 999px;
+  height: 0.32rem;
+  width: 0.32rem;
+}
+
+.accent {
+  color: var(--mn-color-accent-strong);
+}
+
+.success {
+  color: var(--mn-color-success);
+}
+
+.warning {
+  color: var(--mn-color-warning);
+}
+
+.danger {
+  color: var(--mn-color-danger);
+}

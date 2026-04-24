@@ -1,0 +1,46 @@
+.root {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  align-items: center;
+  border-top: 1px solid color-mix(in srgb, var(--mn-color-line) 76%, transparent);
+  display: grid;
+  gap: var(--mn-space-3);
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 1rem 0;
+}
+
+.leading,
+.trailing {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.trailing {
+  justify-items: end;
+}
+
+.eyebrow,
+.detail {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.label {
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.value {
+  font-family: var(--mn-font-display);
+  font-size: 1.4rem;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}

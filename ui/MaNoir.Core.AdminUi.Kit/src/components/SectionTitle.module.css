@@ -1,0 +1,44 @@
+.root {
+  align-items: end;
+  display: grid;
+  gap: var(--mn-space-3);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 960px) {
+  .root {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+.content {
+  display: grid;
+  gap: var(--mn-space-2);
+}
+
+.eyebrow {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.heading {
+  font-family: var(--mn-font-display);
+  font-size: clamp(1.8rem, 3vw, 2.75rem);
+  letter-spacing: -0.05em;
+  line-height: 0.96;
+}
+
+.description {
+  color: var(--mn-color-ink-soft);
+  font-size: 1rem;
+  line-height: 1.5;
+  max-width: 46ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mn-space-2);
+}

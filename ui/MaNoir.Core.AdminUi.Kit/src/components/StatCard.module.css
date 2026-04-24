@@ -1,0 +1,32 @@
+.root {
+  background: rgba(255, 255, 255, 0.42);
+  border-left: 1px solid var(--mn-color-line);
+  display: grid;
+  gap: var(--mn-space-1);
+  min-height: 8rem;
+  padding: var(--mn-space-4) var(--mn-space-5);
+}
+
+.value {
+  font-family: var(--mn-font-display);
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  letter-spacing: -0.06em;
+  line-height: 0.92;
+}
+
+.label {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.detail {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.attention .value,
+.attention .label {
+  color: var(--mn-color-accent-strong);
+}

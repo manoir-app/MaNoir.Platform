@@ -1,0 +1,20 @@
+<Project>
+  <Import Project="eng\Versions.props" />
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <VersionPrefix Condition="'$(VersionPrefix)' == ''">$(MaNoirVersionPrefix)</VersionPrefix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == '' and '$(CI)' == 'true' and '$(GITHUB_REF_TYPE)' != 'tag' and '$(GITHUB_RUN_NUMBER)' != ''">ci.$(GITHUB_RUN_NUMBER)</VersionSuffix>
+    <RepositoryUrl>https://github.com/manoir-app/MaNoir.Platform</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>MaNoir</Authors>
+    <Company>MaNoir</Company>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsPackable)' == 'true'">
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+</Project>

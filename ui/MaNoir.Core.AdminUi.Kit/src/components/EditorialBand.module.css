@@ -1,0 +1,18 @@
+.root {
+  background: var(--mn-color-accent-soft);
+  border-left: 2px solid var(--mn-color-accent);
+  border-radius: 0 var(--mn-radius-sm) var(--mn-radius-sm) 0;
+  display: grid;
+  gap: var(--mn-space-2);
+  padding: var(--mn-space-4) var(--mn-space-5);
+}
+
+.warning {
+  background: var(--mn-color-warning-soft);
+  border-left-color: var(--mn-color-warning);
+}
+
+.danger {
+  background: var(--mn-color-danger-soft);
+  border-left-color: var(--mn-color-danger);
+}

@@ -1,0 +1,66 @@
+.root {
+  background: var(--mn-color-ink);
+  overflow: hidden;
+  position: relative;
+}
+
+.frame {
+  border: var(--mn-hairline) solid rgba(255, 255, 255, 0.22);
+  inset: 1.9rem;
+  position: absolute;
+}
+
+.corner {
+  border-color: rgba(255, 255, 255, 0.88);
+  border-style: solid;
+  height: 2rem;
+  position: absolute;
+  width: 2rem;
+}
+
+.topLeft {
+  border-width: 2px 0 0 2px;
+  left: 1.3rem;
+  top: 1.3rem;
+}
+
+.topRight {
+  border-width: 2px 2px 0 0;
+  right: 1.3rem;
+  top: 1.3rem;
+}
+
+.bottomLeft {
+  border-width: 0 0 2px 2px;
+  bottom: 1.3rem;
+  left: 1.3rem;
+}
+
+.bottomRight {
+  border-width: 0 2px 2px 0;
+  bottom: 1.3rem;
+  right: 1.3rem;
+}
+
+.scanLine {
+  animation: scanPulse 2.4s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.92), transparent);
+  height: 1px;
+  left: 1.3rem;
+  position: absolute;
+  right: 1.3rem;
+  top: calc(50% - 0.5px);
+}
+
+@keyframes scanPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateY(-7rem);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: translateY(7rem);
+  }
+}

@@ -1,0 +1,32 @@
+.root {
+  display: grid;
+  gap: var(--mn-space-2);
+}
+
+.label {
+  color: var(--mn-color-ink);
+  display: inline-flex;
+  font-size: 0.9rem;
+  font-weight: 600;
+  gap: 0.35rem;
+  letter-spacing: -0.01em;
+}
+
+.required {
+  color: var(--mn-color-accent);
+}
+
+.hint,
+.error {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.hint {
+  color: var(--mn-color-ink-soft);
+}
+
+.error {
+  color: var(--mn-color-danger);
+}

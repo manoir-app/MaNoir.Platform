@@ -214,6 +214,13 @@ PublishScripts/
 *.snupkg
 # The packages folder can be ignored because of Package Restore
 **/[Pp]ackages/*
+# Keep the repository root /packages folder tracked.
+!/packages/
+!/packages/**
+/packages/**/[Bb]in/
+/packages/**/[Bb]in/**
+/packages/**/[Oo]bj/
+/packages/**/[Oo]bj/**
 # except build/, which is used as an MSBuild target.
 !**/[Pp]ackages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
@@ -248,6 +255,10 @@ _pkginfo.txt
 # Others
 ClientBin/
 ~$*
+node_modules/
+**/dist/
+**/.vite/
+**/storybook-static/
 *~
 *.dbmdl
 *.dbproj.schemaview
@@ -416,3 +427,4 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+.github/templates
