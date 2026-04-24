@@ -1,0 +1,44 @@
+.root {
+  background: var(--mn-color-danger-soft);
+  border: 1px solid rgba(178, 58, 49, 0.18);
+  border-radius: var(--mn-radius-lg);
+  display: grid;
+  gap: var(--mn-space-3);
+  padding: var(--mn-space-5);
+}
+
+.eyebrow {
+  color: var(--mn-color-accent-strong);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--mn-font-display);
+  font-size: 1.8rem;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
+}
+
+.description,
+.body {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.description {
+  margin: 0;
+}
+
+.body {
+  display: grid;
+  gap: var(--mn-space-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mn-space-2);
+}

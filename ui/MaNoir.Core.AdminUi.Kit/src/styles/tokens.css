@@ -1,0 +1,38 @@
+:root,
+.mn-kit-theme {
+  --mn-color-paper: oklch(97.8% 0.008 85);
+  --mn-color-paper-strong: oklch(96.2% 0.01 85);
+  --mn-color-surface: oklch(99.2% 0.004 85);
+  --mn-color-ink: oklch(20% 0.015 60);
+  --mn-color-ink-soft: oklch(38% 0.012 60);
+  --mn-color-ink-muted: oklch(58% 0.01 60);
+  --mn-color-ink-faint: oklch(74% 0.008 60);
+  --mn-color-line: oklch(86% 0.01 60);
+  --mn-color-line-soft: oklch(91% 0.008 60);
+  --mn-color-accent: oklch(42% 0.13 25);
+  --mn-color-accent-strong: oklch(36% 0.13 25);
+  --mn-color-accent-soft: oklch(94% 0.025 25);
+  --mn-color-danger: oklch(45% 0.14 25);
+  --mn-color-danger-soft: oklch(94% 0.03 25);
+  --mn-color-warning: oklch(52% 0.1 65);
+  --mn-color-warning-soft: oklch(95% 0.025 65);
+  --mn-color-success: oklch(44% 0.08 145);
+  --mn-color-success-soft: oklch(94% 0.02 145);
+  --mn-color-focus: color-mix(in oklch, var(--mn-color-accent) 24%, transparent);
+  --mn-radius-sm: 2px;
+  --mn-radius-md: 4px;
+  --mn-radius-lg: 14px;
+  --mn-space-1: 0.25rem;
+  --mn-space-2: 0.5rem;
+  --mn-space-3: 0.75rem;
+  --mn-space-4: 1rem;
+  --mn-space-5: 1.5rem;
+  --mn-space-6: 2rem;
+  --mn-space-7: 2.5rem;
+  --mn-space-8: 3.5rem;
+  --mn-font-display: "Instrument Sans", "Inter", "Segoe UI", sans-serif;
+  --mn-font-sans: "Inter", "Segoe UI", sans-serif;
+  --mn-font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --mn-hairline: 0.5px;
+  --mn-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.03), 0 20px 50px rgba(0, 0, 0, 0.06);
+}

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MaNoir.Core.Api\MaNoir.Core.Api.csproj" />
+    <ProjectReference Include="..\..\packages\MaNoir.Core.AdminUi.Hosting\MaNoir.Core.AdminUi.Hosting.csproj" />
+  </ItemGroup>
+
+</Project>

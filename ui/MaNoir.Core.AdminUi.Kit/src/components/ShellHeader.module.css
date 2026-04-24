@@ -1,0 +1,136 @@
+.root {
+  align-items: center;
+  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
+  display: flex;
+  gap: 2rem;
+  min-width: 0;
+  padding: 0.9rem 1.75rem 0.75rem;
+  position: relative;
+}
+
+.root[data-compact='true'] {
+  gap: 1rem;
+  padding: 0.7rem 1.25rem 0.55rem;
+}
+
+.withTitle {
+  justify-content: space-between;
+}
+
+.withoutTitle {
+  justify-content: flex-start;
+}
+
+.title {
+  color: var(--mn-color-ink-soft);
+  flex: 1 1 auto;
+  font-size: 1rem;
+  line-height: 1.2;
+  min-width: 0;
+}
+
+.root[data-compact='true'] .title {
+  font-size: 0.92rem;
+}
+
+.nav {
+  align-items: flex-end;
+  display: flex;
+  flex: 0 1 auto;
+  gap: 1.75rem;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.withoutTitle .nav {
+  justify-content: flex-start;
+}
+
+.root[data-compact='true'] .nav {
+  gap: 1rem;
+}
+
+.action,
+.menuAction {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  color: var(--mn-color-ink-soft);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.2;
+  padding: 0 0 0.45rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.root[data-compact='true'] .action,
+.root[data-compact='true'] .menuAction,
+.measure[data-compact='true'] .action {
+  font-size: 0.86rem;
+  padding-bottom: 0.55rem;
+}
+
+.action:hover,
+.menuAction:hover {
+  color: var(--mn-color-ink);
+}
+
+.action:focus-visible,
+.menuAction:focus-visible {
+  box-shadow: 0 0 0 5px var(--mn-color-focus);
+  outline: none;
+}
+
+.active {
+  border-bottom-color: var(--mn-color-ink);
+  color: var(--mn-color-ink);
+}
+
+.overflow {
+  position: relative;
+}
+
+.menu {
+  background: var(--mn-color-paper);
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  border-radius: var(--mn-radius-sm);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  display: grid;
+  gap: 0.25rem;
+  min-width: 12rem;
+  padding: 0.4rem;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.45rem);
+  z-index: 5;
+}
+
+.menuAction {
+  border-bottom: 0;
+  border-radius: var(--mn-radius-sm);
+  color: var(--mn-color-ink-soft);
+  display: block;
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+  width: 100%;
+}
+
+.menuActionActive {
+  background: var(--mn-color-paper-strong);
+  color: var(--mn-color-ink);
+}
+
+.measure {
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  visibility: hidden;
+  white-space: nowrap;
+}
+
+.measureItem {
+  display: inline-flex;
+}

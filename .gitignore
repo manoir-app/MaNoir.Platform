@@ -248,6 +248,10 @@ _pkginfo.txt
 # Others
 ClientBin/
 ~$*
+node_modules/
+**/dist/
+**/.vite/
+**/storybook-static/
 *~
 *.dbmdl
 *.dbproj.schemaview
@@ -416,3 +420,4 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+.github/templates

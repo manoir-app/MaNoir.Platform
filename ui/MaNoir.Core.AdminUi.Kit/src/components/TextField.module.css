@@ -1,0 +1,24 @@
+.root {
+  background: transparent;
+  border: 0;
+  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
+  border-radius: 0;
+  color: var(--mn-color-ink);
+  min-height: 2rem;
+  outline: none;
+  padding: 0.4rem 0.15rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+  width: 100%;
+}
+
+.root::placeholder {
+  color: color-mix(in oklch, var(--mn-color-ink-muted) 72%, transparent);
+}
+
+.root:focus {
+  border-bottom-color: var(--mn-color-ink);
+}
+
+.invalid {
+  border-bottom-color: var(--mn-color-danger);
+}

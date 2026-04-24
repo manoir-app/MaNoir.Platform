@@ -1,0 +1,2357 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Intendance — Éditorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   INTENDANCE — Direction éditoriale minimaliste
+   Fraunces (serif expressif) · Inter (sans neutre) · JetBrains Mono
+   Ivoire / encre / un accent profond
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --ivory:      oklch(97.8% 0.008 85);
+  --ivory-2:    oklch(96.2% 0.010 85);
+  --paper:      oklch(99.2% 0.004 85);
+  --ink:        oklch(20% 0.015 60);
+  --ink-2:      oklch(38% 0.012 60);
+  --ink-3:      oklch(58% 0.010 60);
+  --ink-4:      oklch(74% 0.008 60);
+  --rule:       oklch(86% 0.010 60);
+  --rule-2:     oklch(91% 0.008 60);
+
+  /* Un seul accent profond — prune encre */
+  --accent:     oklch(42% 0.13 25);
+  --accent-2:   oklch(52% 0.14 25);
+  --accent-tint:oklch(94% 0.025 25);
+
+  /* États — très désaturés, presque monochromes */
+  --ok:         oklch(44% 0.08 145);
+  --ok-tint:    oklch(94% 0.020 145);
+  --warn:       oklch(52% 0.10 65);
+  --warn-tint:  oklch(95% 0.025 65);
+  --danger:     oklch(45% 0.14 25);
+  --danger-tint:oklch(94% 0.030 25);
+
+  --f-display:  "Instrument Sans", "Inter", -apple-system, system-ui, sans-serif;
+  --f-sans:     "Inter", -apple-system, system-ui, sans-serif;
+  --f-serif:    "Inter", -apple-system, system-ui, sans-serif; /* legacy alias — sans now */
+  --f-mono:     "JetBrains Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  font-family: var(--f-sans);
+  font-size: 14px; line-height: 1.55;
+  color: var(--ink);
+  background: var(--ivory);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+}
+html, body { height: 100%; overflow: hidden; }
+
+button { font: inherit; cursor: pointer; color: inherit; }
+input, textarea, select { font: inherit; color: inherit; }
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--ink-4); border-radius: 99px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Typography scale ───────────────────────────────────── */
+.serif { font-family: var(--f-display); font-weight: 500; font-style: normal; letter-spacing: -0.01em; }
+.sans  { font-family: var(--f-sans); }
+.mono  { font-family: var(--f-mono); letter-spacing: -0.02em; }
+
+.display-xl { font-family: var(--f-display); font-weight: 500; font-size: 64px; line-height: 1.02; letter-spacing: -0.035em; }
+.display-l  { font-family: var(--f-display); font-weight: 500; font-size: 46px; line-height: 1.05; letter-spacing: -0.03em; }
+.display-m  { font-family: var(--f-display); font-weight: 500; font-size: 32px; line-height: 1.1;  letter-spacing: -0.025em; }
+.display-s  { font-family: var(--f-display); font-weight: 500; font-size: 22px; line-height: 1.2;  letter-spacing: -0.02em; }
+.title      { font-family: var(--f-sans); font-weight: 600; font-size: 17px; line-height: 1.3; letter-spacing: -0.015em; }
+.eyebrow    { font-family: var(--f-sans); font-weight: 500; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-3); }
+.label      { font-family: var(--f-sans); font-weight: 500; font-size: 12.5px; color: var(--ink-2); }
+.lede       { font-family: var(--f-sans); font-weight: 400; font-size: 16px; line-height: 1.5; color: var(--ink-2); }
+.body       { font-family: var(--f-sans); font-size: 13.5px; line-height: 1.55; }
+.small      { font-size: 12px; color: var(--ink-2); }
+.tiny       { font-size: 11px; color: var(--ink-3); }
+.num        { font-family: var(--f-display); font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; font-weight: 500; letter-spacing: -0.02em; }
+
+.dim  { color: var(--ink-3); }
+.dim2 { color: var(--ink-4); }
+
+/* ── Rules & dividers ───────────────────────────────────── */
+.rule  { height: 1px; background: var(--rule); border: 0; }
+.rule-2{ height: 1px; background: var(--rule-2); border: 0; }
+.hair  { border: 0; border-top: 0.5px solid var(--rule); margin: 0; }
+
+/* ── Hstack / vstack ────────────────────────────────────── */
+.hstack { display: flex; align-items: center; }
+.vstack { display: flex; flex-direction: column; }
+
+/* ── Buttons — text-first, no cards ─────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 10px;
+  border: 0.5px solid var(--rule);
+  background: transparent;
+  border-radius: 2px;
+  color: var(--ink);
+  font-size: 12.5px; font-weight: 450;
+  transition: border-color .12s, background .12s;
+}
+.btn:hover { border-color: var(--ink-3); background: var(--ivory-2); }
+.btn--ink { background: var(--ink); border-color: var(--ink); color: var(--ivory); }
+.btn--ink:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn--ghost { border: 0; padding: 0 6px; height: 26px; }
+.btn--ghost:hover { background: var(--ivory-2); }
+.btn--accent { color: var(--accent); border-color: color-mix(in oklch, var(--accent) 40%, transparent); }
+.btn--accent:hover { background: var(--accent-tint); border-color: var(--accent); }
+.btn--sm { height: 24px; font-size: 11.5px; padding: 0 8px; }
+.btn--lg { height: 36px; padding: 0 14px; font-size: 13px; }
+.btn kbd {
+  margin-left: 4px; font-family: var(--f-mono); font-size: 10px;
+  padding: 1px 4px; border: 0.5px solid var(--rule); border-radius: 2px;
+  color: var(--ink-3);
+}
+
+/* ── Inputs ─────────────────────────────────────────────── */
+.field {
+  height: 28px; padding: 0 2px;
+  border: 0; border-bottom: 0.5px solid var(--rule);
+  background: transparent;
+  font-size: 13px;
+  outline: none;
+  transition: border-color .15s;
+}
+.field:focus { border-bottom-color: var(--ink); }
+
+.select {
+  height: 28px; padding: 0 24px 0 10px;
+  border: 0.5px solid var(--rule); border-radius: 2px;
+  background: transparent; font-size: 12.5px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path d='M2 4l3 3 3-3' stroke='%23999' stroke-width='1' fill='none' stroke-linecap='round'/></svg>");
+  background-repeat: no-repeat; background-position: right 8px center;
+}
+
+/* ── Tags (editorial, not chips) ────────────────────────── */
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--f-sans); font-size: 10.5px; font-weight: 500;
+  text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--ink-3);
+  padding: 0;
+}
+.tag::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 99px; background: currentColor; margin-right: 2px; }
+.tag--ok     { color: var(--ok); }
+.tag--warn   { color: var(--warn); }
+.tag--danger { color: var(--danger); }
+.tag--ink    { color: var(--ink-2); }
+
+/* ── Underlined row link (list style) ──────────────────── */
+.row {
+  display: flex; align-items: center; gap: 16px;
+  padding: 14px 0;
+  border-bottom: 0.5px solid var(--rule-2);
+}
+.row:last-child { border-bottom: 0; }
+.row-main { flex: 1; min-width: 0; }
+.row-title { font-size: 14.5px; font-weight: 500; letter-spacing: -0.005em; }
+.row-sub   { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+.row:hover { cursor: default; }
+.row--click:hover { cursor: pointer; background: color-mix(in oklch, var(--ivory-2) 60%, transparent); margin: 0 -16px; padding-left: 16px; padding-right: 16px; }
+
+/* ── Section ─────────────────────────────────────────────  */
+.section { padding: 40px 56px; max-width: 1180px; margin: 0 auto; }
+.section--narrow { max-width: 880px; }
+
+/* ── Pull-quote / alert band (no card) ──────────────────── */
+.band {
+  padding: 16px 20px;
+  border-left: 2px solid var(--accent);
+  background: var(--accent-tint);
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── QR placeholder ─────────────────────────────────────── */
+.qrbox { background: #fff; padding: 6px; border: 0.5px solid var(--rule); }
+
+/* ── Micro-image placeholder (striped) ──────────────────── */
+.ph {
+  background:
+    repeating-linear-gradient(135deg, var(--ivory-2) 0 8px, var(--ivory) 8px 16px);
+  color: var(--ink-4); font-family: var(--f-mono); font-size: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ── Animations ─────────────────────────────────────────── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeUp .25s ease both; }
+
+@keyframes scanPulse {
+  0%, 100% { transform: translateY(-120px); opacity: 0.4; }
+  50%      { transform: translateY(120px);  opacity: 0.9; }
+}
+
+/* ── Layout chrome ──────────────────────────────────────── */
+.app-root { display: flex; flex-direction: column; height: 100vh; background: var(--ivory); }
+
+.env-bar {
+  height: 40px; padding: 0 20px;
+  display: flex; align-items: center; gap: 16px;
+  border-bottom: 0.5px solid var(--rule);
+  background: var(--ivory);
+  flex-shrink: 0;
+}
+.env-bar .wordmark {
+  font-family: var(--f-display); font-weight: 600; font-size: 15px;
+  letter-spacing: -0.02em;
+}
+.env-bar .wordmark em { font-style: normal; color: var(--ink-3); font-weight: 400; }
+
+.device-switch { display: flex; gap: 0; }
+.device-switch button {
+  border: 0; background: transparent;
+  padding: 4px 10px; font-size: 11.5px; color: var(--ink-3);
+  border-bottom: 1px solid transparent;
+  font-weight: 450;
+}
+.device-switch button.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+.canvas-host { flex: 1; min-height: 0; overflow: auto; }
+
+/* ── Sidebar — thin, editorial ──────────────────────────── */
+.aside {
+  width: 200px; flex-shrink: 0;
+  border-right: 0.5px solid var(--rule);
+  padding: 24px 16px 20px 20px;
+  display: flex; flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+.aside-section { padding: 14px 0 4px; }
+.nav-item {
+  display: flex; align-items: baseline; gap: 8px;
+  padding: 5px 0; font-size: 13px; font-weight: 450;
+  color: var(--ink-2);
+  cursor: pointer;
+  border-left: 1px solid transparent;
+  padding-left: 10px; margin-left: -10px;
+}
+.nav-item:hover { color: var(--ink); }
+.nav-item.active { color: var(--ink); border-left-color: var(--accent); font-weight: 500; }
+.nav-item .num-s { margin-left: auto; font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-4); }
+
+.search-field {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border: 0.5px solid var(--rule);
+  background: var(--paper); border-radius: 2px;
+  font-size: 12px; color: var(--ink-3);
+  margin-bottom: 4px;
+}
+.search-field kbd {
+  margin-left: auto; font-family: var(--f-mono); font-size: 10px;
+  color: var(--ink-4);
+}
+
+/* ── Content column ─────────────────────────────────────── */
+.main-col { flex: 1; display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.content-scroll { flex: 1; overflow: auto; }
+
+/* ── Page header ────────────────────────────────────────── */
+.page-head {
+  padding: 48px 56px 32px;
+  max-width: 1180px; margin: 0 auto;
+  display: flex; align-items: flex-end; gap: 40px;
+}
+.page-head .meta { min-width: 0; flex: 1; }
+.page-head .kicker { font-family: var(--f-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); margin-bottom: 8px; }
+
+/* ── Mobile frames ──────────────────────────────────────── */
+.mobile-stage {
+  min-height: 100%; padding: 40px;
+  display: flex; align-items: flex-start; justify-content: center; gap: 40px; flex-wrap: wrap;
+}
+
+.mw-frame {
+  width: 390px; height: 820px; background: var(--paper);
+  border: 0.5px solid var(--rule); border-radius: 14px;
+  overflow: hidden; display: flex; flex-direction: column;
+  box-shadow: 0 1px 2px rgba(0,0,0,.03), 0 20px 50px rgba(0,0,0,.06);
+}
+.mw-topbar {
+  height: 36px; padding: 0 12px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 0.5px solid var(--rule);
+  background: var(--ivory-2);
+}
+.mw-dot { width: 8px; height: 8px; border-radius: 99px; background: var(--ink-4); }
+.mw-url {
+  flex: 1; font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-3);
+  padding: 3px 8px; background: var(--paper); border: 0.5px solid var(--rule); border-radius: 2px;
+}
+.mw-body { flex: 1; overflow: auto; padding: 20px; }
+
+/* ── Phone (iOS-like, but editorial) ───────────────────── */
+.phone {
+  width: 390px; height: 844px; border-radius: 44px;
+  overflow: hidden; position: relative;
+  background: var(--ivory);
+  box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 40px 80px rgba(0,0,0,.12), 0 0 0 1px rgba(0,0,0,.1);
+}
+.phone-island {
+  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 34px; border-radius: 24px; background: #000; z-index: 50;
+}
+.phone-status {
+  height: 50px; padding: 22px 28px 0;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: -apple-system, "SF Pro", system-ui; font-weight: 590; font-size: 15px;
+  position: relative; z-index: 10;
+}
+.phone-home {
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+  width: 130px; height: 4px; border-radius: 99px; background: rgba(0,0,0,0.25);
+  z-index: 60; pointer-events: none;
+}
+.phone-tabbar {
+  height: 82px; padding: 8px 0 28px;
+  display: flex; border-top: 0.5px solid var(--rule);
+  background: color-mix(in oklch, var(--ivory) 92%, transparent);
+  flex-shrink: 0;
+}
+.phone-tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  font-size: 10px; color: var(--ink-3);
+  font-weight: 500;
+}
+.phone-tab.active { color: var(--accent); }
+.phone-content { position: absolute; inset: 50px 0 82px; overflow: auto; }
+
+/* ── Tweaks panel ──────────────────────────────────────── */
+.tweaks {
+  position: fixed; right: 20px; bottom: 20px; z-index: 200;
+  width: 260px; background: var(--paper);
+  border: 0.5px solid var(--rule); padding: 16px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.08);
+}
+.tweaks.hidden { display: none; }
+
+/* ── Command palette ────────────────────────────────────── */
+.palette-overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: oklch(20% 0.015 60 / 0.35);
+  backdrop-filter: blur(4px);
+  display: flex; justify-content: center; padding-top: 14vh;
+}
+.palette {
+  width: 640px; max-width: 92vw;
+  background: var(--paper);
+  border: 0.5px solid var(--rule);
+  box-shadow: 0 40px 80px rgba(0,0,0,.12);
+  overflow: hidden;
+}
+.palette-input {
+  width: 100%; padding: 18px 20px;
+  border: 0; border-bottom: 0.5px solid var(--rule);
+  background: transparent;
+  font-family: var(--f-display); font-size: 20px; font-weight: 500;
+  outline: none;
+  letter-spacing: -0.02em;
+}
+.palette-input::placeholder { color: var(--ink-4); font-weight: 400; }
+.palette-group { padding: 10px 0; }
+.palette-group-title {
+  padding: 6px 20px 4px; font-family: var(--f-mono);
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-4);
+}
+.palette-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 9px 20px; cursor: pointer;
+  font-size: 13.5px;
+}
+.palette-item:hover, .palette-item.selected { background: var(--ivory-2); }
+.palette-item .pi-sub { margin-left: auto; font-family: var(--f-mono); font-size: 10.5px; color: var(--ink-4); }
+
+/* ── Progress bar (hairline) ────────────────────────────── */
+.bar { height: 2px; background: var(--rule-2); position: relative; }
+.bar span { display: block; height: 100%; background: var(--ink); }
+.bar.warn span   { background: var(--warn); }
+.bar.danger span { background: var(--danger); }
+.bar.accent span { background: var(--accent); }
+
+/* ── Table (lists, not cards) ───────────────────────────── */
+.lst { width: 100%; border-collapse: collapse; }
+.lst thead th {
+  font-family: var(--f-mono); font-weight: 500;
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--ink-3); text-align: left;
+  padding: 10px 16px 10px 0;
+  border-bottom: 0.5px solid var(--rule);
+}
+.lst tbody td {
+  padding: 14px 16px 14px 0;
+  border-bottom: 0.5px solid var(--rule-2);
+  vertical-align: baseline;
+  font-size: 13.5px;
+}
+.lst tbody tr:hover td { background: color-mix(in oklch, var(--ivory-2) 50%, transparent); }
+.lst td.num, .lst th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.lst td.drop { color: var(--ink-3); font-size: 12px; }
+
+/* ── Misc ───────────────────────────────────────────────── */
+.avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 99px; font-family: var(--f-display);
+  font-weight: 500; font-size: 11px; color: var(--ink); background: var(--ivory-2);
+  border: 0.5px solid var(--rule);
+}
+.ornament { color: var(--ink-4); padding: 0 6px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+window.TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "accent": "prune"
+}/*EDITMODE-END*/;
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" data-presets="react">
+/* ═════════════════ DATA ═════════════════ */
+const ROOMS = [
+  { id:"r1", name:"Salon" },      { id:"r2", name:"Cuisine" },
+  { id:"r3", name:"Chambre" },    { id:"r4", name:"Bureau" },
+  { id:"r5", name:"Cave" },       { id:"r6", name:"Garage" },
+  { id:"r7", name:"Grenier" },
+];
+const FURNITURE = [
+  { id:"f1",  roomId:"r1", name:"Bibliothèque Kallax" },
+  { id:"f2",  roomId:"r1", name:"Meuble TV" },
+  { id:"f3",  roomId:"r2", name:"Placard haut gauche" },
+  { id:"f5",  roomId:"r2", name:"Frigo" },
+  { id:"f6",  roomId:"r2", name:"Congélateur" },
+  { id:"f10", roomId:"r4", name:"Bureau" },
+  { id:"f12", roomId:"r5", name:"Étagère métal A" },
+  { id:"f13", roomId:"r5", name:"Étagère métal B" },
+  { id:"f14", roomId:"r6", name:"Établi" },
+  { id:"f15", roomId:"r6", name:"Armoire outils" },
+  { id:"f16", roomId:"r7", name:"Cartons sous pente" },
+];
+const CONTAINERS = [
+  { id:"c001", code:"INV-C001", furnId:"f1",  name:"Archives — Photos" },
+  { id:"c002", code:"INV-C002", furnId:"f1",  name:"Câbles & adaptateurs" },
+  { id:"c003", code:"INV-C003", furnId:"f12", name:"Bac Samla 45L — Hiver" },
+  { id:"c004", code:"INV-C004", furnId:"f12", name:"Bac Samla 45L — Camping" },
+  { id:"c005", code:"INV-C005", furnId:"f13", name:"Livres enfance" },
+  { id:"c006", code:"INV-C006", furnId:"f13", name:"Déco saisonnière" },
+  { id:"c007", code:"INV-C007", furnId:"f15", name:"Outillage électrique" },
+  { id:"c008", code:"INV-C008", furnId:"f15", name:"Vis & chevilles" },
+  { id:"c009", code:"INV-C009", furnId:"f14", name:"Boîte à pharmacie" },
+  { id:"c010", code:"INV-C010", furnId:"f16", name:"Archives admin" },
+  { id:"c011", code:"INV-C011", furnId:"f16", name:"Valise ski" },
+  { id:"c012", code:"INV-C012", furnId:"f3",  name:"Épices & condiments" },
+];
+const ITEMS = [
+  { id:"i1",  name:"Perceuse Bosch GSB 18V", category:"Outillage", containerId:"c007", brand:"Bosch", sn:"8F2-1102", value:189, acquired:"2023-11" },
+  { id:"i2",  name:"Scie sauteuse Makita",   category:"Outillage", containerId:"c007", brand:"Makita", sn:"JV0600", value:129, acquired:"2022-06" },
+  { id:"i3",  name:"Lot mèches HSS 1-10 mm", category:"Outillage", containerId:"c008", brand:"Wera", value:45, acquired:"2024-02" },
+  { id:"i4",  name:"Tente Quechua 2 sec.",   category:"Camping",   containerId:"c004", brand:"Quechua", value:99, acquired:"2021-05" },
+  { id:"i5",  name:"Sac couchage −5°C",      category:"Camping",   containerId:"c004", brand:"Forclaz", value:75, acquired:"2021-05" },
+  { id:"i6",  name:"Réchaud MSR PocketRocket",category:"Camping", containerId:"c004", brand:"MSR", value:55, acquired:"2023-03" },
+  { id:"i7",  name:"Doudoune The North Face",category:"Vêtements",containerId:"c003", brand:"TNF", value:220, acquired:"2022-11" },
+  { id:"i8",  name:"Gants ski Reusch",       category:"Vêtements",containerId:"c003", brand:"Reusch", value:45, acquired:"2020-12" },
+  { id:"i9",  name:"Ski Rossignol Experience 76", category:"Sport", containerId:"c011", brand:"Rossignol", sn:"RS22-044", value:380, acquired:"2022-01" },
+  { id:"i10", name:"Dune",                   category:"Livres",    containerId:"c005", brand:"Frank Herbert", value:12 },
+  { id:"i11", name:"Fondation",              category:"Livres",    containerId:"c005", brand:"Isaac Asimov", value:10 },
+  { id:"i12", name:"Guirlande lumineuse LED",category:"Déco",      containerId:"c006", value:22 },
+  { id:"i13", name:"Kit premiers soins",     category:"Santé",     containerId:"c009", value:38 },
+  { id:"i14", name:"Câble HDMI 3 m",         category:"Tech",      containerId:"c002", brand:"UGREEN", value:12 },
+  { id:"i15", name:"Chargeur USB-C 65 W",    category:"Tech",      containerId:"c002", brand:"Anker", value:35 },
+  { id:"i16", name:"Photos — Vacances 2019", category:"Archives",  containerId:"c001" },
+  { id:"i17", name:"Boîte à vis 500 pièces", category:"Outillage", containerId:"c008", brand:"Fischer", value:28 },
+  { id:"i18", name:"Vélo Riverside 500",     category:"Sport",     furnId:"f15", brand:"Decathlon", sn:"DC-R500", value:320, acquired:"2021-07" },
+  { id:"i19", name:"Aspirateur Dyson V8",    category:"Électroménager", furnId:"f2", brand:"Dyson", sn:"V8-9021", value:280, acquired:"2020-09" },
+  { id:"i20", name:"Machine à café Delonghi",category:"Électroménager", furnId:"f3", brand:"Delonghi", sn:"EC685", value:199, acquired:"2019-12" },
+];
+const FOOD = [
+  { id:"fd1",  name:"Lait demi-écrémé",   qty:2,   unit:"L",   location:"Frigo",       daysLeft:2,  category:"Laitiers" },
+  { id:"fd2",  name:"Yaourts nature",     qty:6,   unit:"pot", location:"Frigo",       daysLeft:5,  category:"Laitiers" },
+  { id:"fd3",  name:"Beurre doux",        qty:1,   unit:"×",   location:"Frigo",       daysLeft:14, category:"Laitiers" },
+  { id:"fd4",  name:"Œufs plein air",     qty:10,  unit:"×",   location:"Frigo",       daysLeft:9,  category:"Frais" },
+  { id:"fd5",  name:"Jambon blanc",       qty:150, unit:"g",   location:"Frigo",       daysLeft:1,  category:"Frais" },
+  { id:"fd6",  name:"Saumon fumé",        qty:100, unit:"g",   location:"Frigo",       daysLeft:-2, category:"Frais" },
+  { id:"fd7",  name:"Tomates cerises",    qty:300, unit:"g",   location:"Frigo",       daysLeft:3,  category:"Légumes" },
+  { id:"fd8",  name:"Salade batavia",     qty:1,   unit:"×",   location:"Frigo",       daysLeft:2,  category:"Légumes" },
+  { id:"fd9",  name:"Poulet fermier",     qty:800, unit:"g",   location:"Congélateur", daysLeft:45, category:"Viande" },
+  { id:"fd10", name:"Haché bœuf 5 %",     qty:500, unit:"g",   location:"Congélateur", daysLeft:60, category:"Viande" },
+  { id:"fd11", name:"Pâtes penne",        qty:3,   unit:"paq", location:"Placard",     daysLeft:420,category:"Épicerie" },
+  { id:"fd12", name:"Riz basmati",        qty:2,   unit:"kg",  location:"Placard",     daysLeft:380,category:"Épicerie" },
+  { id:"fd13", name:"Farine T55",         qty:1,   unit:"kg",  location:"Placard",     daysLeft:120,category:"Épicerie" },
+  { id:"fd14", name:"Sucre blanc",        qty:1,   unit:"kg",  location:"Placard",     daysLeft:600,category:"Épicerie" },
+  { id:"fd15", name:"Huile d'olive",      qty:0.5, unit:"L",   location:"Placard",     daysLeft:240,category:"Épicerie" },
+  { id:"fd16", name:"Sauce tomate",       qty:2,   unit:"pot", location:"Placard",     daysLeft:180,category:"Épicerie" },
+  { id:"fd17", name:"Cacao Van Houten",   qty:250, unit:"g",   location:"Placard",     daysLeft:300,category:"Pâtisserie" },
+  { id:"fd18", name:"Chocolat noir 70 %", qty:200, unit:"g",   location:"Placard",     daysLeft:210,category:"Pâtisserie" },
+  { id:"fd19", name:"Levure boulangère",  qty:3,   unit:"sach",location:"Placard",     daysLeft:90, category:"Pâtisserie" },
+  { id:"fd20", name:"Citrons jaunes",     qty:4,   unit:"×",   location:"Frigo",       daysLeft:7,  category:"Fruits" },
+  { id:"fd21", name:"Pommes Gala",        qty:6,   unit:"×",   location:"Placard",     daysLeft:12, category:"Fruits" },
+  { id:"fd22", name:"Bananes",            qty:5,   unit:"×",   location:"Placard",     daysLeft:3,  category:"Fruits" },
+  { id:"fd23", name:"Gin Monkey 47",      qty:0.4, unit:"L",   location:"Bar",         daysLeft:999,category:"Alcools" },
+  { id:"fd24", name:"Tonic Fever Tree",   qty:6,   unit:"×",   location:"Bar",         daysLeft:150,category:"Alcools" },
+  { id:"fd25", name:"Menthe fraîche",     qty:1,   unit:"bott",location:"Frigo",       daysLeft:4,  category:"Herbes" },
+  { id:"fd26", name:"Basilic frais",      qty:1,   unit:"bott",location:"Frigo",       daysLeft:-1, category:"Herbes" },
+  { id:"fd27", name:"Parmesan râpé",      qty:80,  unit:"g",   location:"Frigo",       daysLeft:18, category:"Laitiers" },
+  { id:"fd28", name:"Crème liquide 30 %", qty:200, unit:"mL",  location:"Frigo",       daysLeft:8,  category:"Laitiers" },
+];
+const RECIPES = [
+  { id:"re1", name:"Pâtes à la carbonara",     category:"Repas",      time:20, servings:4, difficulty:"Facile",
+    ingredients:[{foodId:"fd11",qty:2,unit:"paq"},{foodId:"fd4",qty:4,unit:"×"},{foodId:"fd27",qty:60,unit:"g"},{foodId:"fd5",qty:150,unit:"g"}]},
+  { id:"re2", name:"Poulet rôti aux citrons",  category:"Repas",      time:80, servings:4, difficulty:"Moyen",
+    ingredients:[{foodId:"fd9",qty:800,unit:"g"},{foodId:"fd20",qty:2,unit:"×"},{foodId:"fd15",qty:30,unit:"mL"}]},
+  { id:"re3", name:"Salade tomates & basilic", category:"Repas",      time:10, servings:2, difficulty:"Facile",
+    ingredients:[{foodId:"fd7",qty:300,unit:"g"},{foodId:"fd26",qty:1,unit:"bott"},{foodId:"fd15",qty:20,unit:"mL"}]},
+  { id:"re4", name:"Gâteau au chocolat",       category:"Pâtisserie", time:45, servings:6, difficulty:"Facile",
+    ingredients:[{foodId:"fd18",qty:200,unit:"g"},{foodId:"fd3",qty:150,unit:"g"},{foodId:"fd4",qty:4,unit:"×"},{foodId:"fd14",qty:150,unit:"g"},{foodId:"fd13",qty:80,unit:"g"}]},
+  { id:"re5", name:"Cookies au chocolat",      category:"Pâtisserie", time:30, servings:20,difficulty:"Facile",
+    ingredients:[{foodId:"fd13",qty:250,unit:"g"},{foodId:"fd14",qty:180,unit:"g"},{foodId:"fd3",qty:125,unit:"g"},{foodId:"fd4",qty:1,unit:"×"},{foodId:"fd18",qty:150,unit:"g"}]},
+  { id:"re6", name:"Pain maison",              category:"Pâtisserie", time:180,servings:1, difficulty:"Moyen",
+    ingredients:[{foodId:"fd13",qty:500,unit:"g"},{foodId:"fd19",qty:1,unit:"sach"}]},
+  { id:"re7", name:"Gin tonic",                category:"Cocktail",   time:3,  servings:1, difficulty:"Facile",
+    ingredients:[{foodId:"fd23",qty:50,unit:"mL"},{foodId:"fd24",qty:1,unit:"×"},{foodId:"fd20",qty:0.25,unit:"×"}]},
+  { id:"re8", name:"Mojito",                   category:"Cocktail",   time:5,  servings:1, difficulty:"Facile",
+    ingredients:[{foodId:"fd25",qty:8,unit:"feuil"},{foodId:"fd20",qty:0.5,unit:"×"},{foodId:"fd14",qty:15,unit:"g"}]},
+  { id:"re9", name:"Risotto au parmesan",      category:"Repas",      time:30, servings:4, difficulty:"Moyen",
+    ingredients:[{foodId:"fd12",qty:300,unit:"g"},{foodId:"fd27",qty:100,unit:"g"},{foodId:"fd28",qty:100,unit:"mL"}]},
+];
+const STORES = [
+  { id:"s1", name:"Carrefour Market", type:"Supermarché" },
+  { id:"s2", name:"Grand Frais",      type:"Primeur" },
+  { id:"s3", name:"Picard",           type:"Surgelés" },
+  { id:"s4", name:"Cave du quartier", type:"Spécialisé" },
+  { id:"s5", name:"Boulangerie Paul", type:"Artisan" },
+];
+const SHOPPING = [
+  { id:"sh1", name:"Lait demi-écrémé",      qty:4,  unit:"L",   store:"s1", aisle:"Crèmerie",    price:1.15, linkedFoodId:"fd1",  checked:false, auto:true },
+  { id:"sh2", name:"Jambon blanc",          qty:200,unit:"g",   store:"s1", aisle:"Charcuterie", price:3.20, linkedFoodId:"fd5",  checked:false, auto:true },
+  { id:"sh3", name:"Saumon fumé",           qty:200,unit:"g",   store:"s1", aisle:"Poissonnerie",price:5.80, linkedFoodId:"fd6",  checked:true,  auto:true },
+  { id:"sh4", name:"Tomates cerises",       qty:500,unit:"g",   store:"s2", aisle:"Fruits & lég.",price:2.90,linkedFoodId:"fd7",  checked:false, auto:false },
+  { id:"sh5", name:"Basilic frais",         qty:2,  unit:"bott",store:"s2", aisle:"Herbes",      price:1.80, linkedFoodId:"fd26", checked:false, auto:true },
+  { id:"sh6", name:"Salade batavia",        qty:2,  unit:"×",   store:"s2", aisle:"Fruits & lég.",price:1.20,linkedFoodId:"fd8",  checked:true,  auto:false },
+  { id:"sh7", name:"Poulet fermier",        qty:1,  unit:"×",   store:"s2", aisle:"Volaille",    price:14.50,linkedFoodId:"fd9",  checked:false, auto:false },
+  { id:"sh8", name:"Glace vanille",         qty:1,  unit:"L",   store:"s3", aisle:"Glaces",      price:6.90, checked:false, auto:false },
+  { id:"sh9", name:"Petits pois surgelés",  qty:500,unit:"g",   store:"s3", aisle:"Légumes",     price:2.40, checked:false, auto:false },
+  { id:"sh10",name:"Baguette",              qty:2,  unit:"×",   store:"s5", aisle:"Pains",       price:1.20, checked:false, auto:false },
+  { id:"sh11",name:"Croissants",            qty:4,  unit:"×",   store:"s5", aisle:"Viennoiserie",price:1.30, checked:false, auto:false },
+  { id:"sh12",name:"Tonic Fever Tree",      qty:6,  unit:"×",   store:"s4", aisle:"Softs",       price:1.50, linkedFoodId:"fd24", checked:false, auto:true },
+];
+const CONTACTS = [
+  { id:"p1", name:"Julien M.", initials:"JM" },
+  { id:"p2", name:"Clara B.",  initials:"CB" },
+  { id:"p3", name:"Théo L.",   initials:"TL" },
+  { id:"p4", name:"Anaïs K.",  initials:"AK" },
+  { id:"p5", name:"Maman",     initials:"MA" },
+];
+const MOVEMENTS = [
+  { id:"mv1",  type:"loan-out", itemId:"i6",  contactId:"p1", date:"2026-04-14", due:"2026-04-21", note:"Week-end rando", open:true },
+  { id:"mv2",  type:"loan-out", itemId:"i9",  contactId:"p2", date:"2026-03-02", due:"2026-03-10", note:"Ski Vosges", open:true, overdue:true },
+  { id:"mv3",  type:"loan-out", itemId:"i1",  contactId:"p3", date:"2026-04-18", due:"2026-04-25", note:"Fixer étagères", open:true },
+  { id:"mv4",  type:"loan-in",  itemId:"i4",  contactId:"p4", date:"2026-04-05", due:"2026-04-12", note:"Tente empruntée", open:false },
+  { id:"mv5",  type:"out",      itemId:"i12", date:"2026-01-08", note:"Cassée" },
+  { id:"mv6",  type:"in",       itemId:"i15", date:"2026-04-10", note:"Achat Anker — 35 €" },
+  { id:"mv7",  type:"consume",  foodId:"fd1", qty:1, unit:"L",   date:"2026-04-19", note:"Petit déj" },
+  { id:"mv8",  type:"consume",  foodId:"fd11",qty:1, unit:"paq", date:"2026-04-18", note:"Carbonara" },
+  { id:"mv9",  type:"consume",  foodId:"fd4", qty:4, unit:"×",   date:"2026-04-18", note:"Carbonara" },
+  { id:"mv10", type:"loan-out", itemId:"i2",  contactId:"p5", date:"2026-02-11", due:"2026-02-25", note:"Bricolage", open:true, overdue:true },
+];
+
+/* helpers */
+function countByContainer(cid){ return ITEMS.filter(i=>i.containerId===cid).length; }
+function countByRoom(rid){
+  const furns = FURNITURE.filter(f=>f.roomId===rid).map(f=>f.id);
+  const conts = CONTAINERS.filter(c=>furns.includes(c.furnId)).map(c=>c.id);
+  return ITEMS.filter(i=>(i.furnId&&furns.includes(i.furnId))||(i.containerId&&conts.includes(i.containerId))).length;
+}
+const getContainer = cid=>CONTAINERS.find(c=>c.id===cid);
+const getFurniture = fid=>FURNITURE.find(f=>f.id===fid);
+const getRoom      = rid=>ROOMS.find(r=>r.id===rid);
+const getFood      = fid=>FOOD.find(f=>f.id===fid);
+const getItem      = iid=>ITEMS.find(i=>i.id===iid);
+const getContact   = cid=>CONTACTS.find(c=>c.id===cid);
+const getStore     = sid=>STORES.find(s=>s.id===sid);
+
+function locationString(item){
+  if(item.containerId){
+    const c=getContainer(item.containerId); const f=c?getFurniture(c.furnId):null; const r=f?getRoom(f.roomId):null;
+    return [r?.name,f?.name,c?.name].filter(Boolean).join(" / ");
+  }
+  if(item.furnId){ const f=getFurniture(item.furnId); const r=f?getRoom(f.roomId):null;
+    return [r?.name,f?.name].filter(Boolean).join(" / ");
+  }
+  return "—";
+}
+function expiryTone(d){ if(d<0||d<=3) return "danger"; if(d<=7) return "warn"; return "ok"; }
+function daysLabel(d){
+  if(d<0)  return "expiré il y a "+Math.abs(d)+" j";
+  if(d===0)return "aujourd'hui";
+  if(d===1)return "demain";
+  if(d<30) return "dans "+d+" jours";
+  if(d<60) return "dans "+Math.round(d/7)+" sem.";
+  if(d<365)return "dans "+Math.round(d/30)+" mois";
+  return   "dans "+Math.round(d/365)+" an"+(d/365>=2?"s":"");
+}
+function roman(n){ const map=[["M",1000],["CM",900],["D",500],["CD",400],["C",100],["XC",90],["L",50],["XL",40],["X",10],["IX",9],["V",5],["IV",4],["I",1]]; let r=""; for(const [s,v] of map){ while(n>=v){r+=s;n-=v;}} return r; }
+
+/* ═════════════════ ICONS — hairline ═════════════════ */
+const ICON_PATHS = {
+  search:  "M10 3a7 7 0 1 0 4.2 12.5l3.4 3.5 1.4-1.4-3.5-3.4A7 7 0 0 0 10 3zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10z",
+  plus:    "M11 5v6H5v2h6v6h2v-6h6v-2h-6V5h-2z",
+  minus:   "M5 11h14v2H5z",
+  x:       "M6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4 17.6 5 12 10.6z",
+  check:   "M20 6 9 17l-5-5 1.4-1.4L9 14.2 18.6 4.6z",
+  chev:    "M9 6l6 6-6 6",
+  chevL:   "M15 6l-6 6 6 6",
+  chevD:   "M6 9l6 6 6-6",
+  arrow:   "M4 12h14m-4-5 5 5-5 5",
+  arrowL:  "M20 12H6m4-5-5 5 5 5",
+  qr:      "M3 3h7v7H3zm1 1v5h5V4zm2 1h1v1h1v1H6zM13 3h7v7h-7zm1 1v5h5V4zm2 1h1v1h1v1h-2zM3 13h7v7H3zm1 1v5h5v-5zm2 1h1v1h1v1H6zM13 13h2v2h-2zm4 0h1v1h2v1h-1v1h1v1h-2v-1h-1v-1h-1v-2h1zm-4 3h1v1h-1zm0 3h1v1h-1zm2 0h2v1h-2z",
+  cart:    "M4 4h2l2 12h11l2-9H8M9 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm9 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+  apple:   "M12 5c0-1.5 1-3 3-3 0 1.5-1 3-3 3zm5 2c-2 0-2.5 1-5 1s-3-1-5-1c-2.5 0-4 2.5-4 5 0 4 2.5 8 4.5 8s2-1 4.5-1 2.5 1 4.5 1 4.5-4 4.5-8c0-2.5-1.5-5-4-5z",
+  book:    "M5 4a2 2 0 0 1 2-2h12v18H7a2 2 0 0 0-2 2zM7 4v14h10V4z",
+  home:    "M3 11 12 4l9 7v9h-6v-6H9v6H3z",
+  box:     "M12 2 3 7v10l9 5 9-5V7zm0 2.3L18.8 8 12 11.7 5.2 8zM5 10.2l6 3.3V19l-6-3.3zm14 0v5.5L13 19v-5.5z",
+  pin:     "M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6z",
+  flame:   "M12 2c0 4-6 6-6 12a6 6 0 0 0 12 0c0-3-3-4-3-7 0-1 1-2 1-3-2 0-4 1-4 3 0-2-1-4 0-5z",
+  bell:    "M6 16V11a6 6 0 1 1 12 0v5l1 2H5zm4 4h4a2 2 0 0 1-4 0z",
+  move:    "M8 3 4 7l4 4m8 2 4 4-4 4M4 7h16M4 17h16",
+  hand:    "M4 12h12l-3-3m3 3-3 3",
+  scan:    "M4 4h4v2H6v2H4zm16 0v4h-2V6h-2V4zM4 20v-4h2v2h2v2zm16 0h-4v-2h2v-2h2zM3 11h18v2H3z",
+  user:    "M12 4a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 10c4 0 8 3 8 7H4c0-4 4-7 8-7z",
+  store:   "M3 7 5 3h14l2 4v2a2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0zm1 4a4 4 0 0 0 4-1 4 4 0 0 0 4 0 4 4 0 0 0 4 0 4 4 0 0 0 4 1v9H4zM8 13v5h4v-5z",
+  book2:   "M4 5a2 2 0 0 1 2-2h14v18H6a2 2 0 0 0-2 2zM8 6h9v2H8zm0 4h9v2H8z",
+  settings:"M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8zm0 2a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm9 3v-2l-2-.3a7 7 0 0 0-.5-1.3l1.2-1.7-1.4-1.4-1.7 1.2a7 7 0 0 0-1.3-.5L14.9 3h-2l-.3 2.2a7 7 0 0 0-1.3.5l-1.7-1.2-1.4 1.4 1.2 1.7a7 7 0 0 0-.5 1.3L6 9v2l2.3.3a7 7 0 0 0 .5 1.3l-1.2 1.7 1.4 1.4 1.7-1.2a7 7 0 0 0 1.3.5l.3 2.2h2l.3-2.2a7 7 0 0 0 1.3-.5l1.7 1.2 1.4-1.4-1.2-1.7a7 7 0 0 0 .5-1.3z",
+  edit:    "M4 20h4L20 8l-4-4L4 16zM14 6l4 4",
+  dots:    "M5 12a1.5 1.5 0 1 0 0-.01zm7 0a1.5 1.5 0 1 0 0-.01zm7 0a1.5 1.5 0 1 0 0-.01z",
+  archive: "M3 5h18v3H3zm1 4h16v11H4zm5 3v2h6v-2z",
+  fridge:  "M6 3h12v18H6zm2 2v5h8V5zm0 7v7h8v-7zM9 6v2zm0 8v2z",
+  cupboard:"M5 3h14v18H5zm7 0v18M8 8v4m8-4v4",
+  bar:     "M5 3h14l-5 9v7h2v2H8v-2h2v-7z",
+  clock:   "M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18zm0 2a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm-1 3h2v5l4 2-1 1.7L11 14z",
+  forward: "m14 6 6 6-6 6M20 12H4",
+  back:    "m10 6-6 6 6 6M4 12h16",
+  history: "M12 3a9 9 0 1 1-8.5 12l1.9-.6A7 7 0 1 0 5 11H8l-3 3-3-3h2a9 9 0 0 1 8-8zm-1 4h2v5l4 2-1 1.7-5-3z",
+  sparkle: "M12 3l1.4 5.6L19 10l-5.6 1.4L12 17l-1.4-5.6L5 10l5.6-1.4z",
+  eye:     "M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zm10 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
+  filter:  "M4 5h16l-6 8v6l-4-2v-4z",
+};
+function Icon({n, s=14, stroke=false, style={}}){
+  const path = ICON_PATHS[n] || ICON_PATHS.box;
+  if (stroke) {
+    return <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0, ...style}}>
+      <path d={path}/>
+    </svg>;
+  }
+  return <svg width={s} height={s} viewBox="0 0 24 24" fill="currentColor" style={{flexShrink:0, ...style}}>
+    <path d={path}/>
+  </svg>;
+}
+
+/* ═════════════════ QR ═════════════════ */
+function QR({value="INV", size=120, color="#1a1a1a"}){
+  const N=21; let h=2166136261;
+  for(let i=0;i<value.length;i++){h=(h^value.charCodeAt(i))*16777619>>>0;}
+  const cells=[];
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){h=(h*1664525+1013904223)>>>0; cells.push(((h>>>7)&3)>1?1:0);}
+  [[0,0],[0,14],[14,0]].forEach(([ox,oy])=>{for(let y=0;y<7;y++)for(let x=0;x<7;x++){
+    const ring=(x===0||x===6||y===0||y===6); const inner=(x>=2&&x<=4&&y>=2&&y<=4);
+    cells[(oy+y)*N+(ox+x)]=(ring||inner)?1:0;
+  }});
+  const px=size/N;
+  return <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{display:'block'}}>
+    <rect width={size} height={size} fill="#fff"/>
+    {cells.map((v,i)=>v?<rect key={i} x={(i%N)*px} y={Math.floor(i/N)*px} width={px+0.3} height={px+0.3} fill={color}/>:null)}
+  </svg>;
+}
+
+/* ═════════════════ SHELL ═════════════════ */
+function Sidebar({current, setCurrent, setPaletteOpen}){
+  const sections = [
+    { k:"dashboard", l:"Tableau" },
+    { k:"items",     l:"Possessions",   n:ITEMS.length },
+    { k:"food",      l:"Garde-manger",  n:FOOD.length },
+    { k:"recipes",   l:"Recettes",      n:RECIPES.length },
+    { k:"shopping",  l:"Courses",       n:SHOPPING.filter(s=>!s.checked).length },
+    { k:"movements", l:"Mouvements",    n:MOVEMENTS.length },
+    { k:"loans",     l:"Prêts",         n:MOVEMENTS.filter(m=>m.type==="loan-out"&&m.open).length },
+  ];
+  const admin = [
+    { k:"rooms",    l:"Pièces & rangements" },
+    { k:"stores",   l:"Magasins" },
+    { k:"contacts", l:"Contacts" },
+    { k:"scan",     l:"Scanner" },
+  ];
+  return (
+    <aside className="aside">
+      <div style={{marginBottom: 20}}>
+        <div style={{fontFamily: 'var(--f-serif)', fontSize: 20, fontWeight: 500, letterSpacing:'-0.02em', fontVariationSettings:'"opsz" 72'}}>Intendance</div>
+        <div className="tiny dim" style={{fontFamily:'var(--f-mono)'}}>maison · {ITEMS.length + FOOD.length} réf.</div>
+      </div>
+
+      <div className="search-field" onClick={()=>setPaletteOpen(true)}>
+        <Icon n="search" s={12} stroke/>
+        <span>Rechercher</span>
+        <kbd>⌘K</kbd>
+      </div>
+
+      <div style={{marginTop: 20}}>
+        {sections.map(s=>(
+          <div key={s.k} className={"nav-item " + (current===s.k?"active":"")} onClick={()=>setCurrent(s.k)}>
+            <span>{s.l}</span>
+            {s.n!=null && <span className="num-s">{s.n}</span>}
+          </div>
+        ))}
+      </div>
+
+      <div className="eyebrow" style={{marginTop: 28, marginBottom: 6}}>Admin</div>
+      <div>
+        {admin.map(s=>(
+          <div key={s.k} className={"nav-item " + (current===s.k?"active":"")} onClick={()=>setCurrent(s.k)}>
+            <span>{s.l}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{marginTop:'auto', paddingTop: 20, borderTop: '0.5px solid var(--rule)'}}>
+        <div className="hstack" style={{gap: 8}}>
+          <div className="avatar" style={{width:26, height:26}}>PB</div>
+          <div style={{fontSize: 12}}>Paul B.</div>
+          <div style={{marginLeft:'auto', color:'var(--ink-3)'}}><Icon n="settings" s={13} stroke/></div>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+/* ═════════════════ COMMAND PALETTE ═════════════════ */
+function CommandPalette({open, setOpen, setCurrent}){
+  const [q, setQ] = React.useState("");
+  React.useEffect(()=>{
+    window.__openPalette = ()=>setOpen(true);
+    const onKey = (e)=>{
+      if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){ e.preventDefault(); setOpen(o=>!o); }
+      else if(e.key==="Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return ()=>window.removeEventListener("keydown", onKey);
+  },[]);
+  if(!open) return null;
+
+  const actions = [
+    {k:"a1", label:"Ajouter une possession",    sub:"N", go:()=>setCurrent("items")},
+    {k:"a2", label:"Ajouter un produit",        sub:"F", go:()=>setCurrent("food")},
+    {k:"a3", label:"Nouvelle liste de courses", sub:"C", go:()=>setCurrent("shopping")},
+    {k:"a4", label:"Prêter un objet",           sub:"P", go:()=>setCurrent("loans")},
+    {k:"a5", label:"Scanner un QR container",   sub:"⇧S",go:()=>setCurrent("scan")},
+    {k:"a6", label:"Cuisiner une recette",      sub:"R", go:()=>setCurrent("recipes")},
+  ];
+  const items = ITEMS.slice(0,6).map(i=>({k:i.id,label:i.name,sub:locationString(i),go:()=>setCurrent("items")}));
+  const food  = FOOD.filter(f=>f.daysLeft<7).slice(0,4).map(f=>({k:f.id,label:f.name,sub:daysLabel(f.daysLeft),go:()=>setCurrent("food")}));
+
+  const filter = x=>!q||x.label.toLowerCase().includes(q.toLowerCase());
+
+  return (
+    <div className="palette-overlay" onClick={()=>setOpen(false)}>
+      <div className="palette" onClick={e=>e.stopPropagation()}>
+        <input autoFocus className="palette-input" value={q} onChange={e=>setQ(e.target.value)} placeholder="Chercher, agir…"/>
+        {[
+          {title:"Actions",    list:actions.filter(filter)},
+          {title:"Objets",     list:items.filter(filter)},
+          {title:"Périssables", list:food.filter(filter)},
+        ].map(g => g.list.length ? (
+          <div key={g.title} className="palette-group">
+            <div className="palette-group-title">{g.title}</div>
+            {g.list.map(x=>(
+              <div key={x.k} className="palette-item" onClick={()=>{x.go(); setOpen(false);}}>
+                <span>{x.label}</span>
+                {x.sub && <span className="pi-sub">{x.sub}</span>}
+              </div>
+            ))}
+          </div>
+        ) : null)}
+      </div>
+    </div>
+  );
+}
+
+/* ═════════════════ DASHBOARD ═════════════════ */
+function ViewDashboard({setCurrent}){
+  const expiring = FOOD.filter(f=>f.daysLeft<=7).sort((a,b)=>a.daysLeft-b.daysLeft);
+  const openLoans = MOVEMENTS.filter(m=>m.type==="loan-out"&&m.open);
+  const overdue   = openLoans.filter(l=>l.overdue);
+  const totalVal  = ITEMS.reduce((a,i)=>a+(i.value||0),0);
+  const recent = [...MOVEMENTS].slice(-6).reverse();
+
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">N° {roman(47)} · Lundi 20 avril 2026</div>
+          <h1 className="display-l" style={{margin: '0 0 12px'}}>Bonjour Paul.<br/>Rien de grave aujourd'hui<span className="ornament">—</span>juste <em style={{fontStyle:'italic', color:'var(--accent)'}}>quelques attentions</em>.</h1>
+          <p className="lede" style={{margin: 0, maxWidth: 620}}>
+            {expiring.filter(f=>f.daysLeft<=3).length} produits à consommer sous trois jours,
+            {" "}{overdue.length} prêt{overdue.length>1?"s":""} en retard,
+            {" "}et {SHOPPING.filter(s=>!s.checked).length} articles attendent sur votre liste de courses.
+          </p>
+        </div>
+      </header>
+
+      <section className="section" style={{paddingTop: 8}}>
+        {/* Big numbers — editorial figures */}
+        <div style={{display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap: 0, borderTop:'0.5px solid var(--rule)', borderBottom:'0.5px solid var(--rule)'}}>
+          {[
+            { n:ITEMS.length,     l:"Possessions", s:totalVal.toLocaleString('fr-FR')+" € estimés" },
+            { n:CONTAINERS.length,l:"Containers",  s:ROOMS.length+" pièces · "+FURNITURE.length+" meubles" },
+            { n:FOOD.length,      l:"Produits",    s:expiring.length+" à surveiller" },
+            { n:openLoans.length, l:"Prêts",       s:overdue.length+" en retard" },
+          ].map((f,i)=>(
+            <div key={i} style={{padding: '24px 24px 24px 0', borderRight: i<3?'0.5px solid var(--rule)':'none'}}>
+              <div className="num" style={{fontSize: 54, lineHeight: 1, fontWeight: 400, letterSpacing: '-0.03em'}}>{f.n}</div>
+              <div className="label" style={{marginTop: 10}}>{f.l}</div>
+              <div className="tiny dim" style={{marginTop: 2}}>{f.s}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Two-column editorial */}
+        <div style={{display:'grid', gridTemplateColumns:'1.4fr 1fr', gap: 64, marginTop: 56}}>
+          <div>
+            <div className="eyebrow">À consommer bientôt</div>
+            <h2 className="display-s" style={{marginTop: 6}}>Le garde-manger presse.</h2>
+            <p className="small dim" style={{maxWidth: 440, marginTop: 6}}>Classé par date de péremption. Un clic sort le produit du stock.</p>
+            <div style={{marginTop: 24}}>
+              {expiring.slice(0,8).map(f=>{
+                const tone = expiryTone(f.daysLeft);
+                return (
+                  <div key={f.id} className="row">
+                    <div style={{width: 48}} className="num small dim">{f.daysLeft<0?"—":f.daysLeft+"j"}</div>
+                    <div className="row-main">
+                      <div className="row-title serif" style={{fontWeight: 500}}>{f.name}</div>
+                      <div className="row-sub">{f.qty}{f.unit} · {f.location} · {f.category}</div>
+                    </div>
+                    <div className={"tag tag--"+tone}>{tone==="danger"?(f.daysLeft<0?"expiré":"urgent"):tone==="warn"?"bientôt":"ok"}</div>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{marginTop: 14}}>
+              <button className="btn btn--ghost" onClick={()=>setCurrent("food")}>
+                Tout le garde-manger <Icon n="arrow" s={12} stroke/>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            {overdue.length > 0 && (
+              <div className="band" style={{marginBottom: 36}}>
+                <div className="eyebrow" style={{color:'var(--accent)'}}>Attention</div>
+                <div className="title" style={{marginTop: 4}}>{overdue.length} prêt{overdue.length>1?"s":""} en retard de retour.</div>
+                <div className="small" style={{marginTop: 8}}>
+                  {overdue.slice(0,2).map(l=>{
+                    const it = getItem(l.itemId); const ct = getContact(l.contactId);
+                    return <div key={l.id} style={{padding: '2px 0'}}><em className="serif">{it?.name}</em> — {ct?.name}</div>;
+                  })}
+                </div>
+                <button className="btn btn--sm" style={{marginTop: 12}} onClick={()=>setCurrent("loans")}>Relancer</button>
+              </div>
+            )}
+
+            <div className="eyebrow">Prêts en cours</div>
+            <h2 className="display-s" style={{marginTop: 6}}>Hors les murs.</h2>
+            <div style={{marginTop: 24}}>
+              {openLoans.slice(0,5).map(l=>{
+                const it = getItem(l.itemId); const ct = getContact(l.contactId);
+                return (
+                  <div key={l.id} className="row">
+                    <div className="avatar" style={{width: 28, height: 28}}>{ct?.initials}</div>
+                    <div className="row-main">
+                      <div className="row-title serif" style={{fontWeight: 500}}>{it?.name}</div>
+                      <div className="row-sub">{ct?.name} · retour le {new Date(l.due).toLocaleDateString('fr-FR', {day:'numeric', month:'long'})}</div>
+                    </div>
+                    {l.overdue && <div className="tag tag--danger">retard</div>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Activity feed */}
+        <div style={{marginTop: 72, paddingTop: 40, borderTop: '0.5px solid var(--rule)'}}>
+          <div className="eyebrow">Chronique</div>
+          <h2 className="display-s" style={{marginTop: 6}}>Activité récente.</h2>
+          <div style={{marginTop: 24, columnCount: 2, columnGap: 64}}>
+            {recent.map(m=>{
+              const it = m.itemId ? getItem(m.itemId) : null;
+              const fd = m.foodId ? getFood(m.foodId) : null;
+              const ct = m.contactId ? getContact(m.contactId) : null;
+              const verbs = { "loan-out":"a prêté", "loan-in":"a rendu", "in":"a ajouté", "out":"a retiré", "consume":"a consommé" };
+              return (
+                <div key={m.id} style={{breakInside: 'avoid', padding: '10px 0', borderBottom: '0.5px solid var(--rule-2)'}}>
+                  <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.1em'}}>{new Date(m.date).toLocaleDateString('fr-FR', {day: '2-digit', month: 'short'})}</div>
+                  <div className="body" style={{marginTop: 2}}>
+                    <span className="dim">Vous {verbs[m.type]} </span>
+                    <span className="serif" style={{fontWeight: 500, fontStyle: m.type==='consume'?'italic':'normal'}}>{it?.name || fd?.name}</span>
+                    {m.qty && <span className="dim"> ({m.qty}{m.unit})</span>}
+                    {ct && <span className="dim"> à <span style={{color:'var(--ink)'}}>{ct.name}</span></span>}
+                    {m.note && <span className="dim"> — <em>{m.note}</em></span>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═════════════════ POSSESSIONS ═════════════════ */
+function ViewItems(){
+  const [q, setQ] = React.useState("");
+  const [room, setRoom] = React.useState("all");
+  const [view, setView] = React.useState("list");
+  const [sel, setSel] = React.useState(null);
+
+  const list = ITEMS.filter(i=>{
+    if(q && !i.name.toLowerCase().includes(q.toLowerCase())) return false;
+    if(room==="all") return true;
+    const c = i.containerId?getContainer(i.containerId):null;
+    const f = c?getFurniture(c.furnId):(i.furnId?getFurniture(i.furnId):null);
+    return f && f.roomId===room;
+  });
+
+  return (
+    <div className="fade-in" style={{display:'grid', gridTemplateColumns: sel?'1fr 360px':'1fr', height:'100%'}}>
+      <div style={{overflow:'auto'}}>
+        <header className="page-head">
+          <div className="meta">
+            <div className="kicker">Catalogue domestique</div>
+            <h1 className="display-l" style={{margin: 0}}>Possessions</h1>
+            <p className="lede" style={{margin: '12px 0 0', maxWidth: 560}}>
+              {ITEMS.length} objets répartis dans {CONTAINERS.length} containers, sur {ROOMS.length} pièces.
+              Chaque container porte un code QR — scannez pour accéder à son contenu.
+            </p>
+          </div>
+        </header>
+
+        <section className="section" style={{paddingTop: 0}}>
+          <div className="hstack" style={{gap: 12, padding: '16px 0', borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)'}}>
+            <input className="field" placeholder="Chercher par nom, marque…" value={q} onChange={e=>setQ(e.target.value)} style={{width: 240}}/>
+            <select className="select" value={room} onChange={e=>setRoom(e.target.value)}>
+              <option value="all">Toutes les pièces</option>
+              {ROOMS.map(r=><option key={r.id} value={r.id}>{r.name}</option>)}
+            </select>
+            <div className="hstack" style={{gap: 4, marginLeft: 8}}>
+              <button className={"btn btn--sm " + (view==="list"?"btn--ink":"")} onClick={()=>setView("list")}>Liste</button>
+              <button className={"btn btn--sm " + (view==="hierarchy"?"btn--ink":"")} onClick={()=>setView("hierarchy")}>Hiérarchie</button>
+            </div>
+            <div style={{flex: 1}}/>
+            <span className="tiny mono dim">{list.length} / {ITEMS.length}</span>
+            <button className="btn btn--accent btn--sm"><Icon n="plus" s={12}/> Nouvel objet</button>
+          </div>
+
+          {view === "list" ? (
+            <table className="lst" style={{marginTop: 16}}>
+              <thead><tr>
+                <th>Objet</th><th>Catégorie</th><th>Emplacement</th><th>Marque</th><th className="num">Valeur</th><th>État</th>
+              </tr></thead>
+              <tbody>
+                {list.map(i=>{
+                  const loan = MOVEMENTS.find(m=>m.type==="loan-out" && m.itemId===i.id && m.open);
+                  return (
+                    <tr key={i.id} onClick={()=>setSel(i)} style={{cursor:'pointer'}}>
+                      <td><span className="serif" style={{fontSize: 15, fontWeight: 500}}>{i.name}</span></td>
+                      <td><span className="tag tag--ink">{i.category}</span></td>
+                      <td className="drop mono" style={{fontSize: 11}}>{locationString(i)}</td>
+                      <td className="drop">{i.brand || <span className="dim2">—</span>}</td>
+                      <td className="num">{i.value ? i.value+" €" : <span className="dim2">—</span>}</td>
+                      <td>{loan ? <span className="tag tag--warn">prêté</span> : <span className="tag tag--ok">en stock</span>}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          ) : (
+            <HierarchyView/>
+          )}
+        </section>
+      </div>
+
+      {sel && <ItemDetail item={sel} onClose={()=>setSel(null)}/>}
+    </div>
+  );
+}
+
+function HierarchyView(){
+  return (
+    <div style={{marginTop: 24}}>
+      {ROOMS.map(r=>{
+        const furns = FURNITURE.filter(f=>f.roomId===r.id);
+        if(!furns.length) return null;
+        return (
+          <div key={r.id} style={{padding: '28px 0', borderTop: '0.5px solid var(--rule)'}}>
+            <div className="hstack" style={{alignItems: 'baseline', gap: 16, marginBottom: 14}}>
+              <h3 className="display-m" style={{margin: 0}}>{r.name}</h3>
+              <span className="tiny mono dim">{countByRoom(r.id)} objets</span>
+            </div>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 24}}>
+              {furns.map(f=>{
+                const containers = CONTAINERS.filter(c=>c.furnId===f.id);
+                const direct = ITEMS.filter(i=>i.furnId===f.id);
+                return (
+                  <div key={f.id}>
+                    <div className="label" style={{paddingBottom: 6, borderBottom: '0.5px solid var(--rule-2)'}}>{f.name}</div>
+                    <div style={{marginTop: 6}}>
+                      {containers.map(c=>(
+                        <div key={c.id} style={{padding: '8px 0', borderBottom: '0.5px solid var(--rule-2)'}}>
+                          <div className="hstack" style={{gap: 6}}>
+                            <span className="tiny mono dim">{c.code}</span>
+                            <span className="tiny mono dim" style={{marginLeft:'auto'}}>{countByContainer(c.id)}</span>
+                          </div>
+                          <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{c.name}</div>
+                        </div>
+                      ))}
+                      {direct.map(i=>(
+                        <div key={i.id} className="small" style={{padding: '6px 0', borderBottom: '0.5px solid var(--rule-2)'}}>
+                          <em className="serif dim">hors container</em> &nbsp; {i.name}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function ItemDetail({item, onClose}){
+  const loan = MOVEMENTS.find(m=>m.type==="loan-out" && m.itemId===item.id && m.open);
+  const history = MOVEMENTS.filter(m=>m.itemId===item.id);
+  const container = item.containerId?getContainer(item.containerId):null;
+  return (
+    <aside style={{borderLeft: '0.5px solid var(--rule)', background: 'var(--paper)', padding: 32, overflow: 'auto', position: 'relative'}}>
+      <button className="btn btn--ghost btn--sm" onClick={onClose} style={{position:'absolute', top: 16, right: 16}}>
+        <Icon n="x" s={12}/>
+      </button>
+      <div className="eyebrow">Fiche objet N° {item.id.replace('i','').padStart(4,'0')}</div>
+      <h2 className="display-m" style={{margin: '6px 0 4px'}}>{item.name}</h2>
+      <div className="small dim">{item.category}{item.brand ? " · "+item.brand : ""}</div>
+
+      {loan && (
+        <div className="band" style={{marginTop: 20}}>
+          <div className="label">Actuellement prêté</div>
+          <div className="serif" style={{fontSize: 15, marginTop: 2}}>à {getContact(loan.contactId)?.name}</div>
+          <div className="tiny dim" style={{marginTop: 4}}>Retour prévu le {new Date(loan.due).toLocaleDateString('fr-FR')}</div>
+        </div>
+      )}
+
+      <div className="hair" style={{margin: '28px 0 16px'}}/>
+      <div className="eyebrow">Emplacement</div>
+      <div className="serif" style={{fontSize: 16, marginTop: 6}}>{locationString(item)}</div>
+      {container && (
+        <div className="hstack" style={{gap: 12, marginTop: 16, padding: '14px 0', borderTop: '0.5px solid var(--rule-2)', borderBottom: '0.5px solid var(--rule-2)'}}>
+          <div className="qrbox"><QR value={container.code} size={72}/></div>
+          <div>
+            <div className="mono tiny dim">{container.code}</div>
+            <div className="serif" style={{fontSize: 14}}>{container.name}</div>
+          </div>
+        </div>
+      )}
+
+      <div className="hair" style={{margin: '20px 0 16px'}}/>
+      <div className="eyebrow">Détails</div>
+      <dl style={{margin: '8px 0 0', display: 'grid', gridTemplateColumns: 'auto 1fr', columnGap: 24, rowGap: 8, fontSize: 13}}>
+        {item.sn && (<><dt className="label">Série</dt><dd className="mono" style={{margin:0}}>{item.sn}</dd></>)}
+        {item.value != null && (<><dt className="label">Valeur</dt><dd className="num" style={{margin:0, fontSize:15}}>{item.value} €</dd></>)}
+        {item.acquired && (<><dt className="label">Acquis</dt><dd className="mono" style={{margin:0}}>{item.acquired}</dd></>)}
+      </dl>
+
+      <div className="hair" style={{margin: '20px 0 16px'}}/>
+      <div className="eyebrow">Historique</div>
+      <div style={{marginTop: 10}}>
+        {history.length===0 && <div className="small dim"><em>Aucun mouvement enregistré.</em></div>}
+        {history.map(m=>(
+          <div key={m.id} className="small" style={{padding: '8px 0', borderBottom: '0.5px solid var(--rule-2)'}}>
+            <div className="tiny mono dim">{new Date(m.date).toLocaleDateString('fr-FR')}</div>
+            <div style={{marginTop: 2}}>{m.note || m.type}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display: 'flex', gap: 6, marginTop: 24}}>
+        <button className="btn" style={{flex: 1}}>Prêter</button>
+        <button className="btn" style={{flex: 1}}>Déplacer</button>
+        <button className="btn btn--ghost"><Icon n="edit" s={12} stroke/></button>
+      </div>
+    </aside>
+  );
+}
+
+/* ═════════════════ FOOD ═════════════════ */
+function ViewFood(){
+  const [filter, setFilter] = React.useState("all");
+  const [loc, setLoc] = React.useState("all");
+  const [q, setQ] = React.useState("");
+
+  const locations = [...new Set(FOOD.map(f=>f.location))];
+  const counts = {
+    all: FOOD.length,
+    expired: FOOD.filter(f=>f.daysLeft<0).length,
+    urgent:  FOOD.filter(f=>f.daysLeft>=0 && f.daysLeft<=3).length,
+    soon:    FOOD.filter(f=>f.daysLeft>3 && f.daysLeft<=7).length,
+  };
+
+  let list = FOOD;
+  if(filter==="expired") list = list.filter(f=>f.daysLeft<0);
+  else if(filter==="urgent") list = list.filter(f=>f.daysLeft>=0&&f.daysLeft<=3);
+  else if(filter==="soon")   list = list.filter(f=>f.daysLeft>3&&f.daysLeft<=7);
+  if(loc!=="all") list = list.filter(f=>f.location===loc);
+  if(q) list = list.filter(f=>f.name.toLowerCase().includes(q.toLowerCase()));
+
+  const grouped = {};
+  list.forEach(f=>{(grouped[f.category]=grouped[f.category]||[]).push(f);});
+
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Garde-manger · frigo · congélateur · bar</div>
+          <h1 className="display-l" style={{margin: 0}}>Ce qu'il reste<br/>à manger.</h1>
+          <p className="lede" style={{margin: '12px 0 0', maxWidth: 560}}>
+            {FOOD.length} produits suivis. {counts.expired + counts.urgent} réclament votre attention cette semaine.
+          </p>
+        </div>
+      </header>
+
+      <section className="section" style={{paddingTop: 0}}>
+        {/* Filter tabs — editorial, underline-only */}
+        <div className="hstack" style={{gap: 0, borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)'}}>
+          {[
+            {k:"all",     l:"Tout",            n:counts.all},
+            {k:"expired", l:"Expirés",         n:counts.expired, tone:"danger"},
+            {k:"urgent",  l:"Urgents ≤ 3 j",   n:counts.urgent,  tone:"danger"},
+            {k:"soon",    l:"Bientôt ≤ 7 j",   n:counts.soon,    tone:"warn"},
+          ].map(t=>(
+            <button key={t.k} onClick={()=>setFilter(t.k)} style={{
+              background:'transparent', border: 0,
+              padding: '18px 24px 18px 0', marginRight: 8,
+              borderBottom: filter===t.k?'2px solid var(--ink)':'2px solid transparent',
+              marginBottom: -0.5, cursor: 'pointer',
+              color: filter===t.k?'var(--ink)':'var(--ink-3)',
+              fontSize: 13, fontWeight: 450,
+            }}>
+              <span>{t.l}</span>
+              <span className="num" style={{fontSize: 18, marginLeft: 8, color: t.tone==="danger"&&t.n>0?'var(--danger)':t.tone==="warn"&&t.n>0?'var(--warn)':'inherit'}}>{t.n}</span>
+            </button>
+          ))}
+          <div style={{flex: 1}}/>
+          <input className="field" placeholder="Chercher un produit…" value={q} onChange={e=>setQ(e.target.value)} style={{width: 200}}/>
+          <select className="select" value={loc} onChange={e=>setLoc(e.target.value)} style={{marginLeft: 12}}>
+            <option value="all">Tous emplacements</option>
+            {locations.map(l=><option key={l}>{l}</option>)}
+          </select>
+          <button className="btn btn--accent btn--sm" style={{marginLeft: 12}}><Icon n="plus" s={12}/> Ajouter</button>
+        </div>
+
+        {/* Locations strip */}
+        <div style={{display:'grid', gridTemplateColumns: `repeat(${locations.length}, 1fr)`, gap: 0, marginTop: 32, marginBottom: 16}}>
+          {locations.map((l,i)=>{
+            const foods = FOOD.filter(f=>f.location===l);
+            const urgent = foods.filter(f=>f.daysLeft<7).length;
+            return (
+              <div key={l} onClick={()=>setLoc(l)} style={{
+                padding: '12px 20px 12px 0',
+                borderRight: i<locations.length-1?'0.5px solid var(--rule)':'none',
+                cursor: 'pointer', opacity: loc===l||loc==="all"?1:0.5,
+              }}>
+                <div className="label">{l}</div>
+                <div className="hstack" style={{alignItems: 'baseline', gap: 8, marginTop: 2}}>
+                  <span className="num" style={{fontSize: 26}}>{foods.length}</span>
+                  <span className="tiny dim">produits</span>
+                </div>
+                <div className="tiny dim">{urgent} à surveiller</div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Grouped list */}
+        {Object.entries(grouped).map(([cat, foods])=>(
+          <div key={cat} style={{marginTop: 40}}>
+            <div className="hstack" style={{alignItems: 'baseline', gap: 16, marginBottom: 8}}>
+              <h3 className="display-s" style={{margin: 0}}>{cat}</h3>
+              <span className="tiny mono dim">{foods.length}</span>
+            </div>
+            <table className="lst">
+              <thead><tr><th>Produit</th><th>Emplacement</th><th className="num">Quantité</th><th>Péremption</th><th className="num" style={{width:80}}></th></tr></thead>
+              <tbody>
+                {foods.map(f=>{
+                  const tone = expiryTone(f.daysLeft);
+                  return (
+                    <tr key={f.id}>
+                      <td><span className="serif" style={{fontSize: 15, fontWeight: 500}}>{f.name}</span></td>
+                      <td className="drop mono" style={{fontSize: 11}}>{f.location}</td>
+                      <td className="num">{f.qty}{f.unit}</td>
+                      <td>
+                        <span className={"num"} style={{color: tone==="danger"?'var(--danger)':tone==="warn"?'var(--warn)':'var(--ink)'}}>{daysLabel(f.daysLeft)}</span>
+                      </td>
+                      <td className="num">
+                        <button className="btn btn--ghost btn--sm"><Icon n="minus" s={11}/></button>
+                        <button className="btn btn--ghost btn--sm"><Icon n="dots" s={11}/></button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </section>
+    </div>
+  );
+}
+
+/* ═════════════════ RECIPES ═════════════════ */
+function ViewRecipes(){
+  const [cat, setCat] = React.useState("Tout");
+  const [active, setActive] = React.useState(null);
+  const cats = ["Tout", "Repas", "Pâtisserie", "Cocktail"];
+  const list = cat==="Tout"?RECIPES:RECIPES.filter(r=>r.category===cat);
+
+  function availability(r){
+    let have = 0; const missing = [];
+    r.ingredients.forEach(ing=>{
+      const f = getFood(ing.foodId);
+      if(f && f.qty >= ing.qty) have++; else missing.push(ing);
+    });
+    return {have, total: r.ingredients.length, missing};
+  }
+
+  const useSoon = RECIPES.filter(r=>r.ingredients.some(ing=>{
+    const f = getFood(ing.foodId); return f && f.daysLeft>=0 && f.daysLeft<=5;
+  }));
+
+  if(active) return <RecipeDetail r={active} onBack={()=>setActive(null)} availability={availability}/>;
+
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Répertoire de cuisine</div>
+          <h1 className="display-l" style={{margin: 0}}>Recettes<span className="ornament">—</span><em style={{fontStyle:'italic'}}>neuf entrées.</em></h1>
+          <p className="lede" style={{margin: '12px 0 0', maxWidth: 560}}>
+            Des repas, des pâtisseries et quelques cocktails. Chaque recette connaît votre garde-manger —
+            elle vous dira ce qu'il reste à acheter.
+          </p>
+        </div>
+      </header>
+
+      <section className="section" style={{paddingTop: 0}}>
+        <div className="hstack" style={{gap: 0, borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)'}}>
+          {cats.map(c=>(
+            <button key={c} onClick={()=>setCat(c)} style={{
+              background:'transparent', border: 0, padding: '18px 28px 18px 0',
+              marginBottom: -0.5, cursor: 'pointer',
+              borderBottom: cat===c?'2px solid var(--ink)':'2px solid transparent',
+              color: cat===c?'var(--ink)':'var(--ink-3)',
+              fontFamily: 'var(--f-serif)', fontSize: 18, fontWeight: 400,
+              fontVariationSettings: '"opsz" 48',
+              letterSpacing: '-0.015em',
+            }}>
+              {c} <span className="num sans" style={{fontSize: 11, marginLeft: 4, color:'var(--ink-3)', fontFamily: 'var(--f-mono)'}}>{c==="Tout"?RECIPES.length:RECIPES.filter(r=>r.category===c).length}</span>
+            </button>
+          ))}
+          <div style={{flex: 1}}/>
+          <button className="btn btn--sm"><Icon n="sparkle" s={12}/> Avec ce que j'ai</button>
+          <button className="btn btn--accent btn--sm" style={{marginLeft: 8}}><Icon n="plus" s={12}/> Nouvelle</button>
+        </div>
+
+        {cat==="Tout" && useSoon.length>0 && (
+          <div style={{marginTop: 40}}>
+            <div className="band">
+              <div className="eyebrow" style={{color:'var(--accent)'}}>À cuisiner cette semaine</div>
+              <div className="title" style={{marginTop: 4}}>Pour éviter le gaspillage.</div>
+              <div style={{marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 8}}>
+                {useSoon.map(r=>(
+                  <button key={r.id} onClick={()=>setActive(r)} className="btn btn--sm">{r.name}<span className="dim" style={{marginLeft: 4}}>· {r.time} min</span></button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div style={{marginTop: 40, display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 0}}>
+          {list.map((r, i)=>{
+            const a = availability(r);
+            const complete = a.missing.length===0;
+            return (
+              <article key={r.id} onClick={()=>setActive(r)} style={{
+                padding: '28px 32px 32px 0',
+                borderRight: (i%Math.floor(1180/280))!==Math.floor(1180/280)-1?'0.5px solid var(--rule-2)':'none',
+                borderBottom: '0.5px solid var(--rule)',
+                cursor: 'pointer',
+              }}>
+                <div className="tiny mono dim" style={{textTransform:'uppercase', letterSpacing:'0.1em'}}>{r.category} · N° {i+1}</div>
+                <h3 className="display-s" style={{margin: '10px 0 10px', fontWeight: 400}}>{r.name}</h3>
+                <div className="small dim">
+                  <span className="num">{r.time}</span> min  <span className="ornament">·</span>  <span className="num">{r.servings}</span> pers.  <span className="ornament">·</span>  {r.difficulty}
+                </div>
+                <div className="hstack" style={{marginTop: 18, gap: 10}}>
+                  <div className="bar accent" style={{flex: 1}}>
+                    <span style={{width: (a.have/a.total)*100+'%', background: complete?'var(--ok)':'var(--warn)'}}/>
+                  </div>
+                  <span className="num small">{a.have}/{a.total}</span>
+                </div>
+                <div className="tiny dim" style={{marginTop: 6}}>
+                  {complete ? <em className="serif" style={{color: 'var(--ok)'}}>Tous les ingrédients sont là.</em> : <em className="serif">{a.missing.length} manquant{a.missing.length>1?"s":""}.</em>}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function RecipeDetail({r, onBack, availability}){
+  const a = availability(r);
+  return (
+    <div className="fade-in">
+      <section className="section section--narrow">
+        <button className="btn btn--ghost btn--sm" onClick={onBack} style={{marginBottom: 20}}>
+          <Icon n="arrowL" s={12} stroke/> Recettes
+        </button>
+
+        <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.14em'}}>{r.category}</div>
+        <h1 className="display-xl" style={{margin: '8px 0 16px'}}>{r.name}</h1>
+        <p className="lede" style={{margin: 0}}>
+          <span className="num" style={{fontSize: 22, fontStyle: 'normal'}}>{r.time}</span> minutes pour <span className="num" style={{fontSize: 22, fontStyle: 'normal'}}>{r.servings}</span> personne{r.servings>1?"s":""} — difficulté {r.difficulty.toLowerCase()}.
+        </p>
+
+        <div style={{marginTop: 36, padding: '16px 0', borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)', display: 'flex', gap: 10}}>
+          <button className="btn btn--ink"><Icon n="flame" s={12}/> Cuisiner — décrémenter le stock</button>
+          <button className="btn"><Icon n="cart" s={12} stroke/> Ajouter les manquants aux courses</button>
+          <div style={{flex:1}}/>
+          <button className="btn btn--ghost"><Icon n="edit" s={12} stroke/></button>
+        </div>
+
+        <div style={{marginTop: 40}}>
+          <div className="eyebrow">Ingrédients — {a.have} / {a.total} disponibles</div>
+          <div style={{marginTop: 16}}>
+            {r.ingredients.map((ing, idx)=>{
+              const f = getFood(ing.foodId);
+              const ok = f && f.qty >= ing.qty;
+              return (
+                <div key={idx} className="row" style={{alignItems: 'baseline'}}>
+                  <div className="num" style={{width: 90, fontSize: 20}}>
+                    {ing.qty}<span className="tiny dim sans" style={{marginLeft: 3}}>{ing.unit}</span>
+                  </div>
+                  <div className="row-main">
+                    <div className="row-title serif">{f?.name || "Ingrédient"}</div>
+                    {f && <div className="row-sub">En stock : {f.qty}{f.unit} · {daysLabel(f.daysLeft)}</div>}
+                  </div>
+                  {ok ? <span className="tag tag--ok">disponible</span> : <button className="btn btn--sm btn--accent">Ajouter aux courses</button>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═════════════════ SHOPPING ═════════════════ */
+function ViewShopping(){
+  const [shopMode, setShopMode] = React.useState(false);
+  const [store, setStore] = React.useState("all");
+
+  const byStore = {};
+  SHOPPING.forEach(s=>{(byStore[s.store]=byStore[s.store]||[]).push(s);});
+  const remaining = SHOPPING.filter(s=>!s.checked).length;
+  const totalPrice = SHOPPING.filter(s=>!s.checked).reduce((t,s)=>t+s.price*s.qty,0);
+
+  const stores = store==="all"?STORES:STORES.filter(s=>s.id===store);
+
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Liste de courses · semaine 17</div>
+          <h1 className="display-l" style={{margin: 0}}>{remaining} articles<br/><em style={{fontStyle:'italic'}}>à rapporter.</em></h1>
+          <p className="lede" style={{margin: '12px 0 0', maxWidth: 560}}>
+            Environ <span className="num" style={{fontStyle: 'normal'}}>{totalPrice.toFixed(2)} €</span>,
+            répartis sur {new Set(SHOPPING.filter(s=>!s.checked).map(s=>s.store)).size} magasins.
+          </p>
+        </div>
+      </header>
+
+      <section className="section" style={{paddingTop: 0}}>
+        <div className="hstack" style={{gap: 12, padding: '16px 0', borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)'}}>
+          <select className="select" value={store} onChange={e=>setStore(e.target.value)}>
+            <option value="all">Tous les magasins</option>
+            {STORES.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}
+          </select>
+          <div style={{flex: 1}}/>
+          <button className={"btn btn--sm " + (shopMode?"btn--ink":"")} onClick={()=>setShopMode(!shopMode)}>
+            <Icon n="cart" s={12} stroke/> Mode course {shopMode?"· activé":""}
+          </button>
+          <button className="btn btn--accent btn--sm"><Icon n="plus" s={12}/> Ajouter</button>
+        </div>
+
+        <div style={{marginTop: 40, columnCount: stores.length > 1 ? 2 : 1, columnGap: 48}}>
+          {stores.map(st=>{
+            const items = (byStore[st.id]||[]);
+            if(!items.length) return null;
+            const aisles = {};
+            items.forEach(i=>{(aisles[i.aisle]=aisles[i.aisle]||[]).push(i);});
+            const done = items.filter(i=>i.checked).length;
+
+            return (
+              <div key={st.id} style={{breakInside: 'avoid', marginBottom: 48}}>
+                <div style={{paddingBottom: 8, borderBottom: '0.5px solid var(--ink)'}}>
+                  <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.14em'}}>{st.type}</div>
+                  <div className="hstack" style={{alignItems: 'baseline', gap: 10, marginTop: 2}}>
+                    <h3 className="display-s" style={{margin: 0}}>{st.name}</h3>
+                    <span className="num tiny dim" style={{marginLeft: 'auto'}}>{done}/{items.length}</span>
+                  </div>
+                </div>
+                <div>
+                  {Object.entries(aisles).map(([aisle, its])=>(
+                    <div key={aisle} style={{marginTop: 14}}>
+                      <div className="eyebrow" style={{paddingBottom: 4, borderBottom: '0.5px solid var(--rule-2)'}}>{aisle}</div>
+                      {its.map(i=><ShopRow key={i.id} item={i} mode={shopMode}/>)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    </div>
+  );
+}
+function ShopRow({item, mode}){
+  const [checked, setChecked] = React.useState(item.checked);
+  return (
+    <div className="hstack" style={{
+      padding: '10px 0', gap: 12, borderBottom: '0.5px solid var(--rule-2)',
+      opacity: checked?0.4:1, cursor: mode?'pointer':'default',
+    }} onClick={()=>mode && setChecked(!checked)}>
+      <div style={{
+        width: mode?18:14, height: mode?18:14,
+        border: '0.5px solid ' + (checked?'var(--ink)':'var(--rule)'),
+        background: checked?'var(--ink)':'transparent',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ivory)',
+        flexShrink: 0,
+      }}>{checked && <Icon n="check" s={mode?11:9}/>}</div>
+      <div style={{flex: 1, textDecoration: checked?'line-through':'none'}}>
+        <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{item.name}</div>
+        {item.auto && <div className="tiny dim" style={{fontStyle: 'italic', fontFamily:'var(--f-serif)'}}>auto — stock bas</div>}
+      </div>
+      <div className="num small" style={{width: 60, textAlign: 'right'}}>{item.qty}{item.unit}</div>
+      <div className="num tiny dim" style={{width: 50, textAlign: 'right'}}>{(item.price*item.qty).toFixed(2)} €</div>
+    </div>
+  );
+}
+
+/* ═════════════════ MOVEMENTS ═════════════════ */
+function ViewMovements(){
+  const [type, setType] = React.useState("all");
+  const types = [
+    {k:"all",       l:"Tous"},
+    {k:"in",        l:"Entrées"},
+    {k:"out",       l:"Sorties"},
+    {k:"loan-out",  l:"Prêts sortants"},
+    {k:"loan-in",   l:"Prêts entrants"},
+    {k:"consume",   l:"Consommation"},
+  ];
+  const list = type==="all"?MOVEMENTS:MOVEMENTS.filter(m=>m.type===type);
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Registre · toutes entrées & sorties</div>
+          <h1 className="display-l" style={{margin: 0}}>Mouvements.</h1>
+          <p className="lede" style={{margin: '12px 0 0', maxWidth: 540}}>
+            Ce qui entre, ce qui sort, ce qui circule. {MOVEMENTS.length} entrées enregistrées.
+          </p>
+        </div>
+      </header>
+      <section className="section" style={{paddingTop: 0}}>
+        <div className="hstack" style={{gap: 0, borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)', flexWrap: 'wrap'}}>
+          {types.map(t=>(
+            <button key={t.k} onClick={()=>setType(t.k)} style={{
+              background:'transparent', border: 0, padding: '14px 20px 14px 0',
+              marginBottom: -0.5, cursor: 'pointer',
+              borderBottom: type===t.k?'2px solid var(--ink)':'2px solid transparent',
+              color: type===t.k?'var(--ink)':'var(--ink-3)',
+              fontSize: 13, fontWeight: 450,
+            }}>{t.l}</button>
+          ))}
+          <div style={{flex: 1}}/>
+          <button className="btn btn--accent btn--sm"><Icon n="plus" s={12}/> Nouveau mouvement</button>
+        </div>
+
+        <table className="lst" style={{marginTop: 24}}>
+          <thead><tr>
+            <th style={{width: 100}}>Date</th><th>Type</th><th>Objet / Produit</th><th>Qté</th><th>Contact</th><th>Retour</th><th>Note</th>
+          </tr></thead>
+          <tbody>
+            {list.map(m=>{
+              const it = m.itemId?getItem(m.itemId):null;
+              const fd = m.foodId?getFood(m.foodId):null;
+              const ct = m.contactId?getContact(m.contactId):null;
+              const verbs = {"in":"Entrée", "out":"Sortie", "loan-out":"Prêt sortant", "loan-in":"Prêt entrant", "consume":"Consommation"};
+              const tones = {"in":"ok", "out":"danger", "loan-out":"warn", "loan-in":"ink", "consume":"ink"};
+              return (
+                <tr key={m.id}>
+                  <td className="mono" style={{fontSize: 11}}>{new Date(m.date).toLocaleDateString('fr-FR', {day:'2-digit', month:'short'})}</td>
+                  <td><span className={"tag tag--"+tones[m.type]}>{verbs[m.type]}</span></td>
+                  <td><span className="serif" style={{fontSize: 14, fontWeight: 500}}>{it?.name || fd?.name}</span></td>
+                  <td className="num">{m.qty?m.qty+m.unit:"1"}</td>
+                  <td className="drop">{ct?ct.name:<span className="dim2">—</span>}</td>
+                  <td className="mono drop" style={{fontSize: 11}}>{m.due?new Date(m.due).toLocaleDateString('fr-FR', {day:'2-digit', month:'short'}):<span className="dim2">—</span>}</td>
+                  <td className="drop"><em className="serif">{m.note}</em></td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  );
+}
+
+/* ═════════════════ LOANS ═════════════════ */
+function ViewLoans(){
+  const loans = MOVEMENTS.filter(m=>m.type==="loan-out");
+  const open = loans.filter(l=>l.open);
+  const overdue = loans.filter(l=>l.open&&l.overdue);
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Prêts · ce qui circule</div>
+          <h1 className="display-l" style={{margin: 0}}>{open.length} objets<br/><em style={{fontStyle:'italic'}}>hors les murs.</em></h1>
+          <p className="lede" style={{margin: '12px 0 0', maxWidth: 540}}>
+            Dont <span style={{color:'var(--danger)'}}>{overdue.length} en retard</span>.
+            Un rappel peut être envoyé à tout moment.
+          </p>
+        </div>
+      </header>
+      <section className="section" style={{paddingTop: 0}}>
+        <div style={{display: 'grid', gridTemplateColumns: '1.3fr 1fr', gap: 64, borderTop: '0.5px solid var(--rule)', paddingTop: 32}}>
+          <div>
+            <div className="eyebrow">En cours</div>
+            <h2 className="display-m" style={{margin: '6px 0 20px'}}>Prêts ouverts.</h2>
+            {open.map(l=>{
+              const it = getItem(l.itemId); const ct = getContact(l.contactId);
+              const days = Math.ceil((new Date(l.due)-new Date("2026-04-20"))/(1000*60*60*24));
+              return (
+                <div key={l.id} style={{padding: '20px 0', borderBottom: '0.5px solid var(--rule)'}}>
+                  <div className="hstack" style={{alignItems: 'baseline', gap: 14}}>
+                    <div className="avatar" style={{width: 32, height: 32}}>{ct?.initials}</div>
+                    <div style={{flex: 1}}>
+                      <div className="serif" style={{fontSize: 17, fontWeight: 500}}>{it?.name}</div>
+                      <div className="small dim">prêté à <span style={{color:'var(--ink)'}}>{ct?.name}</span> — <em>{l.note}</em></div>
+                    </div>
+                    {l.overdue
+                      ? <span className="tag tag--danger">{Math.abs(days)} j retard</span>
+                      : <span className="tag tag--warn">{days} j restants</span>}
+                  </div>
+                  <div className="hstack" style={{gap: 10, marginTop: 14}}>
+                    <span className="tiny mono dim">
+                      {new Date(l.date).toLocaleDateString('fr-FR')} → {new Date(l.due).toLocaleDateString('fr-FR')}
+                    </span>
+                    <div style={{flex:1}}/>
+                    <button className="btn btn--sm">Relancer</button>
+                    <button className="btn btn--sm btn--ink">Marquer rendu</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div>
+            <div className="eyebrow">Par personne</div>
+            <h2 className="display-m" style={{margin: '6px 0 20px'}}>Historique.</h2>
+            {CONTACTS.map(ct=>{
+              const history = loans.filter(l=>l.contactId===ct.id);
+              if(!history.length) return null;
+              const openC = history.filter(l=>l.open).length;
+              return (
+                <div key={ct.id} style={{padding: '14px 0', borderBottom: '0.5px solid var(--rule-2)'}}>
+                  <div className="hstack" style={{gap: 12}}>
+                    <div className="avatar" style={{width: 28, height: 28}}>{ct.initials}</div>
+                    <div style={{flex: 1}}>
+                      <div className="serif" style={{fontSize: 15, fontWeight: 500}}>{ct.name}</div>
+                      <div className="tiny dim">{history.length} prêt{history.length>1?"s":""} · {openC} en cours</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═════════════════ ADMIN ═════════════════ */
+function ViewRooms(){
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Plan · pièces, meubles, containers</div>
+          <h1 className="display-l" style={{margin: 0}}>Où rangez-vous quoi.</h1>
+        </div>
+      </header>
+      <section className="section" style={{paddingTop: 0}}>
+        <div className="hstack" style={{gap: 8, padding: '16px 0', borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)'}}>
+          <div style={{flex: 1}}/>
+          <button className="btn btn--sm">Nouvelle pièce</button>
+          <button className="btn btn--sm">Nouveau meuble</button>
+          <button className="btn btn--accent btn--sm">Nouveau container + QR</button>
+        </div>
+        {ROOMS.map(r=>{
+          const furns = FURNITURE.filter(f=>f.roomId===r.id);
+          return (
+            <div key={r.id} style={{padding: '36px 0', borderBottom: '0.5px solid var(--rule)'}}>
+              <div className="hstack" style={{alignItems: 'baseline', gap: 16, marginBottom: 16}}>
+                <h3 className="display-m" style={{margin: 0}}>{r.name}</h3>
+                <span className="tiny mono dim">{countByRoom(r.id)} objets · {furns.length} meubles</span>
+              </div>
+              <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 24}}>
+                {furns.map(f=>{
+                  const containers = CONTAINERS.filter(c=>c.furnId===f.id);
+                  return (
+                    <div key={f.id}>
+                      <div className="label" style={{paddingBottom: 6, borderBottom: '0.5px solid var(--ink-4)'}}>{f.name}</div>
+                      {containers.map(c=>(
+                        <div key={c.id} style={{padding: '10px 0', borderBottom: '0.5px solid var(--rule-2)'}}>
+                          <div className="hstack" style={{gap: 10, alignItems: 'flex-start'}}>
+                            <div className="qrbox"><QR value={c.code} size={36}/></div>
+                            <div style={{flex: 1, minWidth: 0}}>
+                              <div className="tiny mono dim">{c.code}</div>
+                              <div className="serif" style={{fontSize: 13.5, fontWeight: 500}}>{c.name}</div>
+                              <div className="tiny dim">{countByContainer(c.id)} objets</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      {containers.length===0 && <div className="small dim" style={{padding:'10px 0'}}><em>aucun container</em></div>}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </section>
+    </div>
+  );
+}
+
+function ViewStores(){
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Où faire les courses</div>
+          <h1 className="display-l" style={{margin: 0}}>Magasins.</h1>
+        </div>
+      </header>
+      <section className="section" style={{paddingTop: 0, borderTop: '0.5px solid var(--rule)'}}>
+        <table className="lst" style={{marginTop: 16}}>
+          <thead><tr><th>Magasin</th><th>Type</th><th className="num">À acheter</th><th className="num">Produits liés</th></tr></thead>
+          <tbody>
+            {STORES.map(s=>{
+              const items = SHOPPING.filter(sh=>sh.store===s.id);
+              return (
+                <tr key={s.id}>
+                  <td><span className="serif" style={{fontSize: 16, fontWeight: 500}}>{s.name}</span></td>
+                  <td className="drop">{s.type}</td>
+                  <td className="num">{items.filter(i=>!i.checked).length}</td>
+                  <td className="num">{items.length}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  );
+}
+
+function ViewContacts(){
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Qui emprunte, qui prête</div>
+          <h1 className="display-l" style={{margin: 0}}>Contacts.</h1>
+        </div>
+      </header>
+      <section className="section" style={{paddingTop: 0, borderTop: '0.5px solid var(--rule)'}}>
+        <table className="lst" style={{marginTop: 16}}>
+          <thead><tr><th></th><th>Nom</th><th className="num">Mouvements</th><th className="num">En cours</th></tr></thead>
+          <tbody>
+            {CONTACTS.map(ct=>{
+              const ms = MOVEMENTS.filter(m=>m.contactId===ct.id);
+              const open = ms.filter(m=>m.open).length;
+              return (
+                <tr key={ct.id}>
+                  <td style={{width: 40}}><div className="avatar">{ct.initials}</div></td>
+                  <td><span className="serif" style={{fontSize: 16, fontWeight: 500}}>{ct.name}</span></td>
+                  <td className="num">{ms.length}</td>
+                  <td className="num">{open}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </section>
+    </div>
+  );
+}
+
+function ViewScan(){
+  const [scanned, setScanned] = React.useState(null);
+  return (
+    <div className="fade-in">
+      <header className="page-head">
+        <div className="meta">
+          <div className="kicker">Audit · ajout rapide · sortie</div>
+          <h1 className="display-l" style={{margin: 0}}>Scanner un QR.</h1>
+          <p className="lede" style={{margin: '12px 0 0', maxWidth: 540}}>
+            Pour un vrai scan, préférer l'app téléphone.
+            Sélectionnez un container ci-dessous pour simuler.
+          </p>
+        </div>
+      </header>
+      <section className="section" style={{paddingTop: 0}}>
+        <div style={{display: 'grid', gridTemplateColumns: '320px 1fr', gap: 56, borderTop: '0.5px solid var(--rule)', paddingTop: 32}}>
+          <div>
+            <div className="eyebrow">Simulation</div>
+            <div style={{marginTop: 12}}>
+              {CONTAINERS.map(c=>(
+                <div key={c.id} onClick={()=>setScanned(c)} className="row row--click" style={{cursor: 'pointer'}}>
+                  <div className="tiny mono dim" style={{width: 70}}>{c.code}</div>
+                  <div className="row-main">
+                    <div className="serif" style={{fontSize: 13, fontWeight: 500}}>{c.name}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            {scanned ? (
+              <div>
+                <div className="hstack" style={{gap: 24, alignItems: 'flex-start'}}>
+                  <div className="qrbox"><QR value={scanned.code} size={110}/></div>
+                  <div>
+                    <div className="tiny mono dim">{scanned.code}</div>
+                    <h2 className="display-m" style={{margin: '4px 0 4px'}}>{scanned.name}</h2>
+                    <div className="small mono dim">{getRoom(getFurniture(scanned.furnId).roomId).name} / {getFurniture(scanned.furnId).name}</div>
+                    <div className="hstack" style={{gap: 6, marginTop: 16}}>
+                      <button className="btn btn--sm btn--accent"><Icon n="plus" s={11}/> Ajouter</button>
+                      <button className="btn btn--sm">Sortir / prêter</button>
+                      <button className="btn btn--sm">Auditer</button>
+                    </div>
+                  </div>
+                </div>
+                <div className="hair" style={{margin: '28px 0 16px'}}/>
+                <div className="eyebrow">Contenu attendu · {countByContainer(scanned.id)} objets</div>
+                <table className="lst" style={{marginTop: 12}}>
+                  <tbody>
+                    {ITEMS.filter(i=>i.containerId===scanned.id).map(i=>(
+                      <tr key={i.id}>
+                        <td><span className="serif" style={{fontSize: 14, fontWeight: 500}}>{i.name}</span></td>
+                        <td className="drop">{i.category}</td>
+                        <td className="drop">{i.brand || ""}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div style={{padding: '60px 0', textAlign: 'center'}}>
+                <Icon n="qr" s={60} style={{color:'var(--ink-4)'}}/>
+                <h2 className="display-s" style={{margin: '16px 0 4px'}}>Aucun container scanné</h2>
+                <p className="small dim">Sélectionnez un container à gauche pour voir son contenu.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* ═════════════════ MOBILE — APP (phone frame) ═════════════════ */
+function MobileApp(){
+  const [tab, setTab] = React.useState("home");
+  const [sub, setSub] = React.useState(null);
+  const screens = {
+    home: <PhoneHome setTab={setTab}/>,
+    scan: <PhoneScan setSub={setSub}/>,
+    food: <PhoneFood/>,
+    list: <PhoneShopping/>,
+    more: <PhoneMore/>,
+  };
+  let content = sub?.screen==="container"?<PhoneContainer container={sub.data} onBack={()=>setSub(null)}/>:screens[tab];
+
+  return (
+    <div className="phone">
+      <div className="phone-island"/>
+      <div className="phone-status">
+        <span>9:41</span>
+        <span style={{fontSize: 10, color: 'var(--ink-3)'}}>◖◗ ▰▰▰</span>
+      </div>
+      <div className="phone-content">{content}</div>
+      <div className="phone-tabbar">
+        {[
+          {k:"home", l:"Accueil"},
+          {k:"scan", l:"Scanner"},
+          {k:"food", l:"Garde-manger"},
+          {k:"list", l:"Courses"},
+          {k:"more", l:"Plus"},
+        ].map(t=>(
+          <div key={t.k} className={"phone-tab " + (tab===t.k?"active":"")} onClick={()=>{setSub(null); setTab(t.k);}}>
+            <div style={{fontSize: 10, fontWeight: tab===t.k?600:500, letterSpacing: -0.1}}>{t.l}</div>
+          </div>
+        ))}
+      </div>
+      <div className="phone-home"/>
+    </div>
+  );
+}
+
+function PhoneHome({setTab}){
+  const expiring = FOOD.filter(f=>f.daysLeft<=5).sort((a,b)=>a.daysLeft-b.daysLeft).slice(0,4);
+  const openLoans = MOVEMENTS.filter(m=>m.type==="loan-out"&&m.open);
+  return (
+    <div style={{padding: '20px 24px 32px'}}>
+      <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.14em'}}>Lundi 20 avril</div>
+      <h1 className="display-m" style={{margin: '6px 0 20px', fontWeight: 400}}>Bonjour Paul.</h1>
+
+      <div onClick={()=>setTab("scan")} style={{padding: '18px 0', borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)', cursor: 'pointer'}}>
+        <div className="hstack">
+          <div>
+            <div className="eyebrow" style={{color:'var(--accent)'}}>Action principale</div>
+            <div className="display-s" style={{margin: '4px 0 0'}}>Scanner un container</div>
+          </div>
+          <div style={{marginLeft:'auto'}}><Icon n="qr" s={40}/></div>
+        </div>
+      </div>
+
+      <div style={{marginTop: 28}}>
+        <div className="eyebrow">À consommer</div>
+        <div style={{marginTop: 8}}>
+          {expiring.map(f=>{
+            const tone = expiryTone(f.daysLeft);
+            return (
+              <div key={f.id} className="row">
+                <div className="num small" style={{width: 36, color: tone==="danger"?'var(--danger)':'var(--ink-2)'}}>{f.daysLeft<0?"—":f.daysLeft+"j"}</div>
+                <div className="row-main">
+                  <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{f.name}</div>
+                  <div className="tiny dim">{f.qty}{f.unit} · {f.location}</div>
+                </div>
+                <span className={"tag tag--"+tone}>{tone==="danger"?(f.daysLeft<0?"exp.":"urgent"):"bientôt"}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div style={{marginTop: 28}}>
+        <div className="eyebrow">Prêts en cours · {openLoans.length}</div>
+        <div style={{marginTop: 8}}>
+          {openLoans.slice(0,3).map(l=>{
+            const it = getItem(l.itemId); const ct = getContact(l.contactId);
+            return (
+              <div key={l.id} className="row">
+                <div className="avatar" style={{width: 26, height: 26}}>{ct?.initials}</div>
+                <div className="row-main">
+                  <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{it?.name}</div>
+                  <div className="tiny dim">{ct?.name}</div>
+                </div>
+                {l.overdue && <span className="tag tag--danger">retard</span>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PhoneScan({setSub}){
+  return (
+    <div style={{padding: '20px 24px 32px'}}>
+      <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.14em'}}>Scanner</div>
+      <h1 className="display-m" style={{margin: '6px 0 20px', fontWeight: 400}}>Cadrer le QR.</h1>
+
+      <div style={{
+        width: '100%', height: 300, background: 'var(--ink)', position: 'relative',
+        overflow: 'hidden', marginBottom: 24,
+      }}>
+        <div style={{position: 'absolute', inset: 30, border: '0.5px solid rgba(255,255,255,0.2)'}}/>
+        {[[0,0],[1,0],[0,1],[1,1]].map(([x,y],i)=>(
+          <div key={i} style={{
+            position: 'absolute',
+            top: y?'auto':20, bottom: y?20:'auto',
+            left: x?'auto':20, right: x?20:'auto',
+            width: 28, height: 28,
+            borderTop: !y?'1px solid var(--ivory)':'none',
+            borderBottom: y?'1px solid var(--ivory)':'none',
+            borderLeft: !x?'1px solid var(--ivory)':'none',
+            borderRight: x?'1px solid var(--ivory)':'none',
+          }}/>
+        ))}
+        <div style={{
+          position: 'absolute', left: 30, right: 30, top: '50%',
+          height: 1, background: 'linear-gradient(90deg, transparent, var(--accent-2), transparent)',
+          animation: 'scanPulse 2.4s ease-in-out infinite',
+        }}/>
+      </div>
+
+      <div className="eyebrow">Récemment scannés</div>
+      <div style={{marginTop: 8}}>
+        {CONTAINERS.slice(0,4).map(c=>(
+          <div key={c.id} className="row row--click" onClick={()=>setSub({screen: "container", data: c})}>
+            <div className="qrbox" style={{padding: 2}}><QR value={c.code} size={30}/></div>
+            <div className="row-main">
+              <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{c.name}</div>
+              <div className="tiny mono dim">{c.code}</div>
+            </div>
+            <Icon n="chev" s={12} stroke style={{color:'var(--ink-4)'}}/>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PhoneContainer({container, onBack}){
+  const f = getFurniture(container.furnId); const r = getRoom(f.roomId);
+  const items = ITEMS.filter(i=>i.containerId===container.id);
+  return (
+    <div style={{padding: '20px 24px 32px'}}>
+      <button className="btn btn--ghost btn--sm" onClick={onBack} style={{marginBottom: 16}}>
+        <Icon n="arrowL" s={12} stroke/> Retour
+      </button>
+      <div className="tiny mono dim">{container.code}</div>
+      <h1 className="display-m" style={{margin: '4px 0 4px', fontWeight: 400}}>{container.name}</h1>
+      <div className="small dim">{r.name} / {f.name} · {items.length} objets</div>
+
+      <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, marginTop: 20, borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)'}}>
+        {[
+          {k: 'add', l: 'Ajouter'},
+          {k: 'out', l: 'Sortir'},
+          {k: 'audit', l: 'Auditer'},
+          {k: 'edit', l: 'Modifier'},
+        ].map((a, i)=>(
+          <div key={a.k} style={{padding: '14px 0', textAlign: 'center', borderRight: i<3?'0.5px solid var(--rule)':'none'}}>
+            <div className="eyebrow" style={{color:'var(--ink-2)'}}>{a.l}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="eyebrow" style={{marginTop: 24}}>Contenu</div>
+      <div style={{marginTop: 8}}>
+        {items.map(i=>(
+          <div key={i.id} className="row">
+            <div className="row-main">
+              <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{i.name}</div>
+              <div className="tiny dim">{i.brand || i.category}</div>
+            </div>
+            <Icon n="chev" s={12} stroke style={{color:'var(--ink-4)'}}/>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PhoneFood(){
+  const grouped = {};
+  FOOD.forEach(f=>{(grouped[f.location]=grouped[f.location]||[]).push(f);});
+  return (
+    <div style={{padding: '20px 24px 32px'}}>
+      <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.14em'}}>Garde-manger</div>
+      <h1 className="display-m" style={{margin: '6px 0 20px', fontWeight: 400}}>{FOOD.length} produits.</h1>
+      {Object.entries(grouped).map(([loc, foods])=>(
+        <div key={loc} style={{marginBottom: 24}}>
+          <div className="eyebrow">{loc}</div>
+          <div style={{marginTop: 8}}>
+            {foods.slice(0,5).map(f=>{
+              const tone = expiryTone(f.daysLeft);
+              return (
+                <div key={f.id} className="row">
+                  <div className="row-main">
+                    <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{f.name}</div>
+                    <div className="tiny dim">{f.qty}{f.unit} · {daysLabel(f.daysLeft)}</div>
+                  </div>
+                  <span className={"tag tag--"+tone}></span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PhoneShopping(){
+  const byStore = {};
+  SHOPPING.forEach(s=>{(byStore[s.store]=byStore[s.store]||[]).push(s);});
+  return (
+    <div style={{padding: '20px 24px 32px'}}>
+      <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.14em'}}>Semaine 17</div>
+      <h1 className="display-m" style={{margin: '6px 0 20px', fontWeight: 400}}>Courses.</h1>
+      {STORES.filter(s=>byStore[s.id]).map(st=>{
+        const items = byStore[st.id];
+        const done = items.filter(i=>i.checked).length;
+        return (
+          <div key={st.id} style={{marginBottom: 24}}>
+            <div style={{paddingBottom: 4, borderBottom: '0.5px solid var(--ink)'}}>
+              <div className="hstack" style={{alignItems: 'baseline'}}>
+                <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.14em'}}>{st.type}</div>
+                <div className="tiny num dim" style={{marginLeft: 'auto'}}>{done}/{items.length}</div>
+              </div>
+              <div className="serif" style={{fontSize: 18, fontWeight: 500}}>{st.name}</div>
+            </div>
+            <div style={{marginTop: 4}}>
+              {items.map(i=>(
+                <div key={i.id} className="row" style={{padding: '10px 0', opacity: i.checked?0.4:1}}>
+                  <div style={{width: 14, height: 14, border: '0.5px solid ' + (i.checked?'var(--ink)':'var(--rule)'), background: i.checked?'var(--ink)':'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ivory)'}}>
+                    {i.checked && <Icon n="check" s={9}/>}
+                  </div>
+                  <div className="row-main" style={{textDecoration: i.checked?'line-through':'none'}}>
+                    <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{i.name}</div>
+                    <div className="tiny dim">{i.aisle} · {i.qty}{i.unit}</div>
+                  </div>
+                  <div className="num tiny dim">{(i.price*i.qty).toFixed(2)}€</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function PhoneMore(){
+  const items = [
+    { l: "Toutes mes possessions", s: ITEMS.length + " objets" },
+    { l: "Recettes",               s: RECIPES.length + " recettes" },
+    { l: "Prêts",                  s: MOVEMENTS.filter(m=>m.type==="loan-out"&&m.open).length + " en cours" },
+    { l: "Historique mouvements",  s: MOVEMENTS.length + " entrées" },
+    { l: "Pièces & rangements",    s: ROOMS.length + " pièces" },
+    { l: "Contacts",               s: CONTACTS.length + " personnes" },
+    { l: "Réglages",               s: null },
+  ];
+  return (
+    <div style={{padding: '20px 24px 32px'}}>
+      <h1 className="display-m" style={{margin: '0 0 20px', fontWeight: 400}}>Plus.</h1>
+      <div>
+        {items.map((it)=>(
+          <div key={it.l} className="row">
+            <div className="row-main">
+              <div className="serif" style={{fontSize: 15, fontWeight: 500}}>{it.l}</div>
+              {it.s && <div className="tiny dim">{it.s}</div>}
+            </div>
+            <Icon n="chev" s={12} stroke style={{color:'var(--ink-4)'}}/>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ═════════════════ MOBILE WEB (content only, in frame) ═════════════════ */
+function MobileWebContent({current, setCurrent}){
+  const titles = {
+    dashboard: "Tableau",
+    items: "Possessions",
+    food: "Garde-manger",
+    recipes: "Recettes",
+    shopping: "Courses",
+    loans: "Prêts",
+  };
+  const Btn = ({k, l})=><button onClick={()=>setCurrent(k)} className={"btn btn--sm " + (current===k?"btn--ink":"")}>{l}</button>;
+  return (
+    <div>
+      <div style={{marginBottom: 16}}>
+        <div className="tiny mono dim" style={{textTransform: 'uppercase', letterSpacing: '0.14em'}}>Intendance</div>
+        <div className="display-s" style={{marginTop: 4, fontWeight: 400}}>{titles[current] || current}</div>
+      </div>
+      <div style={{display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16}}>
+        {Object.keys(titles).map(k=><Btn key={k} k={k} l={titles[k]}/>)}
+      </div>
+      <MobileWebPage current={current}/>
+    </div>
+  );
+}
+function MobileWebPage({current}){
+  if(current==="dashboard"){
+    const expiring = FOOD.filter(f=>f.daysLeft<=5).slice(0,5);
+    const openLoans = MOVEMENTS.filter(m=>m.type==="loan-out"&&m.open);
+    return (
+      <div>
+        <div className="hstack" style={{gap: 0, borderTop: '0.5px solid var(--rule)', borderBottom: '0.5px solid var(--rule)', marginBottom: 20}}>
+          <div style={{padding: '14px 20px 14px 0', borderRight: '0.5px solid var(--rule)', flex: 1}}>
+            <div className="num" style={{fontSize: 32}}>{ITEMS.length}</div>
+            <div className="tiny dim">Objets</div>
+          </div>
+          <div style={{padding: '14px 0 14px 20px', flex: 1}}>
+            <div className="num" style={{fontSize: 32, color: openLoans.some(l=>l.overdue)?'var(--danger)':'var(--ink)'}}>{openLoans.length}</div>
+            <div className="tiny dim">Prêts</div>
+          </div>
+        </div>
+        <div className="eyebrow">À consommer</div>
+        {expiring.map(f=>{
+          const tone = expiryTone(f.daysLeft);
+          return (
+            <div key={f.id} className="row">
+              <div className="row-main">
+                <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{f.name}</div>
+                <div className="tiny dim">{f.qty}{f.unit} · {f.location}</div>
+              </div>
+              <span className={"tag tag--"+tone}>{daysLabel(f.daysLeft)}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+  if(current==="items"){
+    return (
+      <div>
+        {ITEMS.slice(0,10).map(i=>(
+          <div key={i.id} className="row">
+            <div className="row-main">
+              <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{i.name}</div>
+              <div className="tiny mono dim">{locationString(i)}</div>
+            </div>
+            <span className="tag tag--ink">{i.category}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  if(current==="food") return <PhoneFood/>;
+  if(current==="recipes"){
+    return (
+      <div>
+        {RECIPES.map(r=>(
+          <div key={r.id} className="row">
+            <div className="row-main">
+              <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{r.name}</div>
+              <div className="tiny dim">{r.category} · {r.time} min</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  if(current==="shopping") return <PhoneShopping/>;
+  if(current==="loans"){
+    const open = MOVEMENTS.filter(m=>m.type==="loan-out"&&m.open);
+    return (
+      <div>
+        {open.map(l=>{
+          const it = getItem(l.itemId); const ct = getContact(l.contactId);
+          return (
+            <div key={l.id} className="row">
+              <div className="avatar" style={{width: 26, height: 26}}>{ct?.initials}</div>
+              <div className="row-main">
+                <div className="serif" style={{fontSize: 14, fontWeight: 500}}>{it?.name}</div>
+                <div className="tiny dim">{ct?.name}</div>
+              </div>
+              {l.overdue && <span className="tag tag--danger">retard</span>}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+  return null;
+}
+
+/* ═════════════════ APP ROOT ═════════════════ */
+function App(){
+  const [device, setDevice] = React.useState(()=>localStorage.getItem("inv2.device")||"desktop");
+  const [current, setCurrent] = React.useState(()=>localStorage.getItem("inv2.view")||"dashboard");
+  const [paletteOpen, setPaletteOpen] = React.useState(false);
+  const [tweaksOpen, setTweaksOpen] = React.useState(false);
+  const [accent, setAccent] = React.useState(()=>localStorage.getItem("inv2.accent")||window.TWEAK_DEFAULTS.accent);
+
+  React.useEffect(()=>{localStorage.setItem("inv2.device", device);}, [device]);
+  React.useEffect(()=>{localStorage.setItem("inv2.view", current);}, [current]);
+  React.useEffect(()=>{localStorage.setItem("inv2.accent", accent); applyAccent(accent);}, [accent]);
+
+  React.useEffect(()=>{
+    const h = (e)=>{
+      if(e.data?.type==="__activate_edit_mode") setTweaksOpen(true);
+      if(e.data?.type==="__deactivate_edit_mode") setTweaksOpen(false);
+    };
+    window.addEventListener("message", h);
+    window.parent.postMessage({type:"__edit_mode_available"}, "*");
+    return ()=>window.removeEventListener("message", h);
+  }, []);
+
+  function applyAccent(a){
+    const defs = {
+      prune:  { a:"42% 0.13 25",  t:"94% 0.025 25" },
+      encre:  { a:"36% 0.14 260", t:"94% 0.025 260" },
+      foret:  { a:"38% 0.09 155", t:"94% 0.022 155" },
+      ocre:   { a:"48% 0.11 70",  t:"95% 0.028 70" },
+    };
+    const d = defs[a] || defs.prune;
+    document.documentElement.style.setProperty('--accent',      `oklch(${d.a})`);
+    document.documentElement.style.setProperty('--accent-tint', `oklch(${d.t})`);
+  }
+
+  const views = {
+    dashboard: <ViewDashboard setCurrent={setCurrent}/>,
+    items:     <ViewItems/>,
+    food:      <ViewFood/>,
+    recipes:   <ViewRecipes/>,
+    shopping:  <ViewShopping/>,
+    movements: <ViewMovements/>,
+    loans:     <ViewLoans/>,
+    rooms:     <ViewRooms/>,
+    stores:    <ViewStores/>,
+    contacts:  <ViewContacts/>,
+    scan:      <ViewScan/>,
+  };
+
+  function persistAccent(a){
+    setAccent(a);
+    window.parent.postMessage({type:"__edit_mode_set_keys", edits:{accent:a}}, "*");
+  }
+
+  return (
+    <div className="app-root">
+      <div className="env-bar">
+        <div className="wordmark">Intendance <em>— maison</em></div>
+        <div style={{flex:1}}/>
+        <div className="device-switch">
+          {[
+            {k:"desktop",    l:"Desktop"},
+            {k:"mobile-web", l:"Mobile web"},
+            {k:"mobile-app", l:"App téléphone"},
+          ].map(d=>(
+            <button key={d.k} className={device===d.k?"active":""} onClick={()=>setDevice(d.k)}>{d.l}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="canvas-host" data-screen-label={"01 " + current}>
+        {device==="desktop" && (
+          <div style={{display: 'flex', height: '100%'}}>
+            <Sidebar current={current} setCurrent={setCurrent} setPaletteOpen={setPaletteOpen}/>
+            <div className="main-col">
+              <div className="content-scroll">{views[current]}</div>
+            </div>
+          </div>
+        )}
+
+        {device==="mobile-web" && (
+          <div className="mobile-stage">
+            <div>
+              <div className="mw-frame">
+                <div className="mw-topbar">
+                  <div className="mw-dot"/><div className="mw-dot"/><div className="mw-dot"/>
+                  <div className="mw-url">intendance.maison.local/{current}</div>
+                </div>
+                <div className="mw-body">
+                  <MobileWebContent current={current} setCurrent={setCurrent}/>
+                </div>
+              </div>
+              <div className="tiny mono dim" style={{textAlign: 'center', marginTop: 12}}>Mobile web · responsive · 390×820</div>
+            </div>
+          </div>
+        )}
+
+        {device==="mobile-app" && (
+          <div className="mobile-stage">
+            <div>
+              <MobileApp/>
+              <div className="tiny mono dim" style={{textAlign: 'center', marginTop: 12}}>App téléphone</div>
+            </div>
+          </div>
+        )}
+
+        <CommandPalette open={paletteOpen} setOpen={setPaletteOpen} setCurrent={setCurrent}/>
+      </div>
+
+      <div className={"tweaks " + (tweaksOpen?"":"hidden")}>
+        <div className="hstack" style={{marginBottom: 12}}>
+          <div className="eyebrow">Tweaks</div>
+          <button className="btn btn--ghost btn--sm" style={{marginLeft: 'auto'}} onClick={()=>setTweaksOpen(false)}>
+            <Icon n="x" s={11}/>
+          </button>
+        </div>
+        <div className="label" style={{marginBottom: 8}}>Couleur d'accent</div>
+        <div style={{display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6}}>
+          {[
+            {k: "prune", c: "oklch(42% 0.13 25)",  l: "Prune"},
+            {k: "encre", c: "oklch(36% 0.14 260)", l: "Encre"},
+            {k: "foret", c: "oklch(38% 0.09 155)", l: "Forêt"},
+            {k: "ocre",  c: "oklch(48% 0.11 70)",  l: "Ocre"},
+          ].map(p=>(
+            <button key={p.k} onClick={()=>persistAccent(p.k)} style={{
+              padding: 6, border: '0.5px solid ' + (accent===p.k?'var(--ink)':'var(--rule)'),
+              background: 'transparent', cursor: 'pointer', display: 'flex',
+              flexDirection: 'column', alignItems: 'center', gap: 4, fontSize: 10.5,
+              fontFamily: 'var(--f-serif)',
+            }}>
+              <div style={{width:'100%', height: 20, background: p.c}}/>
+              {p.l}
+            </button>
+          ))}
+        </div>
+        <div className="tiny dim" style={{marginTop: 12, fontStyle: 'italic', fontFamily: 'var(--f-serif)'}}>⌘K ouvre la palette de commandes</div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
