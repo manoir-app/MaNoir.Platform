@@ -1,4 +1,5 @@
 using MaNoir.Core.Contracts.Models.Mesh;
+using MaNoir.Core.Locations;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace MaNoir.Core.Mesh;
 public sealed partial class AutomationMeshLogic
 {
     private readonly AutomationMeshMongoOperations _mongoOperations;
+    private readonly LocationMongoOperations _locationMongoOperations;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AutomationMeshLogic"/> class.
@@ -15,6 +17,7 @@ public sealed partial class AutomationMeshLogic
     public AutomationMeshLogic()
     {
         _mongoOperations = new AutomationMeshMongoOperations();
+        _locationMongoOperations = new LocationMongoOperations();
     }
 
     /// <summary>

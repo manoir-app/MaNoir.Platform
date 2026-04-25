@@ -40,4 +40,31 @@ public sealed class UserLogicTests
         Assert.AreEqual(now.AddDays(1), user.DeleteAfter);
         Assert.AreEqual("guestuserexamplecom", user.Id);
     }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void ApplyGuestProfileUpdate_ShouldCopyEditableGuestFields()
+    {
+        User target = new User()
+        {
+            Name = "Old",
+            FirstName = "Guest"
+        };
+        User source = new User()
+        {
+            Name = "Dupont",
+            FirstName = "Jean",
+            CommonName = "Jean D.",
+            MainEmail = "jean@example.test",
+            MainPhoneNumber = "+33102030405"
+        };
+
+        UserLogic.ApplyGuestProfileUpdate(target, source);
+
+        Assert.AreEqual("Dupont", target.Name);
+        Assert.AreEqual("Jean", target.FirstName);
+        Assert.AreEqual("Jean D.", target.CommonName);
+        Assert.AreEqual("jean@example.test", target.MainEmail);
+        Assert.AreEqual("+33102030405", target.MainPhoneNumber);
+    }
 }

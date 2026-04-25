@@ -55,6 +55,30 @@ public sealed class UserMongoOperations
     }
 
     /// <summary>
+    /// Lists all users.
+    /// </summary>
+    public Task<List<User>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return _collection.Find(user => true).ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Lists all guest users.
+    /// </summary>
+    public Task<List<User>> GetGuestUsersAsync(CancellationToken cancellationToken = default)
+    {
+        return _collection.Find(user => user.IsGuest).ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Lists all non-guest users.
+    /// </summary>
+    public Task<List<User>> GetNonGuestUsersAsync(CancellationToken cancellationToken = default)
+    {
+        return _collection.Find(user => !user.IsGuest).ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
     /// Inserts or replaces a user document by identifier.
     /// </summary>
     public Task SaveAsync(User user, CancellationToken cancellationToken = default)
@@ -74,5 +98,18 @@ public sealed class UserMongoOperations
             user,
             new ReplaceOptions() { IsUpsert = true },
             cancellationToken);
+    }
+
+    /// <summary>
+    /// Deletes a user by identifier.
+    /// </summary>
+    public Task<DeleteResult> DeleteAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException("The user identifier cannot be empty.", nameof(userId));
+        }
+
+        return _collection.DeleteOneAsync(user => user.Id == userId, cancellationToken);
     }
 }
