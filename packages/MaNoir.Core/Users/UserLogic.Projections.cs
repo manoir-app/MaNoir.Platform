@@ -14,6 +14,7 @@ public sealed partial class UserLogic
             return;
 
         user.HealthData = null;
+        user.HashedPinCode = null;
         user.HashedPassword = null;
         user.Presence = null;
     }
@@ -28,6 +29,7 @@ public sealed partial class UserLogic
             return;
 
         user.HealthData = null;
+        user.HashedPinCode = null;
         user.HashedPassword = null;
     }
 }

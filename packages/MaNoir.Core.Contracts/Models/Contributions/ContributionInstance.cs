@@ -14,9 +14,10 @@ namespace MaNoir.Core.Contracts.Models.Contributions;
 public enum ContributionInstanceStatus
 {
     NotConfigured,
+    IncompleteConfiguration,
+    AuthorizationPending,
     Functional,
     Error,
-    IncompleteConfiguration,
     Archived
 }
 
@@ -72,6 +73,11 @@ public sealed class ContributionInstance
     /// Gets or sets the creation timestamp.
     /// </summary>
     public DateTimeOffset CreatedAtUtc { get; set; }
+
+    /// <summary>
+    /// Gets or sets the authorization timestamp when the instance is trusted to receive referenced secrets.
+    /// </summary>
+    public DateTimeOffset? AuthorizedAtUtc { get; set; }
 
     /// <summary>
     /// Gets or sets the last update timestamp.

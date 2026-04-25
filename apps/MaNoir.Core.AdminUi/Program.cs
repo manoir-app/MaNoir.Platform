@@ -12,11 +12,11 @@ public static class Program
 		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 		builder.AddMaNoirCoreAdminUiHosting();
-		builder.Services.AddMaNoirCoreApi();
+		builder.AddMaNoirCoreApi();
 
 		WebApplication app = builder.Build();
 
-		app.MapMaNoirCoreApi();
+		app.UseMaNoirCoreApi();
 
 		app.Run();
 	}

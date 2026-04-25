@@ -1,3 +1,5 @@
+using MaNoir.Core.Secrets;
+
 namespace MaNoir.Core.Contributions;
 
 /// <summary>
@@ -6,6 +8,7 @@ namespace MaNoir.Core.Contributions;
 public sealed partial class ContributionLogic
 {
     private readonly ContributionMongoOperations _mongoOperations;
+    private readonly SharedSecretLogic _sharedSecretLogic;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ContributionLogic"/> class.
@@ -13,5 +16,6 @@ public sealed partial class ContributionLogic
     public ContributionLogic()
     {
         _mongoOperations = new ContributionMongoOperations();
+        _sharedSecretLogic = new SharedSecretLogic();
     }
 }

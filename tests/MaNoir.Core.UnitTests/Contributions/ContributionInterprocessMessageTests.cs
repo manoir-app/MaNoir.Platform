@@ -2,6 +2,8 @@ using Home.Common.Messages;
 using MaNoir.Core.Contracts.Models.Contributions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using System;
+using System.Security.Cryptography;
 
 namespace MaNoir.Core.UnitTests.Contributions;
 
@@ -36,6 +38,7 @@ public sealed class ContributionInterprocessMessageTests
         Assert.AreEqual(PluginCatalogPublicationMessage.PublishTopic, new PluginCatalogPublicationMessage().Topic);
         Assert.AreEqual(ContributionDefinitionsChangedMessage.TopicName, new ContributionDefinitionsChangedMessage().Topic);
         Assert.AreEqual(ContributionInstancesChangedMessage.TopicName, new ContributionInstancesChangedMessage().Topic);
+        Assert.AreEqual("sarah.contribution.secrets.resolve", new ContributionSecretsRequestMessage("sarah", "instance-01", "public-key").Topic);
     }
 
     [TestMethod]
@@ -59,5 +62,21 @@ public sealed class ContributionInterprocessMessageTests
         Assert.AreEqual("sarah.hue", response.Instance.ContributionDefinitionId);
         Assert.AreEqual("sarah", response.Instance.PluginId);
         Assert.AreEqual("Hue", response.Instance.Label);
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void ContributionSecretsRequestMessage_ShouldKeepPluginScopedTopicAndPayload()
+    {
+        using RSA rsa = RSA.Create(2048);
+        string publicKeyPem = rsa.ExportRSAPublicKeyPem();
+
+        ContributionSecretsRequestMessage message = new ContributionSecretsRequestMessage("Sarah", "instance-01", publicKeyPem);
+        string json = JsonConvert.SerializeObject(message);
+        ContributionSecretsRequestMessage roundTripped = BaseMessage.ReadAs<ContributionSecretsRequestMessage>(json);
+
+        Assert.AreEqual("sarah.contribution.secrets.resolve", roundTripped.Topic);
+        Assert.AreEqual("instance-01", roundTripped.InstanceId);
+        Assert.AreEqual(publicKeyPem, roundTripped.PublicKeyPem);
     }
 }

@@ -358,6 +358,42 @@ public sealed class ContributionPersistenceTests
 
     [TestMethod]
     [TestCategory("Functional")]
+    public async Task UpsertContributionInstanceAsync_ShouldRequireAuthorizationWhenSettingsReferenceSecrets()
+    {
+        await using MongoDbFunctionalTestHost host = new MongoDbFunctionalTestHost();
+        await host.StartAsync();
+        using ProcessEnvironmentVariableScope connectionScope = new ProcessEnvironmentVariableScope("MONGODB_CONNECTIONSTRING", host.ConnectionString);
+
+        ContributionLogic logic = new ContributionLogic();
+        await logic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "sarah", Label = "Sarah" },
+        [
+            new ContributionDefinition() { Id = "sarah.hue", Kind = ContributionKind.Integration, Label = "Hue", CanCreateInstances = true, CanInstallMultipleTimes = false }
+        ]);
+
+        ContributionInstance pendingInstance = await logic.UpsertContributionInstanceAsync(new ContributionInstance()
+        {
+            ContributionDefinitionId = "sarah.hue",
+            Label = "Authorized Hue",
+            IsConfigured = true,
+            Settings =
+            {
+                ["clientSecret"] = "{{SECRET: hue.client.secret }}"
+            }
+        });
+
+        ContributionInstance authorizedInstance = await logic.AuthorizeContributionInstanceAsync(pendingInstance.Id);
+
+        Assert.IsNotNull(pendingInstance);
+        Assert.AreEqual(ContributionInstanceStatus.AuthorizationPending, pendingInstance.Status);
+        Assert.IsNull(pendingInstance.AuthorizedAtUtc);
+        Assert.AreEqual("Authorization required before the plugin can receive referenced secrets.", pendingInstance.StatusMessage);
+        Assert.IsNotNull(authorizedInstance);
+        Assert.AreEqual(ContributionInstanceStatus.Functional, authorizedInstance.Status);
+        Assert.IsNotNull(authorizedInstance.AuthorizedAtUtc);
+    }
+
+    [TestMethod]
+    [TestCategory("Functional")]
     public async Task UpsertContributionInstanceAsync_ShouldRejectNonInstantiableAndDuplicateSingleInstanceContributions()
     {
         await using MongoDbFunctionalTestHost host = new MongoDbFunctionalTestHost();

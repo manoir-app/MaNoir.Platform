@@ -1,4 +1,5 @@
 using MaNoir.Core.DataAccess;
+using MaNoir.Core.Setup;
 using MongoDB.Driver;
 using System;
 using System.Threading;
@@ -36,6 +37,7 @@ internal sealed class MongoDbFunctionalTestHost : IAsyncDisposable
 
             MongoClient client = new MongoClient(ConnectionString);
             await client.DropDatabaseAsync(MongoDbHelper.DefaultDatabaseName);
+            InitialSetupLogic.InvalidateCachedStatus(ConnectionString);
         }
         finally
         {

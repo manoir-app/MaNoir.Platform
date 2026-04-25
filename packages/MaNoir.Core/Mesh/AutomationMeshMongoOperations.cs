@@ -74,4 +74,17 @@ public sealed class AutomationMeshMongoOperations
             new ReplaceOptions() { IsUpsert = true },
             cancellationToken);
     }
+
+    /// <summary>
+    /// Deletes one automation mesh by identifier.
+    /// </summary>
+    public Task<DeleteResult> DeleteAsync(string meshId, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(meshId))
+        {
+            throw new ArgumentException("The mesh identifier cannot be empty.", nameof(meshId));
+        }
+
+        return _collection.DeleteOneAsync(mesh => mesh.Id == meshId, cancellationToken);
+    }
 }

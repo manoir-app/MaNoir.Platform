@@ -315,6 +315,45 @@ public sealed partial class AutomationMeshLogic
     }
 
     /// <summary>
+    /// Normalizes and validates a country identifier.
+    /// </summary>
+    /// <param name="countryId">The raw country identifier.</param>
+    /// <returns>The canonical ISO country code, or <see langword="null"/> when invalid.</returns>
+    public static string NormalizeCountryId(string countryId)
+    {
+        if (string.IsNullOrWhiteSpace(countryId))
+            return null;
+
+        try
+        {
+            RegionInfo region = new(countryId.Trim());
+            return region.TwoLetterISORegionName;
+        }
+        catch (ArgumentException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Applies a country identifier to the mesh.
+    /// </summary>
+    /// <param name="mesh">The mesh to update.</param>
+    /// <param name="countryId">The country identifier to persist.</param>
+    /// <returns><see langword="true"/> when the country changed.</returns>
+    public static bool ApplyCountryId(AutomationMesh mesh, string countryId)
+    {
+        if (mesh == null)
+            return false;
+
+        if (string.Equals(mesh.CountryId, countryId, StringComparison.InvariantCulture))
+            return false;
+
+        mesh.CountryId = countryId;
+        return true;
+    }
+
+    /// <summary>
     /// Applies a location identifier to the mesh.
     /// </summary>
     /// <param name="mesh">The mesh to update.</param>

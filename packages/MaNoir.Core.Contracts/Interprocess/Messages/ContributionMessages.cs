@@ -138,4 +138,65 @@ namespace Home.Common.Messages
 
         public string Label { get; set; }
     }
+
+    public class ContributionSecretsRequestMessage : BaseMessage
+    {
+        private static readonly string TopicFormat = "{0}.contribution.secrets.resolve";
+
+        public ContributionSecretsRequestMessage() : base(string.Empty)
+        {
+        }
+
+        public ContributionSecretsRequestMessage(string pluginId, string instanceId, string publicKeyPem) : this()
+        {
+            PluginId = pluginId;
+            InstanceId = instanceId;
+            PublicKeyPem = publicKeyPem;
+        }
+
+        private string _pluginId;
+
+        public string PluginId
+        {
+            get { return _pluginId; }
+            set
+            {
+                _pluginId = value;
+                Topic = string.IsNullOrWhiteSpace(value) ? string.Empty : string.Format(TopicFormat, value.ToLowerInvariant());
+            }
+        }
+
+        public string InstanceId { get; set; }
+
+        public string PublicKeyPem { get; set; }
+    }
+
+    public class ContributionSecretsResponse : MessageResponse
+    {
+        public ContributionSecretsResponse()
+        {
+            Secrets = [];
+        }
+
+        public string InstanceId { get; set; }
+
+        public ContributionInstanceStatus InstanceStatus { get; set; }
+
+        public string InstanceStatusMessage { get; set; }
+
+        public Dictionary<string, ContributionEncryptedSecretPayload> Secrets { get; set; }
+    }
+
+    public class ContributionEncryptedSecretPayload
+    {
+        public string EncryptionMode { get; set; }
+
+        public string EncryptedKey { get; set; }
+
+        public string EncryptedData { get; set; }
+
+        public string Nonce { get; set; }
+
+        public string AuthenticationTag { get; set; }
+    }
 }

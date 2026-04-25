@@ -119,13 +119,12 @@ public sealed partial class ContributionLogic
             ? (string.IsNullOrWhiteSpace(existingInstance?.Label) ? definition.Label : existingInstance.Label)
             : instance.Label;
         instance.Settings ??= [];
-        if (instance.Status == ContributionInstanceStatus.NotConfigured && instance.IsConfigured)
-            instance.Status = ContributionInstanceStatus.Functional;
-
         instance.CreatedAtUtc = existingInstance?.CreatedAtUtc == default || existingInstance == null
             ? (instance.CreatedAtUtc == default ? now : instance.CreatedAtUtc)
             : existingInstance.CreatedAtUtc;
+        instance.AuthorizedAtUtc = ResolveAuthorizedAtUtc(instance, existingInstance);
         instance.UpdatedAtUtc = now;
+        ApplyContributionInstanceState(instance, existingInstance);
     }
 
     private static void PrepareConfiguredContributionInstanceForSave(ContributionInstance instance, ContributionDefinition definition, ContributionInstance existingInstance, DateTimeOffset now)

@@ -1,5 +1,6 @@
 using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.Locations;
+using MongoDB.Driver;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,5 +65,14 @@ public sealed partial class AutomationMeshLogic
     public Task SaveAsync(AutomationMesh mesh, CancellationToken cancellationToken = default)
     {
         return _mongoOperations.SaveAsync(mesh, cancellationToken);
+    }
+
+    /// <summary>
+    /// Deletes the local automation mesh.
+    /// </summary>
+    public async Task<bool> DeleteLocalAsync(CancellationToken cancellationToken = default)
+    {
+        DeleteResult deleteResult = await _mongoOperations.DeleteAsync("local", cancellationToken);
+        return deleteResult.DeletedCount == 1;
     }
 }
