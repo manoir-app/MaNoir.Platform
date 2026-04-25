@@ -1,0 +1,36 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: manoir-core-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - manoir-core-mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  nats:
+    image: nats:2.10-alpine
+    container_name: manoir-core-nats
+    restart: unless-stopped
+    ports:
+      - "4222:4222"
+
+  mosquitto:
+    image: eclipse-mosquitto:2.0.20
+    container_name: manoir-core-mosquitto
+    restart: unless-stopped
+    entrypoint:
+      - sh
+      - -c
+      - printf 'listener 1883 0.0.0.0\nallow_anonymous true\n' > /tmp/mosquitto.conf && mosquitto -c /tmp/mosquitto.conf
+    ports:
+      - "1883:1883"
+
+volumes:
+  manoir-core-mongo-data:
