@@ -16,6 +16,9 @@
     <PackageReference Include="MSTest.TestFramework" />
     <PackageReference Include="MSTest.Analyzers" PrivateAssets="all" />
     <PackageReference Include="MongoDB.Driver" />
+    <PackageReference Include="MQTTnet" />
+    <PackageReference Include="NATS.Client" />
+    <PackageReference Include="Testcontainers" />
     <PackageReference Include="Testcontainers.MongoDb" />
   </ItemGroup>
 

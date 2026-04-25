@@ -1,52 +1,48 @@
-using MaNoir.Core.Mongo;
-using MongoDB.Driver;
+using DotNet.Testcontainers.Builders;
+using DotNet.Testcontainers.Containers;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Testcontainers.MongoDb;
 
 namespace MaNoir.Core.FunctionalTests.Infrastructure;
 
-internal sealed class MongoDbFunctionalTestHost : IAsyncDisposable
+internal sealed class MosquittoFunctionalTestHost : IAsyncDisposable
 {
+    private const ushort ContainerPort = 1883;
     private static readonly SemaphoreSlim Sync = new SemaphoreSlim(1, 1);
-    private static readonly MongoDbContainer Container = new MongoDbBuilder("mongo:7.0")
+    private static readonly IContainer Container = new ContainerBuilder("eclipse-mosquitto:2.0.20")
+        .WithPortBinding(ContainerPort, true)
+        .WithEntrypoint("sh", "-c")
+        .WithCommand("printf 'listener 1883 0.0.0.0\nallow_anonymous true\n' > /tmp/mosquitto.conf && mosquitto -c /tmp/mosquitto.conf")
+        .WithWaitStrategy(Wait.ForUnixContainer().UntilInternalTcpPortIsAvailable(ContainerPort))
         .Build();
     private static bool _started;
 
-    public MongoDbFunctionalTestHost()
+    public MosquittoFunctionalTestHost()
     {
     }
 
-    public string ConnectionString
-    {
-        get { return Container.GetConnectionString(); }
-    }
+    public string Host => Container.Hostname;
+
+    public int Port => Container.GetMappedPublicPort(ContainerPort);
 
     public async Task StartAsync()
     {
         await Sync.WaitAsync();
         try
         {
-            if (!_started)
+            if (_started)
             {
-                await Container.StartAsync();
-                _started = true;
+                return;
             }
 
-            MongoClient client = new MongoClient(ConnectionString);
-            await client.DropDatabaseAsync(MongoDbHelper.DefaultDatabaseName);
+            await Container.StartAsync();
+            _started = true;
         }
         finally
         {
             Sync.Release();
         }
-    }
-
-    public IMongoDatabase GetDatabase(string databaseName)
-    {
-        MongoClient client = new MongoClient(ConnectionString);
-        return client.GetDatabase(databaseName);
     }
 
     public ValueTask DisposeAsync()

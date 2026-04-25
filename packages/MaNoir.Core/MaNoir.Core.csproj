@@ -11,6 +11,10 @@
 
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" />
+    <PackageReference Include="MQTTnet" />
+    <PackageReference Include="MQTTnet.Extensions.ManagedClient" />
+    <PackageReference Include="NATS.Client" />
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
   <ItemGroup>
