@@ -4,7 +4,7 @@ using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using System;
 
-namespace MaNoir.Core.Mongo;
+namespace MaNoir.Core.DataAccess;
 
 /// <summary>
 /// Provides direct access to MongoDB collections using process environment variables.

@@ -1,4 +1,4 @@
-using Home.Graph.Common;
+using MaNoir.Core.DataPublication;
 using MaNoir.Core.Contracts.Models.Entities;
 using MaNoir.Core.FunctionalTests.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,7 +12,7 @@ namespace MaNoir.Core.FunctionalTests.Mqtt;
 
 [TestClass]
 [DoNotParallelize]
-public sealed class MqttHelperFunctionalTests
+public sealed class MqttDataPublisherFunctionalTests
 {
     [TestMethod]
     [TestCategory("Functional")]
@@ -43,8 +43,8 @@ public sealed class MqttHelperFunctionalTests
 
         try
         {
-            MqttHelper.Start("functional-tests");
-            MqttHelper.PublishMeshProperty("privacyMode", "none");
+            MqttDataPublisher.Start("functional-tests");
+            MqttDataPublisher.PublishMeshProperty("privacyMode", "none");
 
             string payload = await receivedPayload.Task.WaitAsync(TimeSpan.FromSeconds(5));
 
@@ -52,7 +52,7 @@ public sealed class MqttHelperFunctionalTests
         }
         finally
         {
-            MqttHelper.Stop();
+            MqttDataPublisher.Stop();
             await client.DisconnectAsync();
         }
     }
@@ -90,8 +90,8 @@ public sealed class MqttHelperFunctionalTests
 
         try
         {
-            MqttHelper.Start("functional-tests");
-            MqttHelper.PublishEntity(new Entity()
+            MqttDataPublisher.Start("functional-tests");
+            MqttDataPublisher.PublishEntity(new Entity()
             {
                 Id = "demo-entity",
                 EntityKind = "core:status",
@@ -112,7 +112,7 @@ public sealed class MqttHelperFunctionalTests
         }
         finally
         {
-            MqttHelper.Stop();
+            MqttDataPublisher.Stop();
             await client.DisconnectAsync();
         }
     }

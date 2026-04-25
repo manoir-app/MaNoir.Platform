@@ -1,6 +1,6 @@
 using MaNoir.Core.Contracts.Models.Users;
 using MaNoir.Core.FunctionalTests.Infrastructure;
-using MaNoir.Core.Mongo;
+using MaNoir.Core.DataAccess;
 using MaNoir.Core.Users;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;

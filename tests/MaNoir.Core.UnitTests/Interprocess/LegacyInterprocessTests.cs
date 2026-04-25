@@ -54,7 +54,7 @@ public sealed class LegacyInterprocessTests
             Environment.SetEnvironmentVariable("NATS_SERVICE_PORT", "5333");
             Environment.SetEnvironmentVariable("NATS_PORT_4222_TCP_PROTO", null);
 
-            string[] servers = NatsMessageThread.GetServers();
+            string[] servers = NatsInterprocess.GetServers();
 
             CollectionAssert.AreEqual(new[] { "nats://nats.internal:5333" }, servers);
         }

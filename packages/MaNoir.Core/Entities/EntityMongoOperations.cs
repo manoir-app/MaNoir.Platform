@@ -1,5 +1,5 @@
 using MaNoir.Core.Contracts.Models.Entities;
-using MaNoir.Core.Mongo;
+using MaNoir.Core.DataAccess;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;

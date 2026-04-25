@@ -12,7 +12,7 @@ namespace MaNoir.Core.FunctionalTests.Interprocess;
 
 [TestClass]
 [DoNotParallelize]
-public sealed class NatsMessageThreadFunctionalTests
+public sealed class NatsInterprocessFunctionalTests
 {
     [TestMethod]
     [TestCategory("Functional")]
@@ -29,7 +29,7 @@ public sealed class NatsMessageThreadFunctionalTests
         using ISyncSubscription subscription = connection.SubscribeSync("tests.core.nats.push");
         connection.Flush();
 
-        NatsMessageThread.Push(new AgentGenericMessage("tests.core.nats.push")
+        NatsInterprocess.Push(new AgentGenericMessage("tests.core.nats.push")
         {
             MessageContent = "hello"
         });
@@ -67,7 +67,7 @@ public sealed class NatsMessageThreadFunctionalTests
         });
         connection.Flush();
 
-        MessageResponse responsePayload = NatsMessageThread.Request<MessageResponse>(
+        MessageResponse responsePayload = NatsInterprocess.Request<MessageResponse>(
             "tests.core.nats.request",
             new AgentGenericMessage("tests.core.nats.request") { MessageContent = "ping" },
             5000);

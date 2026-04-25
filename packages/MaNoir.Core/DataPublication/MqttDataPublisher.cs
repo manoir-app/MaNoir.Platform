@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Home.Graph.Common;
+namespace MaNoir.Core.DataPublication;
 
-public static class MqttHelper
+public static class MqttDataPublisher
 {
     private static IManagedMqttClient _client;
 

@@ -1,7 +1,7 @@
 using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.FunctionalTests.Infrastructure;
 using MaNoir.Core.Mesh;
-using MaNoir.Core.Mongo;
+using MaNoir.Core.DataAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Bson;
 using MongoDB.Driver;

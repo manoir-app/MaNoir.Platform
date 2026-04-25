@@ -49,14 +49,13 @@ public sealed partial class UserLogic
     // - POST all/{userName}/presence
     // Preserve probability handling, cleanup windows, and presence-change side effects.
 
-    // TODO: Migrate user notifications rules.
-    // Legacy surface:
-    // - GET  {user}/notifications/clearreaditems
-    // - GET  {user}/notifications/markallasread
-    // - GET  {user}/notifications
-    // - GET  {user}/notifications/{notifId}/markasread
-    // - POST {user}/notify
-    // Decide later which mobile push side effects stay in Core versus an adapter layer.
+    // Migrated in Core:
+    // - notification persistence and legacy deduplication rules
+    // - list notifications ordered by date descending
+    // - clear old read notifications
+    // - mark one or all notifications as read
+
+    // TODO: Decide later which mobile push side effects stay in Core versus an adapter layer.
 
     // TODO: Migrate custom data rules.
     // Legacy surface:

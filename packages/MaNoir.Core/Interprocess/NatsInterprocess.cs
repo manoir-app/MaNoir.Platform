@@ -31,15 +31,8 @@ public class NatsNoResponseException : Exception
 #pragma warning restore SYSLIB0051
 }
 
-public static class NatsMessageThread
+public static class NatsInterprocess
 {
-    private static bool _shouldStop;
-
-    public static void Stop()
-    {
-        _shouldStop = true;
-    }
-
     public static void Push(BaseMessage message)
     {
         Push(message.Topic, message);
@@ -131,91 +124,6 @@ public static class NatsMessageThread
         }
 
         throw new InvalidOperationException();
-    }
-
-    public static void Run(string[] topics, MessageHandler handler)
-    {
-        foreach (string server in GetServers())
-        {
-            Console.WriteLine(server);
-        }
-
-        while (!_shouldStop)
-        {
-            try
-            {
-                using (IConnection connection = GetConnection())
-                {
-                    foreach (string topic in topics)
-                    {
-                        connection.SubscribeAsync(topic, (sender, args) =>
-                        {
-                            string messageBody = Encoding.UTF8.GetString(args.Message.Data, 0, args.Message.Data.Length);
-                            try
-                            {
-                                Console.WriteLine("------------------------");
-                                Console.Write("Message Recu:");
-                                Console.WriteLine(args.Message.Subject);
-                                Console.WriteLine("------------------------");
-
-                                MessageResponse response = handler.Invoke(MessageOrigin.Local, args.Message.Subject, messageBody);
-                                if (response != null)
-                                {
-                                    response.Topic = args.Message.Subject;
-
-                                    try
-                                    {
-                                        Console.WriteLine("------------------------");
-                                        Console.Write("Message Recu:");
-                                        Console.Write(args.Message.Subject);
-                                        Console.Write(" => ");
-                                        Console.WriteLine(response.Response);
-                                        Console.WriteLine("------------------------");
-                                        args.Message.Respond(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(response)));
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        Console.WriteLine(ex.ToString());
-                                    }
-                                }
-                            }
-                            catch (NatsNoResponseException)
-                            {
-                                Console.WriteLine("------------------------");
-                                Console.Write("Message Recu:");
-                                Console.Write(args.Message.Subject);
-                                Console.Write(" => NO RESPONSE");
-                                Console.WriteLine("------------------------");
-                            }
-                            catch (NotImplementedException)
-                            {
-                                Console.WriteLine("------------------------");
-                                Console.Write("Message Recu:");
-                                Console.Write(args.Message.Subject);
-                                Console.Write(" => NOT IMPLEMENTED");
-                                Console.WriteLine("------------------------");
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex.ToString());
-                            }
-                        });
-                    }
-
-                    while (!_shouldStop)
-                    {
-                        Thread.Sleep(500);
-                    }
-                }
-            }
-            catch (NotImplementedException)
-            {
-            }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine(ex.ToString());
-            }
-        }
     }
 
     public static IConnection GetConnection()

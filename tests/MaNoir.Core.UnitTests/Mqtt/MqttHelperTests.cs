@@ -1,4 +1,4 @@
-using Home.Graph.Common;
+using MaNoir.Core.DataPublication;
 using MaNoir.Core.Contracts.Models.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace MaNoir.Core.UnitTests.Mqtt;
 
 [TestClass]
-public sealed class MqttHelperTests
+public sealed class MqttDataPublisherTests
 {
     [TestMethod]
     [TestCategory("Unit")]
@@ -25,7 +25,7 @@ public sealed class MqttHelperTests
             Environment.SetEnvironmentVariable("MOSQUITTO_SERVICE_HOST", "mqtt-broker");
             Environment.SetEnvironmentVariable("MOSQUITTO_SERVICE_PORT", "2883");
 
-            (string server, int port) endpoint = MqttHelper.ResolveBrokerEndpoint();
+            (string server, int port) endpoint = MqttDataPublisher.ResolveBrokerEndpoint();
 
             Assert.AreEqual("mqtt-broker", endpoint.server);
             Assert.AreEqual(2883, endpoint.port);
@@ -43,7 +43,7 @@ public sealed class MqttHelperTests
     [TestCategory("Unit")]
     public void BuildMeshPropertyPublication_ShouldUseLegacyTopic()
     {
-        (string topic, string payload) publication = MqttHelper.BuildMeshPropertyPublication("privacyMode", "none");
+        (string topic, string payload) publication = MqttDataPublisher.BuildMeshPropertyPublication("privacyMode", "none");
 
         Assert.AreEqual("manoir/mesh/properties/privacyMode", publication.topic);
         Assert.AreEqual("none", publication.payload);
@@ -85,7 +85,7 @@ public sealed class MqttHelperTests
             }
         };
 
-        List<(string topic, string payload)> publications = MqttHelper.BuildEntityPublications(entity);
+        List<(string topic, string payload)> publications = MqttDataPublisher.BuildEntityPublications(entity);
 
         CollectionAssert.AreEquivalent(
         new[]

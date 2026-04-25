@@ -1,8 +1,9 @@
 using MaNoir.Core.Contracts.Models.Users;
-using MaNoir.Core.Mongo;
+using MaNoir.Core.DataAccess;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ public sealed class UserMongoOperations
 {
     private readonly MongoDbHelper _mongo;
     private readonly IMongoCollection<User> _collection;
+    private readonly IMongoCollection<UserNotification> _notificationCollection;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="UserMongoOperations"/> class.
@@ -23,6 +25,7 @@ public sealed class UserMongoOperations
     {
         _mongo = new MongoDbHelper();
         _collection = _mongo.GetCollection<User>();
+        _notificationCollection = _mongo.Database.GetCollection<UserNotification>("UserNotifications");
     }
 
     /// <summary>
@@ -31,6 +34,14 @@ public sealed class UserMongoOperations
     public IMongoCollection<User> Collection
     {
         get { return _collection; }
+    }
+
+    /// <summary>
+    /// Gets the MongoDB collection used for user notification documents.
+    /// </summary>
+    public IMongoCollection<UserNotification> NotificationCollection
+    {
+        get { return _notificationCollection; }
     }
 
     /// <summary>
@@ -111,5 +122,127 @@ public sealed class UserMongoOperations
         }
 
         return _collection.DeleteOneAsync(user => user.Id == userId, cancellationToken);
+    }
+
+    /// <summary>
+    /// Lists all notifications of a user ordered by most recent first.
+    /// </summary>
+    public Task<List<UserNotification>> GetNotificationsAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException("The user identifier cannot be empty.", nameof(userId));
+        }
+
+        return _notificationCollection
+            .Find(notification => notification.UserId == userId)
+            .SortByDescending(notification => notification.Date)
+            .ToListAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Marks every notification older than the supplied threshold as read.
+    /// </summary>
+    public Task MarkAllNotificationsAsReadAsync(string userId, DateTimeOffset olderThan, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException("The user identifier cannot be empty.", nameof(userId));
+        }
+
+        UpdateDefinition<UserNotification> update = Builders<UserNotification>.Update
+            .Set(notification => notification.IsRead, true);
+
+        return _notificationCollection.UpdateManyAsync(
+            notification => notification.UserId == userId && notification.Date < olderThan,
+            update,
+            cancellationToken: cancellationToken);
+    }
+
+    /// <summary>
+    /// Marks a single user notification as read.
+    /// </summary>
+    public Task MarkNotificationAsReadAsync(string userId, string notificationId, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException("The user identifier cannot be empty.", nameof(userId));
+        }
+
+        if (string.IsNullOrWhiteSpace(notificationId))
+        {
+            throw new ArgumentException("The notification identifier cannot be empty.", nameof(notificationId));
+        }
+
+        UpdateDefinition<UserNotification> update = Builders<UserNotification>.Update
+            .Set(notification => notification.IsRead, true);
+
+        return _notificationCollection.UpdateOneAsync(
+            notification => notification.UserId == userId && notification.Id == notificationId,
+            update,
+            cancellationToken: cancellationToken);
+    }
+
+    /// <summary>
+    /// Deletes read notifications older than the supplied threshold.
+    /// </summary>
+    public Task<DeleteResult> ClearReadNotificationsAsync(string userId, DateTimeOffset olderThan, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException("The user identifier cannot be empty.", nameof(userId));
+        }
+
+        return _notificationCollection.DeleteManyAsync(
+            notification => notification.UserId == userId && notification.IsRead && notification.Date < olderThan,
+            cancellationToken);
+    }
+
+    /// <summary>
+    /// Inserts or replaces a notification using the legacy deduplication rules.
+    /// </summary>
+    public async Task<UserNotification> SaveNotificationAsync(UserNotification notification, CancellationToken cancellationToken = default)
+    {
+        if (notification == null)
+        {
+            throw new ArgumentNullException(nameof(notification));
+        }
+
+        if (string.IsNullOrWhiteSpace(notification.UserId))
+        {
+            throw new ArgumentException("The user identifier cannot be empty.", nameof(notification));
+        }
+
+        UserNotification existingNotification = null;
+        if (!string.IsNullOrWhiteSpace(notification.SourceAgent) && !string.IsNullOrWhiteSpace(notification.SourceAgentNotificationId))
+        {
+            existingNotification = await _notificationCollection
+                .Find(existing => existing.UserId == notification.UserId
+                    && existing.SourceAgent == notification.SourceAgent
+                    && existing.SourceAgentNotificationId == notification.SourceAgentNotificationId)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+        else if (!string.IsNullOrWhiteSpace(notification.Id))
+        {
+            existingNotification = await _notificationCollection
+                .Find(existing => existing.Id == notification.Id)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        if (existingNotification == null)
+        {
+            await _notificationCollection.InsertOneAsync(notification, cancellationToken: cancellationToken);
+            return notification;
+        }
+
+        notification.Id = existingNotification.Id;
+        notification.IsRead = existingNotification.IsRead;
+
+        await _notificationCollection.ReplaceOneAsync(
+            existing => existing.Id == notification.Id,
+            notification,
+            cancellationToken: cancellationToken);
+
+        return notification;
     }
 }
