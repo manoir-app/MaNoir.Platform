@@ -45,19 +45,19 @@ public sealed class InternetConnectionStatusRefresh
     /// <summary>
     /// Gets or sets the theoretical download bandwidth.
     /// </summary>
-    public long DownloadBandwith { get; set; }
+    public long DownloadBandwidth { get; set; }
     /// <summary>
     /// Gets or sets the theoretical upload bandwidth.
     /// </summary>
-    public long UploadBandwith { get; set; }
+    public long UploadBandwidth { get; set; }
     /// <summary>
     /// Gets or sets the currently used download bandwidth.
     /// </summary>
-    public long UsedDownloadBandwith { get; set; }
+    public long UsedDownloadBandwidth { get; set; }
     /// <summary>
     /// Gets or sets the currently used upload bandwidth.
     /// </summary>
-    public long UsedUploadBandwith { get; set; }
+    public long UsedUploadBandwidth { get; set; }
     /// <summary>
     /// Gets or sets the provider or diagnostic message.
     /// </summary>
@@ -92,19 +92,19 @@ public sealed class InternetConnection
     /// <summary>
     /// Gets or sets the theoretical download bandwidth.
     /// </summary>
-    public long DownloadBandwith { get; set; }
+    public long DownloadBandwidth { get; set; }
     /// <summary>
     /// Gets or sets the theoretical upload bandwidth.
     /// </summary>
-    public long UploadBandwith { get; set; }
+    public long UploadBandwidth { get; set; }
     /// <summary>
     /// Gets or sets the currently used download bandwidth.
     /// </summary>
-    public long UsedDownloadBandwith { get; set; }
+    public long UsedDownloadBandwidth { get; set; }
     /// <summary>
     /// Gets or sets the currently used upload bandwidth.
     /// </summary>
-    public long UsedUploadBandwith { get; set; }
+    public long UsedUploadBandwidth { get; set; }
     /// <summary>
     /// Gets or sets the last diagnostic message associated with the connection.
     /// </summary>

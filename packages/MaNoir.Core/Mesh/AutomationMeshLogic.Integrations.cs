@@ -50,10 +50,10 @@ public sealed partial class AutomationMeshLogic
         }
 
         connection.ConnectionType = statusRefresh.ConnectionType;
-        connection.DownloadBandwith = statusRefresh.DownloadBandwith;
-        connection.UsedDownloadBandwith = statusRefresh.UsedDownloadBandwith;
-        connection.UploadBandwith = statusRefresh.UploadBandwith;
-        connection.UsedUploadBandwith = statusRefresh.UsedUploadBandwith;
+        connection.DownloadBandwidth = statusRefresh.DownloadBandwidth;
+        connection.UsedDownloadBandwidth = statusRefresh.UsedDownloadBandwidth;
+        connection.UploadBandwidth = statusRefresh.UploadBandwidth;
+        connection.UsedUploadBandwidth = statusRefresh.UsedUploadBandwidth;
         connection.LastMessage = statusRefresh.Message;
         connection.LastUpdate = now;
         connection.Status = statusRefresh.Status;
