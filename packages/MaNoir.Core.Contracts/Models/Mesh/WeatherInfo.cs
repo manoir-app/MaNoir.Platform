@@ -69,7 +69,7 @@ public sealed class WeatherInfo
     /// <summary>
     /// Gets or sets a value indicating whether thunder risk exists.
     /// </summary>
-    public bool RiskOfThumber { get; set; }
+    public bool RiskOfThunder { get; set; }
 
     /// <summary>
     /// Returns the default display label for a weather kind.
