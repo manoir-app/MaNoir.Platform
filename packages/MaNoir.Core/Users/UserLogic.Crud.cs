@@ -101,6 +101,30 @@ public sealed partial class UserLogic
     }
 
     /// <summary>
+    /// Applies the admin flag to a main non-guest user.
+    /// </summary>
+    /// <param name="user">The user to update.</param>
+    /// <param name="isAdmin">The new admin flag.</param>
+    /// <returns><see langword="true"/> when the flag changed.</returns>
+    public static bool SetUserIsAdmin(User user, bool isAdmin)
+    {
+        if (user == null)
+            return false;
+
+        if (user.IsGuest)
+            throw new InvalidOperationException("User is a guest.");
+
+        if (isAdmin && !user.IsMain)
+            throw new InvalidOperationException("Only main users can become admin.");
+
+        if (user.IsAdmin == isAdmin)
+            return false;
+
+        user.IsAdmin = isAdmin;
+        return true;
+    }
+
+    /// <summary>
     /// Replaces the avatar of a user.
     /// </summary>
     /// <param name="user">The user to update.</param>

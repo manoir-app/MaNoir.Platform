@@ -84,6 +84,20 @@ public sealed class UserCrudLogicTests
 
     [TestMethod]
     [TestCategory("Unit")]
+    public void SetUserIsAdmin_ShouldRejectNonMainUsers()
+    {
+        User occasionalUser = new User()
+        {
+            Id = "friend1",
+            IsGuest = false,
+            IsMain = false
+        };
+
+        Assert.ThrowsException<InvalidOperationException>(() => UserLogic.SetUserIsAdmin(occasionalUser, true));
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
     public void SetAvatar_ShouldReplaceAvatarWhenValuesChange()
     {
         User user = new User();

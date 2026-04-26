@@ -79,6 +79,7 @@ internal static class CoreApiUserTokenIssuer
             Id = user.Id,
             DeleteAfter = user.DeleteAfter,
             IsGuest = user.IsGuest,
+            IsAdmin = user.IsAdmin,
             IsMain = user.IsMain,
             Name = user.Name,
             FirstName = user.FirstName,

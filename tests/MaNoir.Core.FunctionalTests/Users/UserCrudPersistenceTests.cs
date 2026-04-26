@@ -2,6 +2,7 @@ using MaNoir.Core.Contracts.Models.Users;
 using MaNoir.Core.FunctionalTests.Infrastructure;
 using MaNoir.Core.Users;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Threading.Tasks;
 
 namespace MaNoir.Core.FunctionalTests.Users;
@@ -143,5 +144,65 @@ public sealed class UserCrudPersistenceTests
         Assert.IsNotNull(storedUser);
         Assert.AreEqual("https://example.test/users/avatars/mcarbenay/big-square.png", storedUser.Avatar.UrlSquareBig);
         Assert.AreEqual("https://example.test/users/avatars/mcarbenay/small-square.png", storedUser.Avatar.UrlSquareSmall);
+    }
+
+    [TestMethod]
+    [TestCategory("Functional")]
+    public async Task ChangeAdminUserAsync_ShouldTransferAdminToOneMainUserOnly()
+    {
+        await using MongoDbFunctionalTestHost host = new MongoDbFunctionalTestHost();
+        await host.StartAsync();
+        using ProcessEnvironmentVariableScope connectionScope = new ProcessEnvironmentVariableScope("MONGODB_CONNECTIONSTRING", host.ConnectionString);
+
+        UserLogic logic = new UserLogic();
+
+        await logic.UpsertUserAsync("sarah", new User()
+        {
+            Name = "Connor",
+            FirstName = "Sarah",
+            IsMain = true,
+            IsAdmin = true
+        });
+
+        await logic.UpsertUserAsync("john", new User()
+        {
+            Name = "Doe",
+            FirstName = "John",
+            IsMain = true
+        });
+
+        User updatedAdmin = await logic.ChangeAdminUserAsync("john");
+        User storedSarah = await logic.GetByIdAsync("sarah");
+        User storedJohn = await logic.GetByIdAsync("john");
+
+        Assert.IsNotNull(updatedAdmin);
+        Assert.AreEqual("john", updatedAdmin.Id);
+        Assert.IsFalse(storedSarah.IsAdmin);
+        Assert.IsTrue(storedJohn.IsAdmin);
+    }
+
+    [TestMethod]
+    [TestCategory("Functional")]
+    public async Task ChangeUserIsMainAsync_ShouldRejectDemotingTheCurrentAdmin()
+    {
+        await using MongoDbFunctionalTestHost host = new MongoDbFunctionalTestHost();
+        await host.StartAsync();
+        using ProcessEnvironmentVariableScope connectionScope = new ProcessEnvironmentVariableScope("MONGODB_CONNECTIONSTRING", host.ConnectionString);
+
+        UserLogic logic = new UserLogic();
+
+        await logic.UpsertUserAsync("sarah", new User()
+        {
+            Name = "Connor",
+            FirstName = "Sarah",
+            IsMain = true,
+            IsAdmin = true
+        });
+
+        await Assert.ThrowsExceptionAsync<ArgumentException>(() => logic.ChangeUserIsMainAsync("sarah", false));
+
+        User storedSarah = await logic.GetByIdAsync("sarah");
+        Assert.IsTrue(storedSarah.IsMain);
+        Assert.IsTrue(storedSarah.IsAdmin);
     }
 }

@@ -1,5 +1,6 @@
 using MaNoir.Core.Contracts.Models.Users;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +33,14 @@ public sealed partial class UserLogic
     public Task<List<User>> GetMainUsersAsync(CancellationToken cancellationToken = default)
     {
         return _mongoOperations.GetMainUsersAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Gets the current platform administrator.
+    /// </summary>
+    public Task<User> GetAdminUserAsync(CancellationToken cancellationToken = default)
+    {
+        return _mongoOperations.GetAdminUserAsync(cancellationToken);
     }
 
     /// <summary>
@@ -133,6 +142,9 @@ public sealed partial class UserLogic
         if (existingUser == null || !existingUser.IsMain)
             return false;
 
+        if (existingUser.IsAdmin)
+            return false;
+
         DeleteResult deleteResult = await _mongoOperations.DeleteAsync(normalizedUserId, cancellationToken);
         return deleteResult.DeletedCount == 1;
     }
@@ -153,6 +165,9 @@ public sealed partial class UserLogic
         if (existingUser.IsMain)
             return false;
 
+        if (existingUser.IsAdmin)
+            return false;
+
         DeleteResult deleteResult = await _mongoOperations.DeleteAsync(normalizedUserId, cancellationToken);
         return deleteResult.DeletedCount == 1;
     }
@@ -170,11 +185,46 @@ public sealed partial class UserLogic
         if (existingUser == null)
             return null;
 
+        if (!isMain && existingUser.IsAdmin)
+            throw new ArgumentException("The current admin cannot stop being a main user before transferring admin rights.", nameof(userId));
+
         bool changed = SetUserIsMain(existingUser, isMain);
+
         if (changed)
             await SaveAsync(existingUser, cancellationToken);
 
         return existingUser;
+    }
+
+    /// <summary>
+    /// Transfers the platform administrator role to one main non-guest user.
+    /// </summary>
+    public async Task<User> ChangeAdminUserAsync(string userId, CancellationToken cancellationToken = default)
+    {
+        string normalizedUserId = NormalizeUserId(userId);
+        if (normalizedUserId == null)
+            return null;
+
+        User targetUser = await GetByIdAsync(normalizedUserId, cancellationToken);
+        if (targetUser == null)
+            return null;
+
+        if (targetUser.IsGuest)
+            throw new ArgumentException("Guest users cannot become admin.", nameof(userId));
+
+        if (!targetUser.IsMain)
+            throw new ArgumentException("Only main users can become admin.", nameof(userId));
+
+        List<User> users = await GetAllAsync(cancellationToken);
+        foreach (User user in users)
+        {
+            bool shouldBeAdmin = string.Equals(NormalizeUserId(user?.Id), normalizedUserId, System.StringComparison.Ordinal);
+            bool changed = SetUserIsAdmin(user, shouldBeAdmin);
+            if (changed)
+                await SaveAsync(user, cancellationToken);
+        }
+
+        return await GetByIdAsync(normalizedUserId, cancellationToken);
     }
 
     /// <summary>

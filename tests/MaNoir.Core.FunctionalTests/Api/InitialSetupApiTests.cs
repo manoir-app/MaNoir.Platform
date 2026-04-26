@@ -1,5 +1,9 @@
 using MaNoir.Core.Api;
+using MaNoir.Core.Authorization;
+using MaNoir.Core.Contracts.Models.Authorization;
+using MaNoir.Core.Contracts.Models.Contributions;
 using MaNoir.Core.DataAccess;
+using MaNoir.Core.Contributions;
 using MaNoir.Core.Contracts.Models.Setup;
 using MaNoir.Core.Contracts.Models.Users;
 using MaNoir.Core.FunctionalTests.Infrastructure;
@@ -12,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -54,6 +59,10 @@ public sealed class InitialSetupApiTests
             UserId = "sarah",
             Password = "P@ssword-42"
         })).Content.ReadFromJsonAsync<UserAuthenticationResponse>();
+        ContributionLogic contributionLogic = new ContributionLogic();
+        InstalledPlugin corePlugin = await contributionLogic.GetInstalledPluginAsync("core");
+        ContributionDefinition coreAdminContribution = (await contributionLogic.GetContributionDefinitionsAsync("core"))
+            .Single(definition => definition.Kind == ContributionKind.AdminUiPage);
 
         Assert.IsNotNull(initialStatus);
         Assert.IsTrue(initialStatus.CanInitialize);
@@ -69,6 +78,7 @@ public sealed class InitialSetupApiTests
         Assert.AreEqual("Europe/Paris", payload.Mesh.TimeZoneId);
         Assert.AreEqual("FR", payload.Mesh.CountryId);
         Assert.AreEqual("sarah", payload.User.Id);
+        Assert.IsTrue(payload.User.IsAdmin);
         Assert.IsTrue(payload.User.IsMain);
         Assert.IsNull(payload.User.HashedPassword);
 
@@ -79,6 +89,12 @@ public sealed class InitialSetupApiTests
 
         Assert.IsNotNull(loginPayload);
         Assert.IsFalse(string.IsNullOrWhiteSpace(loginPayload.AccessToken));
+        Assert.IsNotNull(corePlugin);
+        Assert.AreEqual("core", corePlugin.Id);
+        Assert.IsNotNull(coreAdminContribution.AdminUi);
+        Assert.AreEqual(CoreAccessZones.CoreAdminUi, coreAdminContribution.AdminUi.AccessZoneId);
+        Assert.AreEqual(AccessLevel.Read, coreAdminContribution.AdminUi.RequiredAccessLevel);
+        Assert.AreEqual("/admin/core", coreAdminContribution.AdminUi.Pages.Single().Url);
     }
 
     [TestMethod]

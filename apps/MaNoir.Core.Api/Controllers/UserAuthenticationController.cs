@@ -1,3 +1,5 @@
+using MaNoir.Core.Authorization;
+using MaNoir.Core.Contracts.Models.Authorization;
 using MaNoir.Core.Contracts.Models.Users;
 using MaNoir.Core.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -5,8 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MaNoir.Core.Api.Controllers;
@@ -63,7 +63,7 @@ public sealed class UserAuthenticationController : ControllerBase
             }));
         }
 
-        string userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+        string userId = CoreApiUserContext.GetUserId(this);
         if (string.IsNullOrWhiteSpace(userId))
             return Unauthorized();
 
@@ -92,7 +92,7 @@ public sealed class UserAuthenticationController : ControllerBase
     [HttpGet("me")]
     public async Task<ActionResult<User>> Me()
     {
-        string userId = User.FindFirstValue(JwtRegisteredClaimNames.Sub) ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+        string userId = CoreApiUserContext.GetUserId(this);
         if (string.IsNullOrWhiteSpace(userId))
             return Unauthorized();
 
@@ -102,5 +102,99 @@ public sealed class UserAuthenticationController : ControllerBase
 
         UserLogic.MinimizeData(user);
         return Ok(user);
+    }
+
+    [Authorize]
+    [HttpGet("admin")]
+    public async Task<ActionResult<User>> GetCurrentAdmin()
+    {
+        User adminUser = await new UserLogic().GetAdminUserAsync(HttpContext.RequestAborted);
+        if (adminUser == null)
+            return NotFound();
+
+        UserLogic.MinimizeData(adminUser);
+        return Ok(adminUser);
+    }
+
+    [Authorize]
+    [HttpGet("me/access")]
+    public async Task<ActionResult<UserAuthorizationProfile>> GetMyAccess()
+    {
+        string userId = CoreApiUserContext.GetUserId(this);
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        UserAuthorizationProfile profile = await new AuthorizationLogic().GetUserAuthorizationAsync(userId, HttpContext.RequestAborted);
+        return profile == null ? Unauthorized() : Ok(profile);
+    }
+
+    [Authorize]
+    [HttpGet("access-zones")]
+    public async Task<ActionResult<List<AccessZoneDefinition>>> GetAccessZones([FromQuery] string pluginId = null)
+    {
+        if (!await EnsureCurrentUserAccessAsync(CoreAccessZones.CoreAuthorization, AccessLevel.Manage))
+            return Unauthorized();
+
+        return Ok(await new AuthorizationLogic().GetAccessZoneDefinitionsAsync(pluginId, HttpContext.RequestAborted));
+    }
+
+    [Authorize]
+    [HttpGet("{userId}/access")]
+    public async Task<ActionResult<UserAuthorizationProfile>> GetUserAccess(string userId)
+    {
+        if (!await EnsureCurrentUserAccessAsync(CoreAccessZones.CoreAuthorization, AccessLevel.Manage))
+            return Unauthorized();
+
+        UserAuthorizationProfile profile = await new AuthorizationLogic().GetUserAuthorizationAsync(userId, HttpContext.RequestAborted);
+        return profile == null ? NotFound() : Ok(profile);
+    }
+
+    [Authorize]
+    [HttpPut("{userId}/access")]
+    public async Task<ActionResult<UserAuthorizationProfile>> ReplaceUserAccess(string userId, [FromBody] UserAuthorizationUpdateRequest request)
+    {
+        if (!await EnsureCurrentUserAccessAsync(CoreAccessZones.CoreAuthorization, AccessLevel.Manage))
+            return Unauthorized();
+
+        if (request == null)
+        {
+            return BadRequest(new ValidationProblemDetails(new Dictionary<string, string[]>()
+            {
+                ["accesses"] = ["The authorization payload is required."]
+            }));
+        }
+
+        UserAuthorizationProfile profile = await new AuthorizationLogic().ReplaceUserAuthorizationAsync(userId, request.Accesses, HttpContext.RequestAborted);
+        return Ok(profile);
+    }
+
+    [Authorize]
+    [HttpPost("{userId}/admin")]
+    public async Task<ActionResult<User>> ChangeAdminUser(string userId)
+    {
+        string currentUserId = CoreApiUserContext.GetUserId(this);
+        if (string.IsNullOrWhiteSpace(currentUserId))
+            return Unauthorized();
+
+        User currentUser = await new UserLogic().GetByIdAsync(currentUserId, HttpContext.RequestAborted);
+        if (currentUser == null || !currentUser.IsAdmin)
+            return Forbid();
+
+        User updatedUser = await new UserLogic().ChangeAdminUserAsync(userId, HttpContext.RequestAborted);
+        if (updatedUser == null)
+            return NotFound();
+
+        UserLogic.MinimizeData(updatedUser);
+        return Ok(updatedUser);
+    }
+
+    private async Task<bool> EnsureCurrentUserAccessAsync(string zoneId, AccessLevel requiredLevel)
+    {
+        string currentUserId = CoreApiUserContext.GetUserId(this);
+        if (string.IsNullOrWhiteSpace(currentUserId))
+            return false;
+
+        await new AuthorizationLogic().EnsureAccessAsync(currentUserId, zoneId, requiredLevel, HttpContext.RequestAborted);
+        return true;
     }
 }

@@ -1,4 +1,5 @@
 using MaNoir.Core.Contracts.Models.Contributions;
+using MaNoir.Core.Contracts.Models.Authorization;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,10 @@ public sealed partial class ContributionLogic
                 Version = plugin.Version,
                 Description = plugin.Description,
                 Publisher = plugin.Publisher,
+                RepositoryUrl = plugin.RepositoryUrl,
+                DependencyRepositoryUrls = plugin.DependencyRepositoryUrls == null
+                    ? []
+                    : [.. plugin.DependencyRepositoryUrls],
                 IsEnabled = plugin.IsEnabled,
                 IsHealthy = plugin.IsHealthy,
                 InstalledAtUtc = plugin.InstalledAtUtc,
@@ -147,6 +152,15 @@ public sealed partial class ContributionLogic
         return contributionId.Trim().ToLowerInvariant();
     }
 
+    internal static string NormalizeRepositoryUrl(string repositoryUrl)
+    {
+        if (string.IsNullOrWhiteSpace(repositoryUrl))
+            return null;
+
+        string trimmedValue = repositoryUrl.Trim();
+        return trimmedValue.TrimEnd('/');
+    }
+
     internal static ContributionKind? NormalizeContributionKind(string kind)
     {
         if (string.IsNullOrWhiteSpace(kind))
@@ -169,6 +183,13 @@ public sealed partial class ContributionLogic
         plugin.Version = string.IsNullOrWhiteSpace(plugin.Version) ? existingPlugin?.Version : plugin.Version;
         plugin.Description = string.IsNullOrWhiteSpace(plugin.Description) ? existingPlugin?.Description : plugin.Description;
         plugin.Publisher = string.IsNullOrWhiteSpace(plugin.Publisher) ? existingPlugin?.Publisher : plugin.Publisher;
+        plugin.RepositoryUrl = NormalizeRepositoryUrl(plugin.RepositoryUrl) ?? existingPlugin?.RepositoryUrl;
+        plugin.DependencyRepositoryUrls = plugin.DependencyRepositoryUrls == null
+            ? existingPlugin?.DependencyRepositoryUrls ?? []
+            : [.. plugin.DependencyRepositoryUrls
+                .Select(NormalizeRepositoryUrl)
+                .Where(repositoryUrl => repositoryUrl != null)
+                .Distinct(StringComparer.OrdinalIgnoreCase)];
         plugin.InstalledAtUtc = existingPlugin?.InstalledAtUtc == default || existingPlugin == null
             ? (plugin.InstalledAtUtc == default ? now : plugin.InstalledAtUtc)
             : existingPlugin.InstalledAtUtc;
@@ -219,6 +240,9 @@ public sealed partial class ContributionLogic
 
             if (definition.AdminUi != null)
             {
+                definition.AdminUi.AccessZoneId = string.IsNullOrWhiteSpace(definition.AdminUi.AccessZoneId)
+                    ? null
+                    : definition.AdminUi.AccessZoneId.Trim().ToLowerInvariant();
                 definition.AdminUi.Pages ??= [];
                 foreach (AdminUiPageDefinition page in definition.AdminUi.Pages)
                 {
@@ -245,7 +269,16 @@ public sealed partial class ContributionLogic
                 Label = plugin?.Label ?? string.Empty,
                 Version = plugin?.Version ?? string.Empty,
                 Description = plugin?.Description ?? string.Empty,
-                Publisher = plugin?.Publisher ?? string.Empty
+                Publisher = plugin?.Publisher ?? string.Empty,
+                RepositoryUrl = NormalizeRepositoryUrl(plugin?.RepositoryUrl) ?? string.Empty,
+                DependencyRepositoryUrls = plugin?.DependencyRepositoryUrls == null
+                    ? []
+                    : plugin.DependencyRepositoryUrls
+                        .Select(NormalizeRepositoryUrl)
+                        .Where(repositoryUrl => repositoryUrl != null)
+                        .Distinct(StringComparer.OrdinalIgnoreCase)
+                        .OrderBy(repositoryUrl => repositoryUrl, StringComparer.OrdinalIgnoreCase)
+                        .ToArray()
             },
             Definitions = definitions == null
                 ? []
@@ -296,6 +329,8 @@ public sealed partial class ContributionLogic
                             : new
                             {
                                 Domain = definition.AdminUi.Domain ?? string.Empty,
+                                AccessZoneId = definition.AdminUi.AccessZoneId ?? string.Empty,
+                                RequiredAccessLevel = definition.AdminUi.RequiredAccessLevel,
                                 Pages = definition.AdminUi.Pages == null
                                     ? []
                                     : definition.AdminUi.Pages

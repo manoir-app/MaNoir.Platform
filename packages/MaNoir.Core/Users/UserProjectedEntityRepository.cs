@@ -73,6 +73,7 @@ public sealed class UserProjectedEntityRepository : IProjectedEntityRepository
             {
                 ["DisplayName"] = CreateData(displayName, UserEntityConstants.Categories.Identity),
                 ["IsMain"] = CreateData(user.IsMain ? "true" : "false", UserEntityConstants.Categories.Flags)
+                ,["IsAdmin"] = CreateData(user.IsAdmin ? "true" : "false", UserEntityConstants.Categories.Flags)
             }
         };
 

@@ -1,3 +1,7 @@
+using MaNoir.Core.Authorization;
+using MaNoir.Core.Contributions;
+using MaNoir.Core.Contracts.Models.Authorization;
+using MaNoir.Core.Contracts.Models.Contributions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -72,6 +76,8 @@ public static class CoreApiModule
 
     public static WebApplication UseMaNoirCoreApi(this WebApplication app)
     {
+        app.RegisterPlugin(CorePluginDescriptorProvider.Create(typeof(CoreApiModule).Assembly.GetName().Version?.ToString(3)));
+
         app.UseExceptionHandler(exceptionHandlerApp =>
         {
             exceptionHandlerApp.Run(async context =>

@@ -1,3 +1,7 @@
+using MaNoir.Core.Authorization;
+using MaNoir.Core.Contributions;
+using MaNoir.Core.Contracts.Models.Authorization;
+using MaNoir.Core.Contracts.Models.Contributions;
 using MaNoir.Core.Contracts.Models.Setup;
 using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.Contracts.Models.Users;
@@ -19,6 +23,7 @@ public sealed class InitialSetupLogic
     private static readonly ConcurrentDictionary<string, bool> InitializedStateCache = new(StringComparer.OrdinalIgnoreCase);
 
     private readonly AutomationMeshLogic _meshLogic;
+    private readonly ContributionLogic _contributionLogic;
     private readonly UserLogic _userLogic;
 
     /// <summary>
@@ -27,6 +32,7 @@ public sealed class InitialSetupLogic
     public InitialSetupLogic()
     {
         _meshLogic = new AutomationMeshLogic();
+        _contributionLogic = new ContributionLogic();
         _userLogic = new UserLogic();
     }
 
@@ -104,6 +110,7 @@ public sealed class InitialSetupLogic
 
             User createdUser = await _userLogic.UpsertUserAsync(normalizedAdminUserId, new User()
             {
+                IsAdmin = true,
                 IsMain = true,
                 FirstName = request.AdminFirstName,
                 Name = request.AdminName,
@@ -113,6 +120,7 @@ public sealed class InitialSetupLogic
             userCreated = createdUser != null;
 
             await _userLogic.SetPasswordAsync(normalizedAdminUserId, request.AdminPassword, cancellationToken);
+            await new PluginRegistrationLogic().PublishPluginDescriptorAsync(CorePluginDescriptorProvider.Create(typeof(InitialSetupLogic).Assembly.GetName().Version?.ToString(3)), cancellationToken);
             InitializedStateCache[cacheKey] = true;
 
             return new InitialSetupResponse()
@@ -187,6 +195,7 @@ public sealed class InitialSetupLogic
         {
             Id = user.Id,
             IsGuest = user.IsGuest,
+            IsAdmin = user.IsAdmin,
             IsMain = user.IsMain,
             Name = user.Name,
             FirstName = user.FirstName,

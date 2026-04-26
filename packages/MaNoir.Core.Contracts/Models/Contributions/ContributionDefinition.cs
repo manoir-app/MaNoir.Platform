@@ -1,5 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MaNoir.Core.Contracts.Models.Authorization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System;
@@ -198,6 +199,17 @@ public sealed class AdminUiContributionDefinitionData
     /// Gets or sets the target domain.
     /// </summary>
     public string Domain { get; set; }
+
+    /// <summary>
+    /// Gets or sets the access zone required to expose the contributed pages.
+    /// </summary>
+    public string AccessZoneId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the minimum access level required on the access zone.
+    /// </summary>
+    [BsonRepresentation(BsonType.String)]
+    public AccessLevel RequiredAccessLevel { get; set; }
 
     /// <summary>
     /// Gets or sets the contributed pages.

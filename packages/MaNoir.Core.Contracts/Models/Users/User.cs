@@ -34,6 +34,10 @@ public sealed class User
     /// </summary>
     public bool IsMain { get; set; }
     /// <summary>
+    /// Gets or sets a value indicating whether the user is the current platform administrator.
+    /// </summary>
+    public bool IsAdmin { get; set; }
+    /// <summary>
     /// Gets or sets the last name or primary name.
     /// </summary>
     public string Name { get; set; }

@@ -1,3 +1,4 @@
+using MaNoir.Core.Contracts.Models.Authorization;
 using MaNoir.Core.Contracts.Models.Contributions;
 using MaNoir.Core.Contributions;
 using MaNoir.Core.FunctionalTests.Infrastructure;
@@ -28,7 +29,9 @@ public sealed class ContributionPersistenceTests
             Label = "Sarah",
             Version = "1.0.0",
             Description = "Home automation agent",
-            Publisher = "MaNoir"
+            Publisher = "MaNoir",
+            RepositoryUrl = "https://example.net/plugins/sarah/",
+            DependencyRepositoryUrls = [" https://example.net/plugins/core/ "]
         },
         [
             new ContributionDefinition()
@@ -81,6 +84,8 @@ public sealed class ContributionPersistenceTests
                 AdminUi = new AdminUiContributionDefinitionData()
                 {
                     Domain = "Core",
+                    AccessZoneId = "core.admin-ui.sarah",
+                    RequiredAccessLevel = AccessLevel.Read,
                     Pages =
                     [
                         new AdminUiPageDefinition()
@@ -107,6 +112,9 @@ public sealed class ContributionPersistenceTests
         Assert.IsNotNull(publishedPlugin);
         Assert.IsNotNull(reloadedPlugin);
         Assert.AreEqual("sarah", reloadedPlugin.Id);
+        Assert.AreEqual("https://example.net/plugins/sarah", reloadedPlugin.RepositoryUrl);
+        Assert.AreEqual(1, reloadedPlugin.DependencyRepositoryUrls.Count);
+        Assert.AreEqual("https://example.net/plugins/core", reloadedPlugin.DependencyRepositoryUrls[0]);
         Assert.IsFalse(reloadedPlugin.HasNewFeatures);
         Assert.IsFalse(string.IsNullOrWhiteSpace(reloadedPlugin.LastPublishedCatalogFingerprint));
         Assert.AreEqual(2, reloadedPlugin.Contributions.Count);
@@ -120,6 +128,8 @@ public sealed class ContributionPersistenceTests
         Assert.AreEqual("Ampoules et luminaires pilotables.", integrationDefinition.Integration.PublishedEntityKinds.Single(entityKind => entityKind.Kind == "light").Descriptions["fr-FR"]);
         Assert.AreEqual("sarah", adminUiDefinition.PluginId);
         Assert.AreEqual("Core", adminUiDefinition.AdminUi.Domain);
+        Assert.AreEqual("core.admin-ui.sarah", adminUiDefinition.AdminUi.AccessZoneId);
+        Assert.AreEqual(AccessLevel.Read, adminUiDefinition.AdminUi.RequiredAccessLevel);
         Assert.AreEqual(1, adminUiDefinition.AdminUi.Pages.Count);
         Assert.AreEqual("/admin/core/sarah/overview", adminUiDefinition.AdminUi.Pages[0].Url);
         Assert.AreEqual("Vue d'ensemble", adminUiDefinition.AdminUi.Pages[0].Labels["fr-FR"]);

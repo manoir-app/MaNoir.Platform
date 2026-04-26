@@ -66,6 +66,17 @@ public sealed class UserMongoOperations
     }
 
     /// <summary>
+    /// Gets the current platform administrator when one exists.
+    /// </summary>
+    public Task<User> GetAdminUserAsync(CancellationToken cancellationToken = default)
+    {
+        return _collection
+            .Find(user => user.IsAdmin)
+            .SortBy(user => user.Id)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    /// <summary>
     /// Lists all users.
     /// </summary>
     public Task<List<User>> GetAllAsync(CancellationToken cancellationToken = default)
