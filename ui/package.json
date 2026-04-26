@@ -1,0 +1,10 @@
+{
+  "name": "@manoir-app/ui-workspace",
+  "private": true,
+  "scripts": {
+    "dev:bootstrap": "npm --prefix ./MaNoir.Core.AdminUi.Bootstrap run dev",
+    "dev:bootstrap:local": "npm --prefix ./MaNoir.Core.AdminUi.Bootstrap run dev",
+    "build:bootstrap": "npm --prefix ./MaNoir.Core.AdminUi.Bootstrap run build",
+    "typecheck:bootstrap": "npm --prefix ./MaNoir.Core.AdminUi.Bootstrap run typecheck"
+  }
+}

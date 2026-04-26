@@ -56,6 +56,9 @@ jobs:
       - name: Build
         run: dotnet build MaNoir.Platform.slnx --configuration Release --no-restore /p:Version=${{ steps.version.outputs.version }}
 
+      - name: Run unit tests
+        run: dotnet test tests/MaNoir.Core.UnitTests/MaNoir.Core.UnitTests.csproj --configuration Release --no-build
+
       - name: Pack NuGet packages
         shell: bash
         run: |

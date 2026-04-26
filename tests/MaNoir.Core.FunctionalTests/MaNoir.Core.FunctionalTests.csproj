@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <EnableMSTestRunner>true</EnableMSTestRunner>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="MSTest.TestAdapter" />
+    <PackageReference Include="MSTest.TestFramework" />
+    <PackageReference Include="MSTest.Analyzers" PrivateAssets="all" />
+    <PackageReference Include="MongoDB.Driver" />
+    <PackageReference Include="MQTTnet" />
+    <PackageReference Include="NATS.Client" />
+    <PackageReference Include="Testcontainers" />
+    <PackageReference Include="Testcontainers.MongoDb" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\apps\MaNoir.Core.Api\MaNoir.Core.Api.csproj" />
+    <ProjectReference Include="..\..\packages\MaNoir.Core\MaNoir.Core.csproj" />
+    <ProjectReference Include="..\..\packages\MaNoir.Core.Contracts\MaNoir.Core.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

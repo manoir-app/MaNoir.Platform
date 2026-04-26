@@ -1,0 +1,360 @@
+.mn-kit-theme.bootstrap-root {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.bootstrap-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, color-mix(in oklch, var(--mn-color-accent-soft) 82%, white) 0%, transparent 30%),
+    radial-gradient(circle at 85% 14%, color-mix(in oklch, var(--mn-color-warning-soft) 78%, white) 0%, transparent 20%),
+    radial-gradient(circle at bottom right, color-mix(in oklch, var(--mn-color-success-soft) 70%, white) 0%, transparent 34%),
+    linear-gradient(160deg, oklch(98.4% 0.006 82) 0%, var(--mn-color-paper-strong) 55%, oklch(94.8% 0.012 85) 100%);
+}
+
+.bootstrap-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in oklch, var(--mn-color-line-soft) 56%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklch, var(--mn-color-line-soft) 56%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.32;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35), transparent 80%);
+}
+
+.bootstrap-shell {
+  position: relative;
+  z-index: 1;
+  width: min(980px, calc(100% - 2 * var(--mn-space-6)));
+  margin: 0 auto;
+  padding: var(--mn-space-7) 0;
+  display: grid;
+  gap: var(--mn-space-5);
+}
+
+.bootstrap-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--mn-space-2);
+  align-items: start;
+}
+
+.bootstrap-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mn-space-3);
+}
+
+.bootstrap-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mn-space-2);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--mn-color-surface) 80%, white);
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  color: var(--mn-color-ink-soft);
+  font-size: 0.95rem;
+}
+
+.bootstrap-state-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--mn-color-accent) 10%, white);
+  color: var(--mn-color-accent-strong);
+  border: var(--mn-hairline) solid color-mix(in oklch, var(--mn-color-accent) 22%, var(--mn-color-line));
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.bootstrap-hero-copy {
+  display: grid;
+  gap: var(--mn-space-4);
+}
+
+.bootstrap-hero-copy h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 2vw + 1.2rem, 2.6rem);
+  line-height: 1.05;
+}
+
+.bootstrap-hero-copy p,
+.bootstrap-kicker,
+.bootstrap-identity-label {
+  margin: 0;
+  color: var(--mn-color-ink-soft);
+}
+
+.bootstrap-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+}
+
+.bootstrap-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--mn-space-3);
+}
+
+.bootstrap-signal-card,
+.bootstrap-stage-sidebar-card,
+.bootstrap-form-section {
+  border-radius: calc(var(--mn-radius-lg) + 2px);
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  background: color-mix(in oklch, var(--mn-color-surface) 88%, white);
+}
+
+.bootstrap-signal-card {
+  padding: var(--mn-space-4);
+  display: grid;
+  gap: var(--mn-space-2);
+}
+
+.bootstrap-signal-label,
+.bootstrap-runtime-list dt,
+.bootstrap-action-hint,
+.bootstrap-form-section-header p {
+  color: var(--mn-color-ink-soft);
+}
+
+.bootstrap-signal-card strong,
+.bootstrap-runtime-list dd,
+.bootstrap-form-section-header h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--mn-color-ink);
+}
+
+.bootstrap-side-section {
+  display: grid;
+  gap: var(--mn-space-3);
+}
+
+.bootstrap-flow-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--mn-space-3);
+}
+
+.bootstrap-flow-list li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--mn-space-3);
+  align-items: start;
+  padding: var(--mn-space-3);
+  border-radius: calc(var(--mn-radius-lg) - 2px);
+}
+
+.bootstrap-flow-list li p,
+.bootstrap-runtime-list {
+  margin: 0;
+}
+
+.bootstrap-flow-list li strong {
+  display: block;
+  margin-bottom: var(--mn-space-1);
+}
+
+.bootstrap-flow-index {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  font-family: var(--mn-font-mono);
+  font-size: 0.85rem;
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  background: white;
+}
+
+.bootstrap-flow-list .is-current {
+  background: color-mix(in oklch, var(--mn-color-accent-soft) 65%, white);
+}
+
+.bootstrap-flow-list .is-current .bootstrap-flow-index {
+  border-color: color-mix(in oklch, var(--mn-color-accent) 30%, var(--mn-color-line));
+  color: var(--mn-color-accent-strong);
+}
+
+.bootstrap-flow-list .is-done {
+  background: color-mix(in oklch, var(--mn-color-success-soft) 54%, white);
+}
+
+.bootstrap-flow-list .is-upcoming {
+  background: color-mix(in oklch, var(--mn-color-paper) 74%, white);
+}
+
+.bootstrap-runtime-list {
+  display: grid;
+  gap: var(--mn-space-3);
+}
+
+.bootstrap-runtime-list div {
+  display: grid;
+  gap: var(--mn-space-1);
+  padding-top: var(--mn-space-2);
+  border-top: var(--mn-hairline) solid var(--mn-color-line-soft);
+}
+
+.bootstrap-runtime-list div:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.bootstrap-stage-layout,
+.bootstrap-stage-simple {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--mn-space-4);
+}
+
+.bootstrap-form-section-header h3,
+.bootstrap-form-section-header p {
+  margin: 0;
+}
+
+.bootstrap-stage {
+  display: grid;
+}
+
+.bootstrap-stage-shell {
+  position: relative;
+}
+
+.bootstrap-stage-frame {
+  position: absolute;
+  inset: 18px -18px -18px 18px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, color-mix(in oklch, var(--mn-color-accent-soft) 44%, white), transparent 60%);
+  z-index: 0;
+  opacity: 0.85;
+}
+
+.bootstrap-panel {
+  position: relative;
+  z-index: 1;
+  padding: var(--mn-space-6);
+  display: grid;
+  gap: var(--mn-space-5);
+  background: color-mix(in oklch, var(--mn-color-surface) 92%, white);
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  box-shadow: 0 26px 56px rgba(0, 0, 0, 0.06);
+}
+
+.bootstrap-panel-wide {
+  gap: var(--mn-space-6);
+}
+
+.bootstrap-panel-centered {
+  max-width: 720px;
+}
+
+.bootstrap-form {
+  display: grid;
+  gap: var(--mn-space-4);
+}
+
+.bootstrap-form-grid {
+  display: grid;
+  gap: var(--mn-space-4);
+}
+
+.bootstrap-form-grid-two-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.bootstrap-form-grid-three-columns {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.bootstrap-form-section {
+  padding: var(--mn-space-5);
+  display: grid;
+  gap: var(--mn-space-4);
+}
+
+.bootstrap-form-section:first-child {
+  background: color-mix(in oklch, var(--mn-color-accent-soft) 28%, white);
+  border-color: color-mix(in oklch, var(--mn-color-accent) 20%, var(--mn-color-line));
+}
+
+.bootstrap-form-section-header {
+  display: grid;
+  gap: var(--mn-space-2);
+}
+
+.bootstrap-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--mn-space-3);
+}
+
+.bootstrap-actions-full {
+  padding-top: var(--mn-space-2);
+}
+
+.bootstrap-inline-button {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--mn-color-accent);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.bootstrap-identity-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--mn-space-4);
+}
+
+.bootstrap-identity-grid strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--mn-color-ink);
+}
+
+.bootstrap-auth-card,
+.bootstrap-session-card {
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 940px) {
+  .bootstrap-shell {
+    width: min(100%, calc(100% - 2 * var(--mn-space-4)));
+    padding: var(--mn-space-6) 0;
+  }
+
+  .bootstrap-hero,
+  .bootstrap-form-grid-two-columns,
+  .bootstrap-form-grid-three-columns,
+  .bootstrap-signal-grid,
+  .bootstrap-identity-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bootstrap-panel,
+  .bootstrap-hero-card,
+  .bootstrap-summary-card,
+  .bootstrap-form-section {
+    padding: var(--mn-space-5);
+  }
+
+  .bootstrap-stage-frame {
+    inset: 12px -8px -8px 8px;
+  }
+}

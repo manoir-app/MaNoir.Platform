@@ -5,5 +5,19 @@
 
   <ItemGroup>
     <!-- Keep NuGet dependency versions centralized here when package references are introduced. -->
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="10.0.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
+    <PackageVersion Include="MSTest.Analyzers" Version="3.2.0" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="3.2.0" />
+    <PackageVersion Include="MSTest.TestFramework" Version="3.2.0" />
+    <PackageVersion Include="MongoDB.Bson" Version="3.8.0" />
+    <PackageVersion Include="MongoDB.Driver" Version="3.8.0" />
+    <PackageVersion Include="MQTTnet" Version="4.1.4.563" />
+    <PackageVersion Include="MQTTnet.Extensions.ManagedClient" Version="4.1.4.563" />
+    <PackageVersion Include="NATS.Client" Version="0.11.0" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageVersion Include="Testcontainers" Version="4.11.0" />
+    <PackageVersion Include="Testcontainers.MongoDb" Version="4.11.0" />
   </ItemGroup>
 </Project>

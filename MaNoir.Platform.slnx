@@ -8,4 +8,8 @@
     <Project Path="packages/MaNoir.Core.Contracts/MaNoir.Core.Contracts.csproj" />
     <Project Path="packages/MaNoir.Core/MaNoir.Core.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MaNoir.Core.UnitTests/MaNoir.Core.UnitTests.csproj" />
+    <Project Path="tests/MaNoir.Core.FunctionalTests/MaNoir.Core.FunctionalTests.csproj" />
+  </Folder>
 </Solution>
