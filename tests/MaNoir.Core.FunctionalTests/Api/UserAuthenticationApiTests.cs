@@ -345,9 +345,16 @@ public sealed class UserAuthenticationApiTests
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         Assert.IsNotNull(definitions);
-        Assert.AreEqual(2, definitions.Count);
-        Assert.AreEqual(CoreAccessZones.CoreAdminUi, definitions[0].Id);
-        Assert.AreEqual(CoreAccessZones.CoreAuthorization, definitions[1].Id);
+        Assert.AreEqual(4, definitions.Count);
+        CollectionAssert.AreEquivalent(
+            new[]
+            {
+                CoreAccessZones.CoreAdminUi,
+                CoreAccessZones.CoreAuthorization,
+                CoreAccessZones.CoreGeneralFilesWrite,
+                CoreAccessZones.CorePublicFilesWrite
+            },
+            definitions.Select(definition => definition.Id).ToArray());
     }
 
     [TestMethod]
