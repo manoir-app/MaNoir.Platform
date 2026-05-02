@@ -7,6 +7,7 @@ export default defineConfig(({ mode }) => {
   const proxyTarget = env.VITE_CORE_API_PROXY_TARGET?.trim() || 'http://localhost:5243';
 
   return {
+    base: '/bootstrap/',
     plugins: [react()],
     resolve: {
       dedupe: ['react', 'react-dom'],

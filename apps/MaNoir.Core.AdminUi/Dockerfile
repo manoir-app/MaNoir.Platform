@@ -1,3 +1,13 @@
+FROM node:22 AS ui-build
+WORKDIR /src/ui
+
+COPY ["ui/", "./"]
+
+RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap ci
+RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap run build
+RUN npm --prefix ./MaNoir.Core.AdminUi.Front ci
+RUN npm --prefix ./MaNoir.Core.AdminUi.Front run build
+
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
@@ -28,5 +38,7 @@ ENV ASPNETCORE_URLS=http://+:8080
 EXPOSE 8080
 
 COPY --from=build /app/publish .
+COPY --from=ui-build /src/ui/MaNoir.Core.AdminUi.Bootstrap/dist/ ./wwwroot/bootstrap/
+COPY --from=ui-build /src/ui/MaNoir.Core.AdminUi.Front/dist/ ./wwwroot/front/
 
 ENTRYPOINT ["dotnet", "MaNoir.Core.AdminUi.dll"]
