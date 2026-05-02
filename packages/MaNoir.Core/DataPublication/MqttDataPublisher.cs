@@ -8,10 +8,17 @@ using System.Globalization;
 
 namespace MaNoir.Core.DataPublication;
 
+/// <summary>
+/// Publishes retained Core mesh and entity snapshots to the configured MQTT broker.
+/// </summary>
 public static class MqttDataPublisher
 {
     private static IManagedMqttClient _client;
 
+    /// <summary>
+    /// Starts the managed MQTT client with the configured broker endpoint.
+    /// </summary>
+    /// <param name="name">Logical client prefix used to build the MQTT client identifier.</param>
     public static void Start(string name)
     {
         if (_client != null)
@@ -34,6 +41,9 @@ public static class MqttDataPublisher
         _client.StartAsync(options).GetAwaiter().GetResult();
     }
 
+    /// <summary>
+    /// Stops and disposes the managed MQTT client if it is currently running.
+    /// </summary>
     public static void Stop()
     {
         if (_client == null)
@@ -46,6 +56,11 @@ public static class MqttDataPublisher
         _client = null;
     }
 
+    /// <summary>
+    /// Publishes one retained mesh property value.
+    /// </summary>
+    /// <param name="property">Mesh property name appended to the MQTT topic.</param>
+    /// <param name="value">String payload to retain for the target topic.</param>
     public static void PublishMeshProperty(string property, string value)
     {
         EnsureStarted();
@@ -53,6 +68,10 @@ public static class MqttDataPublisher
         PublishRetained(publication.topic, publication.payload);
     }
 
+    /// <summary>
+    /// Publishes the retained MQTT projection of one entity and its flat data values.
+    /// </summary>
+    /// <param name="entity">Entity snapshot to expose through MQTT.</param>
     public static void PublishEntity(Entity entity)
     {
         EnsureStarted();

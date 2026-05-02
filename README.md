@@ -13,7 +13,7 @@ The main GitHub workflow is `build` in `.github/workflows/build.yml`.
 - build the .NET solution
 - pack NuGet packages as GitHub Actions artifacts
 - build and pack the npm kit as a GitHub Actions artifact
-- build the Docker image without publishing it
+- build the Docker images without publishing them
 
 ### Push To Main
 
@@ -52,6 +52,7 @@ npm install @manoir-app/core-admin-ui-kit
 ### Docker
 
 - image: `ghcr.io/manoir-app/manoir-core-adminui`
+- image: `ghcr.io/manoir-app/manoir-agents-erza`
 
 ## Local Artifacts
 

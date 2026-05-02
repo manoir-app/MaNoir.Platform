@@ -7,6 +7,9 @@ using System.Text.Json;
 
 namespace MaNoir.Core.Files;
 
+/// <summary>
+/// Resolves and maintains the filesystem storage layout used by Core file features.
+/// </summary>
 public static class FileStorageHelper
 {
     private const string PrimaryRootEnvironmentVariableName = "MANOIR_FILE_STORAGE_FOLDER";
@@ -17,16 +20,25 @@ public static class FileStorageHelper
     private const string UsersSpace = "users";
     private static readonly JsonSerializerOptions MetadataSerializerOptions = new(JsonSerializerDefaults.Web);
 
+    /// <summary>
+    /// Gets the absolute file path for one general-purpose stored file.
+    /// </summary>
     public static string GetGeneralFilePath(string scope, string relativePath)
     {
         return GetFilePath(GeneralSpace, scope, relativePath);
     }
 
+    /// <summary>
+    /// Gets the absolute file path for one publicly exposed stored file.
+    /// </summary>
     public static string GetPublicFilePath(string scope, string relativePath)
     {
         return GetFilePath(PublicSpace, scope, relativePath);
     }
 
+    /// <summary>
+    /// Gets the absolute file path for one stored file scoped to a specific user.
+    /// </summary>
     public static string GetUserFilePath(string userId, string scope, string relativePath)
     {
         string normalizedUserId = NormalizePathSegment(userId);
@@ -36,6 +48,9 @@ public static class FileStorageHelper
         return GetFilePath(UsersSpace, normalizedUserId, scope, relativePath);
     }
 
+    /// <summary>
+    /// Resolves the root storage folder, creating it when necessary.
+    /// </summary>
     public static string GetRootPath()
     {
         string path = Environment.GetEnvironmentVariable(PrimaryRootEnvironmentVariableName);
@@ -56,6 +71,9 @@ public static class FileStorageHelper
         return path;
     }
 
+    /// <summary>
+    /// Infers a content type from the local file extension.
+    /// </summary>
     public static string GetContentType(string localFile)
     {
         string extension = Path.GetExtension(localFile)?.ToLowerInvariant();
@@ -74,6 +92,9 @@ public static class FileStorageHelper
         };
     }
 
+    /// <summary>
+    /// Gets stored metadata for one local file, rebuilding it when the sidecar file is missing or invalid.
+    /// </summary>
     public static StoredFileMetadata GetStoredFileMetadata(string localFile)
     {
         if (string.IsNullOrWhiteSpace(localFile) || !File.Exists(localFile))
@@ -100,6 +121,9 @@ public static class FileStorageHelper
         return BuildMetadata(localFile, null);
     }
 
+    /// <summary>
+    /// Recomputes and persists the metadata sidecar of one local file.
+    /// </summary>
     public static StoredFileMetadata UpdateStoredFileMetadata(string localFile, string contentType)
     {
         if (string.IsNullOrWhiteSpace(localFile) || !File.Exists(localFile))
@@ -115,6 +139,9 @@ public static class FileStorageHelper
         return metadata;
     }
 
+    /// <summary>
+    /// Deletes the metadata sidecar file associated with one local file.
+    /// </summary>
     public static void DeleteStoredFileMetadata(string localFile)
     {
         string metadataFile = GetMetadataFilePath(localFile);
@@ -241,30 +268,48 @@ public static class FileStorageHelper
     }
 }
 
+/// <summary>
+/// Compatibility wrapper that preserves the historical file cache API on top of <see cref="FileStorageHelper"/>.
+/// </summary>
 public static class FileCacheHelper
 {
+    /// <summary>
+    /// Gets the root storage folder used by the legacy file cache API.
+    /// </summary>
     public static string GetRootPath()
     {
         return FileStorageHelper.GetRootPath();
     }
 
+    /// <summary>
+    /// Gets the absolute path of one local folder in the general storage space.
+    /// </summary>
     public static string GetLocalFolder(string scope, string folder)
     {
         string filePath = FileStorageHelper.GetGeneralFilePath(scope, string.Concat(folder?.Trim('/'), "/placeholder.tmp"));
         return filePath == null ? null : Path.GetDirectoryName(filePath);
     }
 
+    /// <summary>
+    /// Gets the absolute path of one local file in the general storage space.
+    /// </summary>
     public static string GetLocalFilename(string scope, string folder, string file)
     {
         string relativePath = string.IsNullOrWhiteSpace(folder) ? file : string.Concat(folder.Trim('/'), "/", file);
         return FileStorageHelper.GetGeneralFilePath(scope, relativePath);
     }
 
+    /// <summary>
+    /// Gets the absolute path of one local file from a relative path in the general storage space.
+    /// </summary>
     public static string GetLocalFilename(string scope, string relativePath)
     {
         return FileStorageHelper.GetGeneralFilePath(scope, relativePath);
     }
 
+    /// <summary>
+    /// Infers a content type from the local file extension.
+    /// </summary>
     public static string GetContentType(string localFile)
     {
         return FileStorageHelper.GetContentType(localFile);

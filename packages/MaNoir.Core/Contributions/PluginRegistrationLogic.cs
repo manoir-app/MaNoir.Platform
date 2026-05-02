@@ -12,11 +12,28 @@ namespace MaNoir.Core.Contributions;
 /// <summary>
 /// Publishes complete plugin descriptors made of plugin metadata, contributions, and access zones.
 /// </summary>
+/// <remarks>
+/// <para>Example:</para>
+/// <code>
+/// PluginRegistrationLogic logic = new PluginRegistrationLogic();
+/// await logic.PublishPluginDescriptorAsync(CorePluginDescriptorProvider.Create("1.0.0"), cancellationToken);
+/// </code>
+/// <para>
+/// This is the preferred entry point when a plugin wants to publish its catalog, contribution surfaces,
+/// and access zones as one coherent operation.
+/// </para>
+/// </remarks>
 public sealed class PluginRegistrationLogic
 {
     /// <summary>
     /// Publishes one complete plugin descriptor.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Repository dependencies are validated before publication so that contribution access-zone references stay resolvable.
+    /// The method throws <see cref="InvalidPluginDescriptorException"/> when the descriptor is inconsistent.
+    /// </para>
+    /// </remarks>
     public async Task PublishPluginDescriptorAsync(PluginDescriptor pluginDescriptor, CancellationToken cancellationToken = default)
     {
         if (pluginDescriptor == null)

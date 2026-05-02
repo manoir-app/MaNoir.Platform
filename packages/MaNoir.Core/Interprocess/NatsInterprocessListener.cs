@@ -7,15 +7,26 @@ using System.Threading;
 
 namespace Home.Common;
 
+/// <summary>
+/// Hosts a simple long-running NATS subscription loop and dispatches incoming messages to a delegate.
+/// </summary>
 public static class NatsInterprocessListener
 {
     private static bool _shouldStop;
 
+    /// <summary>
+    /// Requests the currently running listener loop to stop.
+    /// </summary>
     public static void Stop()
     {
         _shouldStop = true;
     }
 
+    /// <summary>
+    /// Starts listening to the provided topics until <see cref="Stop"/> is called.
+    /// </summary>
+    /// <param name="topics">Topics to subscribe to on each configured NATS server.</param>
+    /// <param name="handler">Delegate invoked for each received message.</param>
     public static void Run(string[] topics, MessageHandler handler)
     {
         foreach (string server in NatsInterprocess.GetServers())

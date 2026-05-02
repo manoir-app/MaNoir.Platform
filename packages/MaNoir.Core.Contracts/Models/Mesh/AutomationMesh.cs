@@ -28,6 +28,7 @@ public sealed class AutomationMesh
 {
     public AutomationMesh()
     {
+        FrontendUrls = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
         InternetConnections = [];
         Status = new AutomationMeshStatus();
         LocationInfo = new AutomationMeshLocationInfo();
@@ -88,6 +89,10 @@ public sealed class AutomationMesh
     /// Gets or sets the source code integration settings.
     /// </summary>
     public AutomationMeshSouceCodeIntegration SourceCodeIntegration { get; set; }
+    /// <summary>
+    /// Gets or sets the frontend URLs exposed for this mesh, indexed by stable frontend code.
+    /// </summary>
+    public Dictionary<string, string> FrontendUrls { get; set; }
     /// <summary>
     /// Gets or sets the mesh time zone identifier.
     /// </summary>

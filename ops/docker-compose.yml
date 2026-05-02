@@ -32,5 +32,24 @@ services:
     ports:
       - "1883:1883"
 
+  erza:
+    image: ${MANOIR_ERZA_IMAGE:-ghcr.io/manoir-app/manoir-agents-erza:latest}
+    container_name: manoir-agents-erza
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      nats:
+        condition: service_started
+    environment:
+      MONGODB_CONNECTIONSTRING: mongodb://mongodb:27017
+      NATS_SERVICE_HOST: nats
+      NATS_SERVICE_PORT: 4222
+      MANOIR_MESH_ID: ${MANOIR_MESH_ID:-local}
+      ERZA_AGENT_ID: ${ERZA_AGENT_ID:-erza}
+      ERZA_DISPLAY_NAME: ${ERZA_DISPLAY_NAME:-Erza}
+      ERZA_TOPICS: ${ERZA_TOPICS:-users.presence.*,system.mesh.*}
+      ERZA_CAPABILITIES: ${ERZA_CAPABILITIES:-presence,mesh.monitoring}
+
 volumes:
   manoir-core-mongo-data:

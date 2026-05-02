@@ -12,6 +12,14 @@ namespace MaNoir.Core.Authorization;
 /// <summary>
 /// Resolves and persists user access grants on functional zones.
 /// </summary>
+/// <remarks>
+/// <para>Example:</para>
+/// <code>
+/// AuthorizationLogic logic = new AuthorizationLogic();
+/// await logic.PublishAccessZoneDefinitionsAsync("manoir.core", CoreAccessZones.GetDefinitions(), cancellationToken);
+/// bool canManageMesh = await logic.HasAccessAsync("michael", "core.mesh.settings", AccessLevel.Manage, cancellationToken);
+/// </code>
+/// </remarks>
 public sealed class AuthorizationLogic
 {
     private readonly AuthorizationMongoOperations _mongoOperations;
@@ -29,6 +37,9 @@ public sealed class AuthorizationLogic
     /// <summary>
     /// Gets the published access zone definitions.
     /// </summary>
+    /// <remarks>
+    /// <para>Pass a plugin identifier to scope the result to one plugin, or omit it to inspect the full catalog.</para>
+    /// </remarks>
     public Task<List<AccessZoneDefinition>> GetAccessZoneDefinitionsAsync(string pluginId = null, CancellationToken cancellationToken = default)
     {
         string normalizedPluginId = NormalizePluginId(pluginId);
@@ -38,6 +49,11 @@ public sealed class AuthorizationLogic
     /// <summary>
     /// Publishes the access zone definitions of one plugin.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Republishing a plugin catalog replaces its zone set: removed definitions are deleted, and matching identifiers are updated in place.
+    /// </para>
+    /// </remarks>
     public async Task<List<AccessZoneDefinition>> PublishAccessZoneDefinitionsAsync(string pluginId, IEnumerable<AccessZoneDefinition> definitions, CancellationToken cancellationToken = default)
     {
         string normalizedPluginId = NormalizePluginId(pluginId);
@@ -61,6 +77,13 @@ public sealed class AuthorizationLogic
     /// <summary>
     /// Gets the explicit authorization profile of one user.
     /// </summary>
+    /// <remarks>
+    /// <para>Example:</para>
+    /// <code>
+    /// AuthorizationLogic logic = new AuthorizationLogic();
+    /// UserAuthorizationProfile profile = await logic.GetUserAuthorizationAsync("michael", cancellationToken);
+    /// </code>
+    /// </remarks>
     public async Task<UserAuthorizationProfile> GetUserAuthorizationAsync(string userId, CancellationToken cancellationToken = default)
     {
         string normalizedUserId = UserLogic.NormalizeUserId(userId);
@@ -87,6 +110,16 @@ public sealed class AuthorizationLogic
     /// <summary>
     /// Replaces the explicit authorization profile of one user.
     /// </summary>
+    /// <remarks>
+    /// <para>Example:</para>
+    /// <code>
+    /// AuthorizationLogic logic = new AuthorizationLogic();
+    /// UserAuthorizationProfile profile = await logic.ReplaceUserAuthorizationAsync("michael",
+    /// [
+    ///     new UserZoneAccess() { ZoneId = "core.mesh.settings", Level = AccessLevel.Manage }
+    /// ], cancellationToken);
+    /// </code>
+    /// </remarks>
     public async Task<UserAuthorizationProfile> ReplaceUserAuthorizationAsync(string userId, IEnumerable<UserZoneAccess> accesses, CancellationToken cancellationToken = default)
     {
         string normalizedUserId = UserLogic.NormalizeUserId(userId);
@@ -117,6 +150,11 @@ public sealed class AuthorizationLogic
     /// <summary>
     /// Gets the effective access level of one user on one zone.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Effective access walks up the dotted zone hierarchy, so a grant on <c>core.mesh</c> can satisfy a query on <c>core.mesh.settings</c>.
+    /// </para>
+    /// </remarks>
     public async Task<AccessLevel> GetEffectiveAccessLevelAsync(string userId, string zoneId, CancellationToken cancellationToken = default)
     {
         string normalizedUserId = UserLogic.NormalizeUserId(userId);
@@ -152,6 +190,9 @@ public sealed class AuthorizationLogic
     /// <summary>
     /// Gets whether the user has at least the required access level on one zone.
     /// </summary>
+    /// <remarks>
+    /// <para>This helper is the lightweight boolean form when you only need an allow/deny answer.</para>
+    /// </remarks>
     public async Task<bool> HasAccessAsync(string userId, string zoneId, AccessLevel requiredLevel, CancellationToken cancellationToken = default)
     {
         if (requiredLevel <= AccessLevel.None)
@@ -163,6 +204,11 @@ public sealed class AuthorizationLogic
     /// <summary>
     /// Throws when the user does not have the required access level on one zone.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Use this method in API or orchestration code when unauthorized access should fail fast with an exception instead of returning a boolean.
+    /// </para>
+    /// </remarks>
     public async Task EnsureAccessAsync(string userId, string zoneId, AccessLevel requiredLevel, CancellationToken cancellationToken = default)
     {
         if (!await HasAccessAsync(userId, zoneId, requiredLevel, cancellationToken))
