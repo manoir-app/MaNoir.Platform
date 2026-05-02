@@ -69,14 +69,15 @@ public sealed class AuthorizationCatalogPersistenceTests
         List<AccessZoneDefinition> definitions = await new AuthorizationLogic().GetAccessZoneDefinitionsAsync("core");
         InstalledPlugin plugin = await new MaNoir.Core.Contributions.ContributionLogic().GetInstalledPluginAsync("core");
 
-        Assert.AreEqual(4, definitions.Count);
+        Assert.AreEqual(5, definitions.Count);
         CollectionAssert.AreEquivalent(
             new[]
             {
                 CoreAccessZones.CoreAdminUi,
                 CoreAccessZones.CoreAuthorization,
                 CoreAccessZones.CoreGeneralFilesWrite,
-                CoreAccessZones.CorePublicFilesWrite
+                CoreAccessZones.CorePublicFilesWrite,
+                CoreAccessZones.CoreMeshSettings
             },
             definitions.ConvertAll(definition => definition.Id));
         Assert.IsNotNull(plugin);
@@ -98,7 +99,7 @@ public sealed class AuthorizationCatalogPersistenceTests
         List<AccessZoneDefinition> coreDefinitions = await new AuthorizationLogic().GetAccessZoneDefinitionsAsync("core");
         List<AccessZoneDefinition> weatherDefinitions = await new AuthorizationLogic().GetAccessZoneDefinitionsAsync("weather");
 
-        Assert.AreEqual(4, coreDefinitions.Count);
+        Assert.AreEqual(5, coreDefinitions.Count);
         Assert.AreEqual(1, weatherDefinitions.Count);
         Assert.AreEqual("weather.forecast", weatherDefinitions[0].Id);
         Assert.AreEqual("weather", weatherDefinitions[0].PluginId);

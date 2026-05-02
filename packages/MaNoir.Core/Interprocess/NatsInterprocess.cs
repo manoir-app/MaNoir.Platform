@@ -7,22 +7,40 @@ using System.Threading;
 
 namespace Home.Common;
 
+/// <summary>
+/// Represents a NATS request that completed without any response payload.
+/// </summary>
 [Serializable]
 public class NatsNoResponseException : Exception
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NatsNoResponseException"/> class.
+    /// </summary>
     public NatsNoResponseException()
     {
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NatsNoResponseException"/> class.
+    /// </summary>
+    /// <param name="message">Exception message.</param>
     public NatsNoResponseException(string message) : base(message)
     {
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NatsNoResponseException"/> class.
+    /// </summary>
+    /// <param name="message">Exception message.</param>
+    /// <param name="inner">Underlying failure.</param>
     public NatsNoResponseException(string message, Exception inner) : base(message, inner)
     {
     }
 
 #pragma warning disable SYSLIB0051
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NatsNoResponseException"/> class from serialized exception data.
+    /// </summary>
     protected NatsNoResponseException(
         System.Runtime.Serialization.SerializationInfo info,
         System.Runtime.Serialization.StreamingContext context) : base(info, context)
@@ -31,19 +49,31 @@ public class NatsNoResponseException : Exception
 #pragma warning restore SYSLIB0051
 }
 
+/// <summary>
+/// Provides convenience helpers for pushing and requesting JSON messages over NATS.
+/// </summary>
 public static class NatsInterprocess
 {
+    /// <summary>
+    /// Publishes one message using its intrinsic topic.
+    /// </summary>
     public static void Push(BaseMessage message)
     {
         Push(message.Topic, message);
     }
 
+    /// <summary>
+    /// Publishes one structured message to an explicit topic.
+    /// </summary>
     public static void Push(string topic, BaseMessage message)
     {
         string messageContent = JsonConvert.SerializeObject(message);
         Push(topic, messageContent);
     }
 
+    /// <summary>
+    /// Publishes one raw message payload to an explicit topic.
+    /// </summary>
     public static void Push(string topic, string messageContent)
     {
         for (int index = 0; index < 3; index++)
@@ -66,6 +96,9 @@ public static class NatsInterprocess
         }
     }
 
+    /// <summary>
+    /// Sends one request and returns the raw response payload.
+    /// </summary>
     public static string Request(string topic, BaseMessage message)
     {
         string messageContent = JsonConvert.SerializeObject(message);
@@ -93,11 +126,17 @@ public static class NatsInterprocess
         return JsonConvert.SerializeObject(MessageResponse.GenericFail);
     }
 
+    /// <summary>
+    /// Sends one request and deserializes the response payload.
+    /// </summary>
     public static T Request<T>(string topic, BaseMessage message)
     {
         return Request<T>(topic, message, 15000);
     }
 
+    /// <summary>
+    /// Sends one request and deserializes the response payload with a custom timeout.
+    /// </summary>
     public static T Request<T>(string topic, BaseMessage message, int durationMaxInMs)
     {
         string messageContent = JsonConvert.SerializeObject(message);
@@ -126,6 +165,9 @@ public static class NatsInterprocess
         throw new InvalidOperationException();
     }
 
+    /// <summary>
+    /// Creates one transient NATS connection using the configured server list.
+    /// </summary>
     public static IConnection GetConnection()
     {
         ConnectionFactory connectionFactory = new ConnectionFactory();
@@ -136,6 +178,9 @@ public static class NatsInterprocess
         return connectionFactory.CreateConnection(options);
     }
 
+    /// <summary>
+    /// Resolves the configured NATS server endpoints.
+    /// </summary>
     public static string[] GetServers()
     {
         string server = "localhost";

@@ -18,6 +18,23 @@ namespace MaNoir.Core.Setup;
 /// <summary>
 /// Coordinates the first setup of a local Core instance.
 /// </summary>
+/// <remarks>
+/// <para>Example:</para>
+/// <code>
+/// InitialSetupLogic logic = new InitialSetupLogic();
+/// InitialSetupStatus status = await logic.GetStatusAsync(cancellationToken);
+/// if (status.CanInitialize)
+/// {
+///     InitialSetupResponse response = await logic.InitializeAsync(new InitialSetupRequest()
+///     {
+///         AdminUserId = "michael",
+///         AdminPassword = "P@ssw0rd!",
+///         AdminFirstName = "Michael",
+///         AdminName = "Carbenay"
+///     }, "https://core.local/api/graph/", Environment.MachineName, cancellationToken);
+/// }
+/// </code>
+/// </remarks>
 public sealed class InitialSetupLogic
 {
     private static readonly ConcurrentDictionary<string, bool> InitializedStateCache = new(StringComparer.OrdinalIgnoreCase);
@@ -39,6 +56,9 @@ public sealed class InitialSetupLogic
     /// <summary>
     /// Invalidates the cached initialization state for the current MongoDB binding.
     /// </summary>
+    /// <remarks>
+    /// <para>Call this after destructive test cleanup or when an external process resets the local database.</para>
+    /// </remarks>
     public static void InvalidateCachedStatus()
     {
         InitializedStateCache.TryRemove(ResolveCacheKey(), out _);
@@ -47,6 +67,9 @@ public sealed class InitialSetupLogic
     /// <summary>
     /// Invalidates the cached initialization state for one explicit MongoDB connection string.
     /// </summary>
+    /// <remarks>
+    /// <para>This overload is useful when several test or worker processes share different MongoDB bindings.</para>
+    /// </remarks>
     public static void InvalidateCachedStatus(string connectionString)
     {
         InitializedStateCache.TryRemove(ResolveCacheKey(connectionString), out _);
@@ -55,6 +78,11 @@ public sealed class InitialSetupLogic
     /// <summary>
     /// Gets whether the first setup can still be executed.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Once both a local mesh and at least one user exist, the returned status is cached for the current MongoDB binding.
+    /// </para>
+    /// </remarks>
     public async Task<InitialSetupStatus> GetStatusAsync(CancellationToken cancellationToken = default)
     {
         string cacheKey = ResolveCacheKey();
@@ -80,6 +108,11 @@ public sealed class InitialSetupLogic
     /// <summary>
     /// Initializes the local mesh and the first master admin user.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The operation is compensating: if user creation fails after the mesh is created, the method rolls back the partial setup before rethrowing.
+    /// </para>
+    /// </remarks>
     public async Task<InitialSetupResponse> InitializeAsync(InitialSetupRequest request, string graphApiBaseUri, string machineName, CancellationToken cancellationToken = default)
     {
         string cacheKey = ResolveCacheKey();

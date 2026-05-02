@@ -6,6 +6,16 @@ namespace MaNoir.Core.Locations;
 /// <summary>
 /// Provides business logic for locations.
 /// </summary>
+/// <remarks>
+/// <para>Example:</para>
+/// <code>
+/// Location location = new Location() { Label = "Maison" };
+/// LocationLogic.PrepareForSave(location);
+/// </code>
+/// <para>
+/// The location helpers normalize aggregate identifiers and ensure nested zones and rooms are ready for persistence.
+/// </para>
+/// </remarks>
 public sealed partial class LocationLogic
 {
     private readonly LocationMongoOperations _mongoOperations;
@@ -21,6 +31,9 @@ public sealed partial class LocationLogic
     /// <summary>
     /// Normalizes a location identifier.
     /// </summary>
+    /// <remarks>
+    /// <para>This helper lower-cases persisted identifiers so that API and storage use a stable canonical form.</para>
+    /// </remarks>
     public static string NormalizeLocationId(string locationId)
     {
         if (string.IsNullOrWhiteSpace(locationId))
@@ -32,6 +45,11 @@ public sealed partial class LocationLogic
     /// <summary>
     /// Ensures that a location and its nested zones and rooms have identifiers.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Use this before saving imported or UI-authored location trees to avoid missing identifiers on zones and rooms.
+    /// </para>
+    /// </remarks>
     public static void EnsureNestedIdentifiers(Location location)
     {
         if (location == null || location.Zones == null)
@@ -66,6 +84,11 @@ public sealed partial class LocationLogic
     /// <summary>
     /// Prepares a location aggregate for persistence.
     /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This method combines root identifier normalization and nested identifier generation, making it the recommended pre-save step.
+    /// </para>
+    /// </remarks>
     public static void PrepareForSave(Location location)
     {
         if (location == null)

@@ -1,6 +1,7 @@
 using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.Contracts.Models.Locations;
 using MaNoir.Core.Locations;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,6 +9,68 @@ namespace MaNoir.Core.Mesh;
 
 public sealed partial class AutomationMeshLogic
 {
+    /// <summary>
+    /// Gets the frontend URL catalog from the local mesh.
+    /// </summary>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The current frontend URL catalog, or an empty dictionary when no mesh exists.</returns>
+    public async Task<Dictionary<string, string>> GetFrontendUrlsAsync(CancellationToken cancellationToken = default)
+    {
+        AutomationMesh mesh = await GetLocalAsync(cancellationToken);
+        return GetFrontendUrls(mesh);
+    }
+
+    /// <summary>
+    /// Gets one frontend URL from the local mesh.
+    /// </summary>
+    /// <param name="frontendCode">The frontend code to find.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>The matching URL, or <see langword="null"/> when missing.</returns>
+    public async Task<string> GetFrontendUrlAsync(string frontendCode, CancellationToken cancellationToken = default)
+    {
+        AutomationMesh mesh = await GetLocalAsync(cancellationToken);
+        return GetFrontendUrl(mesh, frontendCode);
+    }
+
+    /// <summary>
+    /// Sets one frontend URL on the local mesh and persists the change when needed.
+    /// </summary>
+    /// <param name="frontendCode">The stable frontend code.</param>
+    /// <param name="frontendUrl">The absolute frontend URL.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns><see langword="true"/> when the catalog changed.</returns>
+    public async Task<bool> SetFrontendUrlAsync(string frontendCode, string frontendUrl, CancellationToken cancellationToken = default)
+    {
+        AutomationMesh mesh = await GetLocalAsync(cancellationToken);
+        if (mesh == null)
+            return false;
+
+        bool changed = UpsertFrontendUrl(mesh, frontendCode, frontendUrl);
+        if (changed)
+            await SaveAsync(mesh, cancellationToken);
+
+        return changed;
+    }
+
+    /// <summary>
+    /// Deletes one frontend URL from the local mesh and persists the change when needed.
+    /// </summary>
+    /// <param name="frontendCode">The stable frontend code.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns><see langword="true"/> when the catalog changed.</returns>
+    public async Task<bool> DeleteFrontendUrlAsync(string frontendCode, CancellationToken cancellationToken = default)
+    {
+        AutomationMesh mesh = await GetLocalAsync(cancellationToken);
+        if (mesh == null)
+            return false;
+
+        bool changed = DeleteFrontendUrl(mesh, frontendCode);
+        if (changed)
+            await SaveAsync(mesh, cancellationToken);
+
+        return changed;
+    }
+
     /// <summary>
     /// Creates or updates a global scenario on the local mesh and persists the change when needed.
     /// </summary>

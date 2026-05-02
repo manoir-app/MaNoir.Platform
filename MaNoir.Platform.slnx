@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/apps/">
+    <Project Path="apps/MaNoir.Agents.Erza/MaNoir.Agents.Erza.csproj" />
     <Project Path="apps/MaNoir.Core.AdminUi/MaNoir.Core.AdminUi.csproj" />
     <Project Path="apps/MaNoir.Core.Api/MaNoir.Core.Api.csproj" />
   </Folder>

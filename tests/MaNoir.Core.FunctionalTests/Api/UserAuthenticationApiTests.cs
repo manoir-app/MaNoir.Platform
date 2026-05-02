@@ -345,14 +345,15 @@ public sealed class UserAuthenticationApiTests
 
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         Assert.IsNotNull(definitions);
-        Assert.AreEqual(4, definitions.Count);
+        Assert.AreEqual(5, definitions.Count);
         CollectionAssert.AreEquivalent(
             new[]
             {
                 CoreAccessZones.CoreAdminUi,
                 CoreAccessZones.CoreAuthorization,
                 CoreAccessZones.CoreGeneralFilesWrite,
-                CoreAccessZones.CorePublicFilesWrite
+                CoreAccessZones.CorePublicFilesWrite,
+                CoreAccessZones.CoreMeshSettings
             },
             definitions.Select(definition => definition.Id).ToArray());
     }

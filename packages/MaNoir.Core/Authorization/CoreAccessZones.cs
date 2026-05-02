@@ -29,6 +29,11 @@ public static class CoreAccessZones
     public const string CorePublicFilesWrite = "core.files.public.write";
 
     /// <summary>
+    /// Grants access to mesh configuration settings.
+    /// </summary>
+    public const string CoreMeshSettings = "core.mesh.settings";
+
+    /// <summary>
     /// Gets the built-in access zone definitions published by Core.
     /// </summary>
     public static IReadOnlyCollection<AccessZoneDefinition> GetDefinitions()
@@ -58,6 +63,12 @@ public static class CoreAccessZones
                 Id = CorePublicFilesWrite,
                 Label = "Core Public Files Write",
                 Description = "Upload or delete publicly readable files stored in shared module spaces."
+            },
+            new AccessZoneDefinition()
+            {
+                Id = CoreMeshSettings,
+                Label = "Core Mesh Settings",
+                Description = "Configure local mesh settings such as published frontend URLs."
             }
         ];
     }

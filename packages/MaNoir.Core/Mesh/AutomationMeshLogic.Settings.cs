@@ -9,6 +9,115 @@ namespace MaNoir.Core.Mesh;
 public sealed partial class AutomationMeshLogic
 {
     /// <summary>
+    /// Normalizes a frontend code for comparisons and persistence.
+    /// </summary>
+    /// <param name="frontendCode">The raw frontend code.</param>
+    /// <returns>The normalized lower-case code, or <see langword="null"/> when missing.</returns>
+    public static string NormalizeFrontendCode(string frontendCode)
+    {
+        if (string.IsNullOrWhiteSpace(frontendCode))
+            return null;
+
+        return frontendCode.Trim().ToLowerInvariant();
+    }
+
+    /// <summary>
+    /// Normalizes a frontend URL before persistence.
+    /// </summary>
+    /// <param name="frontendUrl">The raw frontend URL.</param>
+    /// <returns>The normalized absolute URL, or <see langword="null"/> when invalid.</returns>
+    public static string NormalizeFrontendUrl(string frontendUrl)
+    {
+        if (string.IsNullOrWhiteSpace(frontendUrl))
+            return null;
+
+        if (!Uri.TryCreate(frontendUrl.Trim(), UriKind.Absolute, out Uri normalizedUri))
+            return null;
+
+        return normalizedUri.AbsoluteUri;
+    }
+
+    /// <summary>
+    /// Gets a frontend URL from the mesh catalog.
+    /// </summary>
+    /// <param name="mesh">The mesh to inspect.</param>
+    /// <param name="frontendCode">The frontend code to find.</param>
+    /// <returns>The matching frontend URL, or <see langword="null"/> when missing.</returns>
+    public static string GetFrontendUrl(AutomationMesh mesh, string frontendCode)
+    {
+        if (mesh == null)
+            return null;
+
+        string normalizedFrontendCode = NormalizeFrontendCode(frontendCode);
+        if (normalizedFrontendCode == null)
+            return null;
+
+        EnsureFrontendUrls(mesh);
+        return mesh.FrontendUrls.TryGetValue(normalizedFrontendCode, out string frontendUrl) ? frontendUrl : null;
+    }
+
+    /// <summary>
+    /// Gets the frontend URL catalog from the mesh.
+    /// </summary>
+    /// <param name="mesh">The mesh to inspect.</param>
+    /// <returns>A stable copy of the frontend URLs indexed by code.</returns>
+    public static Dictionary<string, string> GetFrontendUrls(AutomationMesh mesh)
+    {
+        if (mesh == null)
+            return [];
+
+        EnsureFrontendUrls(mesh);
+        return new Dictionary<string, string>(mesh.FrontendUrls, StringComparer.InvariantCultureIgnoreCase);
+    }
+
+    /// <summary>
+    /// Creates or updates one frontend URL on the mesh.
+    /// </summary>
+    /// <param name="mesh">The mesh to update.</param>
+    /// <param name="frontendCode">The stable frontend code.</param>
+    /// <param name="frontendUrl">The absolute frontend URL.</param>
+    /// <returns><see langword="true"/> when the catalog changed.</returns>
+    public static bool UpsertFrontendUrl(AutomationMesh mesh, string frontendCode, string frontendUrl)
+    {
+        if (mesh == null)
+            return false;
+
+        string normalizedFrontendCode = NormalizeFrontendCode(frontendCode);
+        string normalizedFrontendUrl = NormalizeFrontendUrl(frontendUrl);
+        if (normalizedFrontendCode == null || normalizedFrontendUrl == null)
+            return false;
+
+        EnsureFrontendUrls(mesh);
+        if (mesh.FrontendUrls.TryGetValue(normalizedFrontendCode, out string existingFrontendUrl)
+            && string.Equals(existingFrontendUrl, normalizedFrontendUrl, StringComparison.InvariantCulture))
+        {
+            return false;
+        }
+
+        mesh.FrontendUrls[normalizedFrontendCode] = normalizedFrontendUrl;
+        return true;
+    }
+
+    /// <summary>
+    /// Deletes one frontend URL from the mesh.
+    /// </summary>
+    /// <param name="mesh">The mesh to update.</param>
+    /// <param name="frontendCode">The stable frontend code.</param>
+    /// <returns><see langword="true"/> when the catalog changed.</returns>
+    public static bool DeleteFrontendUrl(AutomationMesh mesh, string frontendCode)
+    {
+        if (mesh == null)
+            return false;
+
+        string normalizedFrontendCode = NormalizeFrontendCode(frontendCode);
+        if (normalizedFrontendCode == null)
+            return false;
+
+        EnsureFrontendUrls(mesh);
+        return mesh.FrontendUrls.Remove(normalizedFrontendCode);
+    }
+
+    /// <summary>
     /// Normalizes a global scenario code for comparisons and persistence.
     /// </summary>
     /// <param name="scenarioCode">The raw scenario code.</param>
@@ -120,6 +229,17 @@ public sealed partial class AutomationMeshLogic
         }
 
         return true;
+    }
+
+    private static void EnsureFrontendUrls(AutomationMesh mesh)
+    {
+        if (mesh.FrontendUrls == null)
+            mesh.FrontendUrls = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
+        string mainFrontendUrl = mesh.MainServer?.MainRole?.Uri;
+        string normalizedMainFrontendUrl = NormalizeFrontendUrl(mainFrontendUrl);
+        if (normalizedMainFrontendUrl != null && !mesh.FrontendUrls.ContainsKey("home"))
+            mesh.FrontendUrls["home"] = normalizedMainFrontendUrl;
     }
 
     /// <summary>
