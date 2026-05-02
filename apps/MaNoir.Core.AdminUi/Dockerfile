@@ -3,9 +3,11 @@ WORKDIR /src/ui
 
 COPY ["ui/", "./"]
 
-RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap ci
+RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap install
+RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap install --no-save @rolldown/binding-linux-x64-gnu@1.0.0-rc.17 lightningcss-linux-x64-gnu@1.32.0
 RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap run build
-RUN npm --prefix ./MaNoir.Core.AdminUi.Front ci
+RUN npm --prefix ./MaNoir.Core.AdminUi.Front install
+RUN npm --prefix ./MaNoir.Core.AdminUi.Front install --no-save @rolldown/binding-linux-x64-gnu@1.0.0-rc.17 lightningcss-linux-x64-gnu@1.32.0
 RUN npm --prefix ./MaNoir.Core.AdminUi.Front run build
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
