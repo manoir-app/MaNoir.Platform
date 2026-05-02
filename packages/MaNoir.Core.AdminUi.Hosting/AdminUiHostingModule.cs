@@ -35,6 +35,18 @@ public static class AdminUiHostingModule
     /// <returns>The same <paramref name="app"/> instance for chaining.</returns>
     public static WebApplication UseMaNoirCoreAdminUiHosting(this WebApplication app)
     {
+        app.Use(async (context, next) =>
+        {
+            if (ShouldRemapRootStaticAssetRequest(context.Request.Path)
+                && !RootStaticFileExists(app.Environment, context.Request.Path))
+            {
+                string spaFolder = await ResolveDefaultSpaFolderAsync(context.RequestAborted);
+                context.Request.Path = new PathString($"/{spaFolder}{context.Request.Path}");
+            }
+
+            await next();
+        });
+
         app.UseStaticFiles();
         app.MapHealthChecks("/healthz");
 
@@ -60,18 +72,31 @@ public static class AdminUiHostingModule
         if (requestPath.StartsWithSegments("/bootstrap", StringComparison.OrdinalIgnoreCase, out PathString bootstrapRemainder)
             && !HasFileExtension(bootstrapRemainder))
         {
-            await SendSpaIndexAsync(app.Environment, context, BootstrapSpaFolder);
+            await SendSpaIndexAsync(app.Environment, context, BootstrapSpaFolder, remapToRoot: false);
             return;
         }
 
         if (requestPath.StartsWithSegments("/front", StringComparison.OrdinalIgnoreCase, out PathString frontRemainder)
             && !HasFileExtension(frontRemainder))
         {
-            await SendSpaIndexAsync(app.Environment, context, FrontSpaFolder);
+            await SendSpaIndexAsync(app.Environment, context, FrontSpaFolder, remapToRoot: false);
             return;
         }
 
-        await SendSpaIndexAsync(app.Environment, context, await ResolveDefaultSpaFolderAsync(context.RequestAborted));
+        await SendSpaIndexAsync(app.Environment, context, await ResolveDefaultSpaFolderAsync(context.RequestAborted), remapToRoot: true);
+    }
+
+    private static bool ShouldRemapRootStaticAssetRequest(PathString path)
+    {
+        if (!HasFileExtension(path))
+        {
+            return false;
+        }
+
+        return !path.StartsWithSegments("/api", StringComparison.OrdinalIgnoreCase)
+            && !path.StartsWithSegments("/bootstrap", StringComparison.OrdinalIgnoreCase)
+            && !path.StartsWithSegments("/front", StringComparison.OrdinalIgnoreCase)
+            && !path.StartsWithSegments("/healthz", StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool HasFileExtension(PathString path)
@@ -92,10 +117,15 @@ public static class AdminUiHostingModule
         }
     }
 
-    private static async Task SendSpaIndexAsync(IHostEnvironment environment, HttpContext context, string spaFolder)
+    private static bool RootStaticFileExists(IHostEnvironment environment, PathString requestPath)
     {
-        string webRootPath = environment.ContentRootPath;
-        string candidateFile = Path.Combine(webRootPath, "wwwroot", spaFolder, "index.html");
+        string candidateFile = GetWebRootFilePath(environment, requestPath.Value);
+        return File.Exists(candidateFile);
+    }
+
+    private static async Task SendSpaIndexAsync(IHostEnvironment environment, HttpContext context, string spaFolder, bool remapToRoot)
+    {
+        string candidateFile = GetWebRootFilePath(environment, $"/{spaFolder}/index.html");
         if (!File.Exists(candidateFile))
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
@@ -104,6 +134,33 @@ public static class AdminUiHostingModule
         }
 
         context.Response.ContentType = "text/html; charset=utf-8";
-        await context.Response.SendFileAsync(candidateFile, context.RequestAborted);
+        if (HttpMethods.IsHead(context.Request.Method))
+        {
+            return;
+        }
+
+        if (!remapToRoot)
+        {
+            await context.Response.SendFileAsync(candidateFile, context.RequestAborted);
+            return;
+        }
+
+        string indexHtml = await File.ReadAllTextAsync(candidateFile, context.RequestAborted);
+        indexHtml = RewriteSpaIndexForRoot(indexHtml, spaFolder);
+        await context.Response.WriteAsync(indexHtml, context.RequestAborted);
+    }
+
+    private static string GetWebRootFilePath(IHostEnvironment environment, string requestPath)
+    {
+        string relativePath = requestPath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar);
+        return Path.Combine(environment.ContentRootPath, "wwwroot", relativePath);
+    }
+
+    private static string RewriteSpaIndexForRoot(string indexHtml, string spaFolder)
+    {
+        string absolutePrefix = $"/{spaFolder}/";
+        return indexHtml
+            .Replace($"\"{absolutePrefix}", "\"/")
+            .Replace($"'{absolutePrefix}", "'/");
     }
 }
