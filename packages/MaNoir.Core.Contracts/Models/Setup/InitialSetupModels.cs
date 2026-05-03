@@ -73,6 +73,11 @@ public sealed class InitialSetupRequest
     /// Gets or sets the default mesh country identifier.
     /// </summary>
     public string CountryId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the default public base domain of the mesh.
+    /// </summary>
+    public string PublicBaseDomain { get; set; }
 }
 
 /// <summary>

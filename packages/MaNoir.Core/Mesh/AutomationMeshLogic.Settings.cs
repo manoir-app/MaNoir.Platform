@@ -435,6 +435,46 @@ public sealed partial class AutomationMeshLogic
     }
 
     /// <summary>
+    /// Normalizes and validates the public base domain configured for the mesh.
+    /// </summary>
+    /// <param name="publicBaseDomain">The raw public base domain.</param>
+    /// <returns>The normalized lower-case DNS name, or <see langword="null"/> when invalid.</returns>
+    public static string NormalizePublicBaseDomain(string publicBaseDomain)
+    {
+        if (string.IsNullOrWhiteSpace(publicBaseDomain))
+            return null;
+
+        string normalizedDomain = publicBaseDomain.Trim().Trim('.').ToLowerInvariant();
+        if (normalizedDomain.Length == 0)
+            return null;
+
+        if (normalizedDomain.Contains('/', StringComparison.Ordinal)
+            || normalizedDomain.Contains(':', StringComparison.Ordinal)
+            || normalizedDomain.Contains('*', StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        if (Uri.CheckHostName(normalizedDomain) != UriHostNameType.Dns)
+            return null;
+
+        string[] labels = normalizedDomain.Split('.');
+        if (labels.Length < 2)
+            return null;
+
+        foreach (string label in labels)
+        {
+            if (label.Length == 0 || label.Length > 63)
+                return null;
+
+            if (label.StartsWith("-", StringComparison.Ordinal) || label.EndsWith("-", StringComparison.Ordinal))
+                return null;
+        }
+
+        return normalizedDomain;
+    }
+
+    /// <summary>
     /// Normalizes and validates a country identifier.
     /// </summary>
     /// <param name="countryId">The raw country identifier.</param>
@@ -470,6 +510,24 @@ public sealed partial class AutomationMeshLogic
             return false;
 
         mesh.CountryId = countryId;
+        return true;
+    }
+
+    /// <summary>
+    /// Applies the public base domain to the mesh.
+    /// </summary>
+    /// <param name="mesh">The mesh to update.</param>
+    /// <param name="publicBaseDomain">The public base domain to persist.</param>
+    /// <returns><see langword="true"/> when the domain changed.</returns>
+    public static bool ApplyPublicBaseDomain(AutomationMesh mesh, string publicBaseDomain)
+    {
+        if (mesh == null)
+            return false;
+
+        if (string.Equals(mesh.PublicBaseDomain, publicBaseDomain, StringComparison.InvariantCulture))
+            return false;
+
+        mesh.PublicBaseDomain = publicBaseDomain;
         return true;
     }
 

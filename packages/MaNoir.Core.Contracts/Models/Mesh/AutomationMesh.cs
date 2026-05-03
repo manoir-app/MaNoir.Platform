@@ -46,6 +46,10 @@ public sealed class AutomationMesh
     /// </summary>
     public string PublicId { get; set; }
     /// <summary>
+    /// Gets or sets the public base domain used to derive exposed frontend hosts.
+    /// </summary>
+    public string PublicBaseDomain { get; set; }
+    /// <summary>
     /// Gets or sets the related location identifier.
     /// </summary>
     public string LocationId { get; set; }

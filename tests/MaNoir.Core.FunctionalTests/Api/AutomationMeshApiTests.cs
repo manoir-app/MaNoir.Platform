@@ -52,6 +52,38 @@ public sealed class AutomationMeshApiTests
 
     [TestMethod]
     [TestCategory("Functional")]
+    public async Task GetLocalSettings_ShouldExposeMeshGeneralSettings()
+    {
+        await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();
+        await mongoHost.StartAsync();
+
+        using ProcessEnvironmentVariableScope mongoScope = new("MONGODB_CONNECTIONSTRING", mongoHost.ConnectionString);
+
+        AutomationMeshLogic logic = new AutomationMeshLogic();
+        AutomationMesh mesh = await logic.GetOrCreateLocalAsync("machine-a", "https://localhost:5001");
+        AutomationMeshLogic.ApplySettings(mesh, "fr-FR", "Europe/Paris");
+        AutomationMeshLogic.ApplyCountryId(mesh, "FR");
+        AutomationMeshLogic.ApplyPublicBaseDomain(mesh, "chezmoi.mondomaine.fr");
+        await logic.SaveAsync(mesh);
+
+        await using WebApplication app = CreateApplication();
+        await app.StartAsync();
+
+        HttpClient client = app.GetTestClient();
+        HttpResponseMessage response = await client.GetAsync("/api/core/system/mesh/local/settings");
+        AutomationMeshLocalSettings settings = await response.Content.ReadFromJsonAsync<AutomationMeshLocalSettings>();
+
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        Assert.IsNotNull(settings);
+        Assert.AreEqual("local", settings.MeshId);
+        Assert.AreEqual("fr-FR", settings.LanguageId);
+        Assert.AreEqual("Europe/Paris", settings.TimeZoneId);
+        Assert.AreEqual("FR", settings.CountryId);
+        Assert.AreEqual("chezmoi.mondomaine.fr", settings.PublicBaseDomain);
+    }
+
+    [TestMethod]
+    [TestCategory("Functional")]
     public async Task WriteLocalFrontendUrls_ShouldRequireMeshManageAccessAndPersistChanges()
     {
         await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();

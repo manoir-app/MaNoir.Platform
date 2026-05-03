@@ -50,7 +50,8 @@ public sealed class InitialSetupApiTests
             AdminPassword = "P@ssword-42",
             LanguageId = "fr-FR",
             TimeZoneId = "Europe/Paris",
-            CountryId = "FR"
+            CountryId = "FR",
+            PublicBaseDomain = "chezmoi.mondomaine.fr"
         });
         InitialSetupResponse payload = await initializeResponse.Content.ReadFromJsonAsync<InitialSetupResponse>();
         InitialSetupStatus afterStatus = await client.GetFromJsonAsync<InitialSetupStatus>("/api/core/setup/status");
@@ -77,6 +78,7 @@ public sealed class InitialSetupApiTests
         Assert.AreEqual("fr-FR", payload.Mesh.LanguageId);
         Assert.AreEqual("Europe/Paris", payload.Mesh.TimeZoneId);
         Assert.AreEqual("FR", payload.Mesh.CountryId);
+        Assert.AreEqual("chezmoi.mondomaine.fr", payload.Mesh.PublicBaseDomain);
         Assert.AreEqual("sarah", payload.User.Id);
         Assert.IsTrue(payload.User.IsAdmin);
         Assert.IsTrue(payload.User.IsMain);

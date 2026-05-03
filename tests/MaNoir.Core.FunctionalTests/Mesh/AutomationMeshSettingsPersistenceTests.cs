@@ -14,7 +14,7 @@ public sealed class AutomationMeshSettingsPersistenceTests
 {
     [TestMethod]
     [TestCategory("Functional")]
-    public async Task SettingsMethods_ShouldPersistLanguageTimeZoneAndLocationChanges()
+    public async Task SettingsMethods_ShouldPersistLanguageTimeZoneLocationAndPublicBaseDomainChanges()
     {
         await using MongoDbFunctionalTestHost host = new MongoDbFunctionalTestHost();
         await host.StartAsync();
@@ -34,6 +34,9 @@ public sealed class AutomationMeshSettingsPersistenceTests
         bool invalidTimeZoneChanged = await logic.UpdateSettingsAsync("LOCAL", "fr-FR", "Romance Standard Time");
         bool settingsChanged = await logic.UpdateSettingsAsync("LOCAL", "fr-fr", "Europe/Paris");
         bool settingsChangedAgain = await logic.UpdateSettingsAsync("local", "fr-FR", "Europe/Paris");
+        bool invalidPublicBaseDomainChanged = await logic.UpdatePublicBaseDomainAsync("local", "https://chezmoi.mondomaine.fr");
+        bool publicBaseDomainChanged = await logic.UpdatePublicBaseDomainAsync("LOCAL", "ChezMoi.Mondomaine.FR.");
+        bool publicBaseDomainChangedAgain = await logic.UpdatePublicBaseDomainAsync("local", "chezmoi.mondomaine.fr");
         bool missingLocationChanged = await logic.SetLocationAsync("local", "missing-location");
         bool locationChanged = await logic.SetLocationAsync("local", "PARIS-HOME");
         bool locationChangedAgain = await logic.SetLocationAsync("local", "paris-home");
@@ -44,12 +47,16 @@ public sealed class AutomationMeshSettingsPersistenceTests
         Assert.IsFalse(invalidTimeZoneChanged);
         Assert.IsTrue(settingsChanged);
         Assert.IsFalse(settingsChangedAgain);
+        Assert.IsFalse(invalidPublicBaseDomainChanged);
+        Assert.IsTrue(publicBaseDomainChanged);
+        Assert.IsFalse(publicBaseDomainChangedAgain);
         Assert.IsFalse(missingLocationChanged);
         Assert.IsTrue(locationChanged);
         Assert.IsFalse(locationChangedAgain);
         Assert.IsNotNull(storedMesh);
         Assert.AreEqual("fr-FR", storedMesh.LanguageId);
         Assert.AreEqual("Europe/Paris", storedMesh.TimeZoneId);
+        Assert.AreEqual("chezmoi.mondomaine.fr", storedMesh.PublicBaseDomain);
         Assert.AreEqual("paris-home", storedMesh.LocationId);
     }
 }

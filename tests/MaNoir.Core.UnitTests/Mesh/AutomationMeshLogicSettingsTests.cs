@@ -41,6 +41,39 @@ public sealed class AutomationMeshLogicSettingsTests
 
     [TestMethod]
     [TestCategory("Unit")]
+    public void NormalizePublicBaseDomain_ShouldReturnCanonicalDnsName()
+    {
+        string normalizedPublicBaseDomain = AutomationMeshLogic.NormalizePublicBaseDomain("ChezMoi.Mondomaine.FR.");
+
+        Assert.AreEqual("chezmoi.mondomaine.fr", normalizedPublicBaseDomain);
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void NormalizePublicBaseDomain_ShouldRejectHostWithScheme()
+    {
+        string normalizedPublicBaseDomain = AutomationMeshLogic.NormalizePublicBaseDomain("https://chezmoi.mondomaine.fr");
+
+        Assert.IsNull(normalizedPublicBaseDomain);
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void ApplyPublicBaseDomain_ShouldUpdateDomainWhenValueChanges()
+    {
+        AutomationMesh mesh = new AutomationMesh()
+        {
+            PublicBaseDomain = "chezmoi.mondomaine.fr"
+        };
+
+        bool changed = AutomationMeshLogic.ApplyPublicBaseDomain(mesh, "maison.mondomaine.fr");
+
+        Assert.IsTrue(changed);
+        Assert.AreEqual("maison.mondomaine.fr", mesh.PublicBaseDomain);
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
     public void NormalizeLanguageId_ShouldReturnCanonicalCultureName()
     {
         string normalizedLanguageId = AutomationMeshLogic.NormalizeLanguageId("fr-fr");

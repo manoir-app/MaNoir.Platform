@@ -16,6 +16,25 @@ namespace MaNoir.Core.Api.Controllers;
 public sealed class AutomationMeshController : ControllerBase
 {
     [AllowAnonymous]
+    [HttpGet("local/settings")]
+    public async Task<ActionResult<AutomationMeshLocalSettings>> GetLocalSettings()
+    {
+        AutomationMesh mesh = await new AutomationMeshLogic().GetLocalAsync(HttpContext.RequestAborted);
+        if (mesh == null)
+            return NotFound();
+
+        return Ok(new AutomationMeshLocalSettings()
+        {
+            MeshId = mesh.Id,
+            PublicId = mesh.PublicId,
+            PublicBaseDomain = mesh.PublicBaseDomain,
+            LanguageId = mesh.LanguageId,
+            TimeZoneId = mesh.TimeZoneId,
+            CountryId = mesh.CountryId
+        });
+    }
+
+    [AllowAnonymous]
     [HttpGet("local/frontends")]
     public async Task<ActionResult<Dictionary<string, string>>> GetLocalFrontendUrls()
     {

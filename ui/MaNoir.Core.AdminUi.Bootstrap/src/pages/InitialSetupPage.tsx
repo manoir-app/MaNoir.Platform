@@ -20,6 +20,7 @@ export function InitialSetupPage({ busy, error, onSubmit, status }: InitialSetup
     languageId: 'fr-FR',
     timeZoneId: 'Europe/Paris',
     countryId: 'FR',
+    publicBaseDomain: '',
   });
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -97,7 +98,7 @@ export function InitialSetupPage({ busy, error, onSubmit, status }: InitialSetup
             <p>Leave these values as-is unless this instance needs another locale.</p>
           </div>
 
-          <div className="bootstrap-form-grid bootstrap-form-grid-three-columns">
+          <div className="bootstrap-form-grid bootstrap-form-grid-two-columns">
             <Field htmlFor="setup-language" hint="Culture name accepted by the Core API." label="Language">
               <TextField id="setup-language" onChange={(event) => updateField('languageId', event.target.value)} placeholder="fr-FR" value={formState.languageId} />
             </Field>
@@ -108,6 +109,10 @@ export function InitialSetupPage({ busy, error, onSubmit, status }: InitialSetup
 
             <Field htmlFor="setup-country" hint="ISO region code." label="Country">
               <TextField id="setup-country" onChange={(event) => updateField('countryId', event.target.value)} placeholder="FR" value={formState.countryId} />
+            </Field>
+
+            <Field htmlFor="setup-public-base-domain" hint="Base domain used for fronts like main.&lt;domain&gt; and home.&lt;domain&gt;. Leave empty to stay in degraded IP:port mode." label="Public base domain">
+              <TextField id="setup-public-base-domain" onChange={(event) => updateField('publicBaseDomain', event.target.value)} placeholder="chezmoi.mondomaine.fr" value={formState.publicBaseDomain} />
             </Field>
           </div>
         </section>
