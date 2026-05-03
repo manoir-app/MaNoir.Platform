@@ -1,16 +1,26 @@
 FROM node:22 AS ui-build
 WORKDIR /src/ui
 
+ARG TARGETARCH
+
 COPY ["ui/", "./"]
 
 RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap install
-RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap install --no-save @rolldown/binding-linux-x64-gnu@1.0.0-rc.17 lightningcss-linux-x64-gnu@1.32.0
+RUN case "$TARGETARCH" in \
+            amd64) npm --prefix ./MaNoir.Core.AdminUi.Bootstrap install --no-save @rolldown/binding-linux-x64-gnu@1.0.0-rc.17 lightningcss-linux-x64-gnu@1.32.0 ;; \
+            arm64) npm --prefix ./MaNoir.Core.AdminUi.Bootstrap install --no-save @rolldown/binding-linux-arm64-gnu@1.0.0-rc.17 lightningcss-linux-arm64-gnu@1.32.0 ;; \
+            *) echo "Unsupported TARGETARCH: $TARGETARCH" >&2; exit 1 ;; \
+        esac
 RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap run build
 RUN npm --prefix ./MaNoir.Core.AdminUi.Front install
-RUN npm --prefix ./MaNoir.Core.AdminUi.Front install --no-save @rolldown/binding-linux-x64-gnu@1.0.0-rc.17 lightningcss-linux-x64-gnu@1.32.0
+RUN case "$TARGETARCH" in \
+            amd64) npm --prefix ./MaNoir.Core.AdminUi.Front install --no-save @rolldown/binding-linux-x64-gnu@1.0.0-rc.17 lightningcss-linux-x64-gnu@1.32.0 ;; \
+            arm64) npm --prefix ./MaNoir.Core.AdminUi.Front install --no-save @rolldown/binding-linux-arm64-gnu@1.0.0-rc.17 lightningcss-linux-arm64-gnu@1.32.0 ;; \
+            *) echo "Unsupported TARGETARCH: $TARGETARCH" >&2; exit 1 ;; \
+        esac
 RUN npm --prefix ./MaNoir.Core.AdminUi.Front run build
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
