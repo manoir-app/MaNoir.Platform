@@ -35,6 +35,7 @@ export interface InitialSetupRequest {
   languageId: string;
   timeZoneId: string;
   countryId: string;
+  publicBaseDomain: string;
 }
 
 export interface InitialSetupResponse {
@@ -44,6 +45,7 @@ export interface InitialSetupResponse {
     languageId?: string;
     timeZoneId?: string;
     countryId?: string;
+    publicBaseDomain?: string;
   };
   user: UserModel;
 }

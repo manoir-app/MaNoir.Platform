@@ -230,6 +230,39 @@ public sealed partial class AutomationMeshLogic
     }
 
     /// <summary>
+    /// Updates the public base domain of a mesh and persists the change when needed.
+    /// </summary>
+    /// <param name="meshId">The mesh identifier to update.</param>
+    /// <param name="publicBaseDomain">The public base domain to persist.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns><see langword="true"/> when the domain changed.</returns>
+    public async Task<bool> UpdatePublicBaseDomainAsync(string meshId, string publicBaseDomain, CancellationToken cancellationToken = default)
+    {
+        string normalizedMeshId = NormalizeMeshId(meshId);
+        if (normalizedMeshId == null)
+            return false;
+
+        string normalizedPublicBaseDomain = NormalizePublicBaseDomain(publicBaseDomain);
+        if (normalizedPublicBaseDomain == null)
+            return false;
+
+        AutomationMesh mesh = await GetByIdAsync(normalizedMeshId, cancellationToken);
+        if (mesh == null)
+            return false;
+
+        string previousPublicBaseDomain = mesh.PublicBaseDomain;
+        bool changed = ApplyPublicBaseDomain(mesh, normalizedPublicBaseDomain);
+        if (changed)
+        {
+            await SaveAsync(mesh, cancellationToken);
+
+            AutomationMeshInterprocessPublisher.TryPublishPublicBaseDomainChanged(mesh.Id, previousPublicBaseDomain, mesh.PublicBaseDomain);
+        }
+
+        return changed;
+    }
+
+    /// <summary>
     /// Updates the location identifier of a mesh and persists the change when needed.
     /// </summary>
     /// <param name="meshId">The mesh identifier to update.</param>

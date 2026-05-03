@@ -13,4 +13,8 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MaNoir.Core\MaNoir.Core.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -123,7 +123,8 @@ public sealed class InitialSetupLogic
         string normalizedLanguageId;
         string normalizedTimeZoneId;
         string normalizedCountryId;
-        ValidateRequest(request, graphApiBaseUri, machineName, out normalizedLanguageId, out normalizedTimeZoneId, out normalizedCountryId);
+        string normalizedPublicBaseDomain;
+        ValidateRequest(request, graphApiBaseUri, machineName, out normalizedLanguageId, out normalizedTimeZoneId, out normalizedCountryId, out normalizedPublicBaseDomain);
 
         bool meshCreated = false;
         bool userCreated = false;
@@ -138,7 +139,13 @@ public sealed class InitialSetupLogic
             if (normalizedCountryId != null)
                 AutomationMeshLogic.ApplyCountryId(mesh, normalizedCountryId);
 
+            if (normalizedPublicBaseDomain != null)
+                AutomationMeshLogic.ApplyPublicBaseDomain(mesh, normalizedPublicBaseDomain);
+
             await _meshLogic.SaveAsync(mesh, cancellationToken);
+            if (normalizedPublicBaseDomain != null)
+                AutomationMeshInterprocessPublisher.TryPublishPublicBaseDomainChanged(mesh.Id, null, mesh.PublicBaseDomain);
+
             meshCreated = true;
 
             User createdUser = await _userLogic.UpsertUserAsync(normalizedAdminUserId, new User()
@@ -176,11 +183,19 @@ public sealed class InitialSetupLogic
         }
     }
 
-    private static void ValidateRequest(InitialSetupRequest request, string graphApiBaseUri, string machineName, out string normalizedLanguageId, out string normalizedTimeZoneId, out string normalizedCountryId)
+    private static void ValidateRequest(
+        InitialSetupRequest request,
+        string graphApiBaseUri,
+        string machineName,
+        out string normalizedLanguageId,
+        out string normalizedTimeZoneId,
+        out string normalizedCountryId,
+        out string normalizedPublicBaseDomain)
     {
         normalizedLanguageId = null;
         normalizedTimeZoneId = null;
         normalizedCountryId = null;
+        normalizedPublicBaseDomain = null;
 
         if (request == null)
             throw new ArgumentNullException(nameof(request));
@@ -216,6 +231,13 @@ public sealed class InitialSetupLogic
             normalizedCountryId = AutomationMeshLogic.NormalizeCountryId(request.CountryId);
             if (normalizedCountryId == null)
                 throw new ArgumentException("The mesh country identifier is invalid.", nameof(request));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.PublicBaseDomain))
+        {
+            normalizedPublicBaseDomain = AutomationMeshLogic.NormalizePublicBaseDomain(request.PublicBaseDomain);
+            if (normalizedPublicBaseDomain == null)
+                throw new ArgumentException("The mesh public base domain is invalid.", nameof(request));
         }
     }
 

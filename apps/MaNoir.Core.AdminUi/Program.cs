@@ -17,6 +17,7 @@ public static class Program
 		WebApplication app = builder.Build();
 
 		app.UseMaNoirCoreApi();
+		app.UseMaNoirCoreAdminUiHosting();
 
 		app.Run();
 	}

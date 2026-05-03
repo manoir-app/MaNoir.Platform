@@ -38,6 +38,7 @@ public sealed class LegacyInterprocessTests
         Assert.AreEqual(MeshScenarioMessage.SetTopic, new MeshScenarioMessage(MeshScenarioMessage.SetTopic).Topic);
         Assert.AreEqual("agent.test.topic", new AgentGenericMessage("agent.test.topic").Topic);
         Assert.AreEqual(MeshExtensionOperationMessage.TopicRestart, new MeshExtensionOperationMessage().Topic);
+        Assert.AreEqual(MeshPublicBaseDomainChangedMessage.TopicName, new MeshPublicBaseDomainChangedMessage().Topic);
     }
 
     [TestMethod]
