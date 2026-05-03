@@ -1,0 +1,77 @@
+.canvasRoot {
+  background: var(--mn-color-paper);
+  min-height: 100vh;
+}
+
+.sidebarFooter {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.sidebarName {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.sidebarRole {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.76rem;
+}
+
+.accentWord {
+  color: var(--mn-color-accent);
+  font-style: italic;
+}
+
+.sectionStack {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.tablePrimary {
+  font-weight: 500;
+}
+
+.tableSecondary {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.8rem;
+  margin-top: 0.15rem;
+}
+
+.tableSwitchCell {
+  display: flex;
+  justify-content: center;
+}
+
+.dualPanel {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 22rem);
+}
+
+.sideStack {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.personRow {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.personName {
+  font-weight: 500;
+}
+
+.dialogFields {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (max-width: 959px) {
+  .dualPanel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

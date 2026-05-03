@@ -1,0 +1,54 @@
+.root {
+  align-items: center;
+  background: var(--mn-color-surface);
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  border-radius: 999px;
+  color: var(--mn-color-ink-soft);
+  display: inline-flex;
+  font-family: var(--mn-font-mono);
+  font-weight: 500;
+  justify-content: center;
+  overflow: hidden;
+  text-transform: uppercase;
+}
+
+.sm {
+  font-size: 0.62rem;
+  height: 1.75rem;
+  width: 1.75rem;
+}
+
+.md {
+  font-size: 0.72rem;
+  height: 2.25rem;
+  width: 2.25rem;
+}
+
+.lg {
+  font-family: var(--mn-font-display);
+  font-size: 1.15rem;
+  height: 4rem;
+  width: 4rem;
+}
+
+.muted {
+  color: var(--mn-color-ink-muted);
+}
+
+.accent {
+  background: var(--mn-color-accent-soft);
+  border-color: transparent;
+  color: var(--mn-color-ink);
+}
+
+.success {
+  background: var(--mn-color-success-soft);
+  border-color: transparent;
+  color: var(--mn-color-ink);
+}
+
+.warning {
+  background: var(--mn-color-warning-soft);
+  border-color: transparent;
+  color: var(--mn-color-ink);
+}

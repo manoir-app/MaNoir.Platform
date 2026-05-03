@@ -1,0 +1,59 @@
+.wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.caption {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.88rem;
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+
+.head {
+  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  padding: 0.7rem 0;
+  text-transform: uppercase;
+}
+
+.cell {
+  border-bottom: var(--mn-hairline) solid var(--mn-color-line-soft);
+  font-size: 0.92rem;
+  padding: 0.95rem 0.5rem 0.95rem 0;
+  vertical-align: top;
+}
+
+.row:hover .cell {
+  background: color-mix(in oklch, var(--mn-color-paper-strong) 48%, transparent);
+}
+
+.left {
+  text-align: left;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.mono {
+  font-family: var(--mn-font-mono);
+}
+
+.empty {
+  color: var(--mn-color-ink-soft);
+  padding: 1rem 0;
+}
