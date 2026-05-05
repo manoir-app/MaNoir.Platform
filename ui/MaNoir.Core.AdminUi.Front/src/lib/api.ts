@@ -46,6 +46,22 @@ export interface AutomationMeshLocalSettings {
   countryId?: string | null;
 }
 
+export type AgentState = 'unknown' | 'starting' | 'ready' | 'degraded' | 'stopping' | 'stopped';
+
+export interface RegisteredAgentModel {
+  id: string;
+  agentId: string;
+  displayName?: string | null;
+  meshId: string;
+  version?: string | null;
+  capabilities: string[];
+  state: AgentState;
+  statusMessage?: string | null;
+  registeredAtUtc: string;
+  lastHeartbeatUtc: string;
+  updatedAtUtc: string;
+}
+
 export class ApiProblemError extends Error {
   constructor(
     public readonly status: number,
@@ -74,6 +90,16 @@ export function getServerInfo() {
 
 export function getLocalMeshSettings() {
   return requestJson<AutomationMeshLocalSettings>('/system/mesh/local/settings');
+}
+
+export function getRegisteredAgents(meshId?: string) {
+  const search = meshId ? `?meshId=${encodeURIComponent(meshId)}` : '';
+  return requestJson<RegisteredAgentModel[]>(`/system/agents${search}`);
+}
+
+export function getRegisteredAgent(agentId: string, meshId = 'local') {
+  const search = meshId ? `?meshId=${encodeURIComponent(meshId)}` : '';
+  return requestJson<RegisteredAgentModel>(`/system/agents/${encodeURIComponent(agentId)}${search}`);
 }
 
 export function logoutUser() {

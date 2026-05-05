@@ -1,7 +1,9 @@
 import { Navigate, createBrowserRouter } from 'react-router';
 import { App } from './App';
 import { AuthenticatedLayout } from './components/AuthenticatedLayout';
+import { AgentRegistryPage } from './pages/AgentRegistryPage';
 import { ConsoleHomePage } from './pages/ConsoleHomePage';
+import { PlatformHealthPage } from './pages/PlatformHealthPage';
 
 export const router = createBrowserRouter(
   [
@@ -19,6 +21,14 @@ export const router = createBrowserRouter(
             {
               path: 'console',
               Component: ConsoleHomePage,
+            },
+            {
+              path: 'system/health',
+              Component: PlatformHealthPage,
+            },
+            {
+              path: 'system/agents',
+              Component: AgentRegistryPage,
             },
           ],
         },

@@ -14,6 +14,16 @@ export function useAuthenticatedLayoutViewModel() {
       description: t('navigation.console.description'),
       to: '/console',
     },
+    {
+      label: t('navigation.health.label'),
+      description: t('navigation.health.description'),
+      to: '/system/health',
+    },
+    {
+      label: t('navigation.agents.label'),
+      description: t('navigation.agents.description'),
+      to: '/system/agents',
+    },
   ] as const;
 
   const currentUserLabel = currentUser?.commonName || currentUser?.firstName || currentUser?.id || t('common.currentUserFallback');

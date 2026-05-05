@@ -10,17 +10,13 @@ public static class Program
     public static async Task Main(string[] args)
     {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+        ErzaRuntime runtime = new ErzaRuntime();
+        ErzaMessageRouter messageRouter = new ErzaMessageRouter(runtime);
 
-        builder.Services.AddHttpClient<NetworkConnectivityService>(client =>
-        {
-            client.Timeout = TimeSpan.FromSeconds(10);
-        });
-        builder.Services.AddSingleton<ErzaRuntime>();
-        builder.Services.AddSingleton<ErzaMessageRouter>();
-        builder.Services.AddHostedService<LifecycleHeartbeatService>();
-        builder.Services.AddHostedService<MessagePumpService>();
-        builder.Services.AddHostedService<PresenceMaintenanceService>();
-        builder.Services.AddHostedService<NetworkConnectivityService>();
+        builder.Services.AddSingleton<IHostedService>(_ => new LifecycleHeartbeatService(runtime));
+        builder.Services.AddSingleton<IHostedService>(_ => new MessagePumpService(runtime, messageRouter));
+        builder.Services.AddSingleton<IHostedService>(_ => new PresenceMaintenanceService(runtime));
+        builder.Services.AddSingleton<IHostedService>(_ => new NetworkConnectivityService(runtime));
 
         using IHost host = builder.Build();
         await host.RunAsync();

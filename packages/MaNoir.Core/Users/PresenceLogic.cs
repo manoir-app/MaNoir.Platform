@@ -1,5 +1,7 @@
 using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.Contracts.Models.Users;
+using MaNoir.Core.DataPublication;
+using MaNoir.Core.Locations;
 using MaNoir.Core.Mesh;
 using System;
 using System.Collections.Generic;
@@ -33,6 +35,7 @@ public sealed class PresenceLogic
     private const int PresentProbabilityThreshold = 50;
 
     private readonly AutomationMeshLogic _automationMeshLogic;
+    private readonly LocationLogic _locationLogic;
     private readonly UserLogic _userLogic;
 
     /// <summary>
@@ -41,6 +44,7 @@ public sealed class PresenceLogic
     public PresenceLogic()
     {
         _automationMeshLogic = new AutomationMeshLogic();
+        _locationLogic = new LocationLogic();
         _userLogic = new UserLogic();
     }
 
@@ -96,10 +100,12 @@ public sealed class PresenceLogic
 
         MergePresenceUpdate(user, update);
         await _userLogic.SaveAsync(user, cancellationToken);
+        await PublishPresenceProjectionAsync(user, cancellationToken);
 
         bool isPresent = IsUserPresent(user);
         AppendTransition(changeSet, user.Id, wasPresent, isPresent);
         await RefreshMeshPrivacyModeAsync(cancellationToken);
+        await PublishPrivacyModeProjectionAsync(cancellationToken);
         return changeSet;
     }
 
@@ -148,9 +154,11 @@ public sealed class PresenceLogic
                 continue;
 
             await _userLogic.SaveAsync(user, cancellationToken);
+            await PublishPresenceProjectionAsync(user, cancellationToken);
         }
 
         await RefreshMeshPrivacyModeAsync(cancellationToken);
+        await PublishPrivacyModeProjectionAsync(cancellationToken);
 
         HashSet<string> currentlyPresentUserIds = await GetPresentUserIdSetAsync(cancellationToken);
         PresenceChangeSet changeSet = new PresenceChangeSet();
@@ -395,6 +403,32 @@ public sealed class PresenceLogic
     {
         List<User> presentUsers = await GetPresentUsersAsync(cancellationToken);
         return new HashSet<string>(presentUsers.Where(user => user != null && user.Id != null).Select(user => user.Id), StringComparer.OrdinalIgnoreCase);
+    }
+
+    private async Task PublishPresenceProjectionAsync(User user, CancellationToken cancellationToken)
+    {
+        if (user == null || user.IsGuest)
+            return;
+
+        string currentLocationId = user.Presence?.Location?
+            .Where(location => location != null && location.Probability >= PresentProbabilityThreshold)
+            .OrderByDescending(location => location.Probability)
+            .ThenByDescending(location => location.LatestUpdate)
+            .Select(location => location.LocationId)
+            .FirstOrDefault();
+
+        string currentLocationName = null;
+        if (!string.IsNullOrWhiteSpace(currentLocationId))
+            currentLocationName = (await _locationLogic.GetByIdAsync(currentLocationId, cancellationToken))?.Name;
+
+        MqttDataPublisher.PublishUserPresence(user, currentLocationName);
+    }
+
+    private async Task PublishPrivacyModeProjectionAsync(CancellationToken cancellationToken)
+    {
+        AutomationMesh mesh = await _automationMeshLogic.GetLocalAsync(cancellationToken);
+        string privacyMode = mesh?.CurrentPrivacyMode?.ToString() ?? "none";
+        MqttDataPublisher.PublishMeshProperty("privacyMode", privacyMode);
     }
 
     private static bool IsUserPresent(User user)

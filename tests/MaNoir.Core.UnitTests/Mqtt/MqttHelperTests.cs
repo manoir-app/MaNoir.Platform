@@ -1,5 +1,8 @@
 using MaNoir.Core.DataPublication;
+using MaNoir.Core.Contracts.Models.Agents;
 using MaNoir.Core.Contracts.Models.Entities;
+using MaNoir.Core.Contracts.Models.Mesh;
+using MaNoir.Core.Contracts.Models.Users;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -98,5 +101,87 @@ public sealed class MqttDataPublisherTests
             "manoir/mesh/home-automation/device-alpha/Flags/State=on"
         },
         publications.ConvertAll(publication => publication.topic + "=" + publication.payload));
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void BuildAgentPublications_ShouldUseLegacyAgentTopics()
+    {
+        RegisteredAgent agent = new()
+        {
+            AgentId = "erza",
+            State = AgentState.Ready,
+            StatusMessage = "Running",
+            LastHeartbeatUtc = new DateTimeOffset(2026, 5, 5, 12, 34, 56, TimeSpan.FromHours(2))
+        };
+
+        List<(string topic, string payload)> publications = MqttDataPublisher.BuildAgentPublications(agent);
+
+        CollectionAssert.AreEquivalent(
+        new[]
+        {
+            "manoir/mesh/agents/erza/status=Running",
+            "manoir/mesh/agents/erza/lastPing=2026-05-05 10:34:56Z"
+        },
+        publications.ConvertAll(publication => publication.topic + "=" + publication.payload));
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void BuildUserPresencePublications_ShouldUseLegacyUserTopics()
+    {
+        User user = new()
+        {
+            Id = "michael",
+            Presence = new PresenceData()
+            {
+                Location =
+                [
+                    new PresenceLocationData()
+                    {
+                        LocationId = "home",
+                        Probability = 85,
+                        LatestUpdate = new DateTimeOffset(2026, 5, 5, 18, 0, 0, TimeSpan.Zero)
+                    }
+                ]
+            }
+        };
+
+        List<(string topic, string payload)> publications = MqttDataPublisher.BuildUserPresencePublications(user, "Maison");
+
+        CollectionAssert.AreEquivalent(
+        new[]
+        {
+            "manoir/mesh/users/michael/presence/currentLocation/id=home",
+            "manoir/mesh/users/michael/presence/currentLocation/name=Maison"
+        },
+        publications.ConvertAll(publication => publication.topic + "=" + publication.payload));
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void BuildInternetConnectivityPublications_ShouldUseAggregateLegacyNetworkTopics()
+    {
+        InternetConnection connection = new()
+        {
+            Id = "wan-main",
+            IsMain = true,
+            Status = ConnectionStatus.Up,
+            LastMessage = "Probe OK: https://1.1.1.1/",
+            UploadBandwidth = 100,
+            DownloadBandwidth = 200,
+            UsedUploadBandwidth = 10,
+            UsedDownloadBandwidth = 20
+        };
+
+        List<(string topic, string payload, bool retain)> publications = MqttDataPublisher.BuildInternetConnectivityPublications(connection, "MaisonWifi");
+
+        CollectionAssert.AreEquivalent(
+        new[]
+        {
+            "manoir/network/internet-router/status=Probe OK: https://1.1.1.1/|True",
+            "manoir/network/wifi/mainSsid=MaisonWifi|True"
+        },
+        publications.ConvertAll(publication => publication.topic + "=" + publication.payload + "|" + publication.retain));
     }
 }
