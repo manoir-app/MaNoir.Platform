@@ -1,14 +1,46 @@
 .root {
   background: transparent;
   border: 0;
-  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
   border-radius: 0;
   color: var(--mn-color-ink);
   min-height: 2rem;
   outline: none;
   padding: 0.4rem 0.15rem;
-  transition: border-color 160ms ease, box-shadow 160ms ease;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
   width: 100%;
+}
+
+.underline {
+  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
+}
+
+.plain {
+  border-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.surface {
+  background: var(--mn-color-surface);
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  border-radius: var(--mn-radius-sm);
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.md {
+  min-height: 2rem;
+}
+
+.lg {
+  font-size: 0.95rem;
+  min-height: 2.5rem;
+  padding-bottom: 0.55rem;
+  padding-top: 0.55rem;
+}
+
+.mono {
+  font-family: var(--mn-font-mono);
 }
 
 .root::placeholder {
@@ -16,9 +48,21 @@
 }
 
 .root:focus {
+  box-shadow: none;
+}
+
+.underline:focus {
   border-bottom-color: var(--mn-color-ink);
+}
+
+.surface:focus {
+  border-color: var(--mn-color-ink);
 }
 
 .invalid {
   border-bottom-color: var(--mn-color-danger);
+}
+
+.surface.invalid {
+  border-color: var(--mn-color-danger);
 }

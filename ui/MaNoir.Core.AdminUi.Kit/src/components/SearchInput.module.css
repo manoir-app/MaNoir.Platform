@@ -1,11 +1,20 @@
 .root {
   align-items: center;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  position: relative;
+}
+
+.framed {
   background: var(--mn-color-surface);
   border: var(--mn-hairline) solid var(--mn-color-line);
   border-radius: var(--mn-radius-sm);
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
   padding: 0 0.15rem;
+}
+
+.bare {
+  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
+  padding: 0;
   position: relative;
 }
 
@@ -17,13 +26,19 @@
 }
 
 .input {
-  border-bottom: 0;
   min-height: 1.75rem;
   padding-left: 2.35rem;
   padding-right: 4.6rem;
 }
 
-.input:focus {
+.bare .input {
+  min-height: 2rem;
+  padding-bottom: 0.4rem;
+  padding-top: 0.4rem;
+}
+
+.framed .input:focus,
+.bare .input:focus {
   border-bottom-color: transparent;
 }
 
@@ -40,4 +55,10 @@
   right: 0.85rem;
   text-align: center;
   text-transform: uppercase;
+}
+
+.bare .shortcut {
+  border: 0;
+  min-width: auto;
+  padding-right: 0;
 }

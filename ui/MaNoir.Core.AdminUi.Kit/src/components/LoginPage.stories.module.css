@@ -1,0 +1,206 @@
+.storyRoot {
+  min-height: 100vh;
+}
+
+.serverCard {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.serverEyebrow,
+.separatorLabel,
+.mfaMeta,
+.heroFooter,
+.panelMono {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+.serverRow {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+}
+
+.serverGlyph {
+  align-items: center;
+  border: 1px solid var(--mn-color-ink);
+  display: flex;
+  font-family: var(--mn-font-display);
+  font-size: 1.8rem;
+  font-weight: 500;
+  height: 3.5rem;
+  justify-content: center;
+  width: 3.5rem;
+}
+
+.serverCopy {
+  flex: 1;
+  min-width: 0;
+}
+
+.serverName {
+  font-family: var(--mn-font-display);
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.serverMeta {
+  color: var(--mn-color-ink-soft);
+  font-family: var(--mn-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  margin-top: 0.2rem;
+}
+
+.heroFooter {
+  display: flex;
+  gap: 0.7rem;
+  text-transform: uppercase;
+}
+
+.form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.formFields {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.passwordRow {
+  align-items: end;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.passwordInput {
+  min-width: 0;
+}
+
+.inlineButton {
+  background: transparent;
+  border: 0;
+  color: var(--mn-color-ink-soft);
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 0 0 0.5rem;
+}
+
+.formMetaRow,
+.linkRowCentered {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.checkboxRow {
+  align-items: center;
+  color: var(--mn-color-ink-soft);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+}
+
+.checkbox {
+  accent-color: var(--mn-color-ink);
+}
+
+.inlineLink,
+.inlineLinkStrong {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.82rem;
+  text-decoration: underline;
+  text-underline-offset: 0.22rem;
+}
+
+.inlineLinkStrong {
+  color: var(--mn-color-ink);
+}
+
+.formActions {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-height: 3rem;
+  width: 100%;
+}
+
+.separatorRow {
+  align-items: center;
+  display: flex;
+  gap: 0.9rem;
+}
+
+.separatorLine {
+  background: var(--mn-color-line);
+  flex: 1;
+  height: 1px;
+}
+
+.mfaStack {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.mfaCodeRow {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin-top: 0.5rem;
+}
+
+.mfaDigit {
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid var(--mn-color-ink);
+  color: var(--mn-color-ink);
+  font-family: var(--mn-font-display);
+  font-size: 1.75rem;
+  font-weight: 500;
+  height: 3.75rem;
+  outline: none;
+  text-align: center;
+}
+
+.mfaDigit:focus {
+  border-bottom-color: var(--mn-color-accent);
+}
+
+.mfaMeta,
+.linkRowCentered {
+  justify-content: center;
+}
+
+.dotDivider {
+  color: var(--mn-color-ink-faint);
+}
+
+@media (max-width: 959px) {
+  .serverRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .formMetaRow {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mfaCodeRow {
+    gap: 0.35rem;
+  }
+}

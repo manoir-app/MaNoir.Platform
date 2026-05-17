@@ -1,0 +1,71 @@
+.root {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.line {
+  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
+  gap: 0;
+}
+
+.pill {
+  gap: 0.5rem;
+}
+
+.tab {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--mn-color-ink-muted);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.4rem;
+  padding: 0.55rem 0.1rem;
+}
+
+.line .tab {
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  margin-right: 1.15rem;
+  padding-right: 0.1rem;
+}
+
+.pill .tab {
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  border-radius: var(--mn-radius-sm);
+  padding: 0.35rem 0.75rem;
+}
+
+.tab:hover:not(:disabled) {
+  color: var(--mn-color-ink);
+}
+
+.tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.active {
+  color: var(--mn-color-ink);
+}
+
+.line .active {
+  border-bottom-color: var(--mn-color-ink);
+}
+
+.pill .active {
+  background: var(--mn-color-ink);
+  border-color: var(--mn-color-ink);
+  color: var(--mn-color-paper);
+}
+
+.badge {
+  color: var(--mn-color-ink-faint);
+  font-family: var(--mn-font-mono);
+  font-size: 0.68rem;
+}
+
+.pill .active .badge {
+  color: color-mix(in oklch, var(--mn-color-paper) 72%, transparent);
+}

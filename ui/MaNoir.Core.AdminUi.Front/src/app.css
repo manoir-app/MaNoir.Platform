@@ -1,132 +1,936 @@
 :root {
   color-scheme: light;
-  font-family: "Fraunces", "Segoe UI", serif;
-  background:
-    radial-gradient(circle at top left, rgba(212, 159, 72, 0.16), transparent 30%),
-    radial-gradient(circle at 85% 18%, rgba(25, 118, 210, 0.18), transparent 22%),
-    linear-gradient(180deg, #f8f4ec 0%, #f2ebe0 45%, #ede5d9 100%);
-  color: #221c16;
+  font-family: "Instrument Sans", "Segoe UI", sans-serif;
+  background: var(--mn-color-paper);
+  color: var(--mn-color-ink);
 }
 
 body {
   margin: 0;
   min-width: 320px;
+  background: var(--mn-color-paper);
 }
 
 #root {
   min-height: 100vh;
 }
 
-.front-shell {
-  position: relative;
+.front-login-page {
+  background: var(--mn-color-paper);
+  color: var(--mn-color-ink);
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  padding: 2rem;
 }
 
-.front-aurora {
-  position: absolute;
-  width: 34rem;
-  height: 34rem;
-  border-radius: 999px;
-  filter: blur(48px);
-  opacity: 0.55;
+.front-login-page-topbar {
+  padding: 0.9rem 3.5rem;
 }
 
-.front-aurora-left {
-  top: -8rem;
-  left: -10rem;
-  background: rgba(198, 126, 37, 0.28);
+.front-login-page-topbar-status {
+  text-transform: none;
 }
 
-.front-aurora-right {
-  right: -8rem;
-  bottom: -10rem;
-  background: rgba(25, 118, 210, 0.2);
+.front-app-header-meta,
+.front-login-page-topbar-meta {
+  text-transform: none;
 }
 
-.front-card {
-  position: relative;
-  z-index: 1;
-  width: min(44rem, calc(100vw - 3rem));
-  display: grid;
-  gap: 1.5rem;
-  padding: 2rem;
-  border-radius: 2rem;
-  border: 1px solid rgba(34, 28, 22, 0.08);
-  background: rgba(255, 251, 245, 0.82);
-  box-shadow: 0 28px 80px rgba(58, 38, 11, 0.12);
-  backdrop-filter: blur(14px);
-}
-
-.front-badge {
-  display: inline-flex;
-  width: fit-content;
+.front-language-switcher {
   align-items: center;
-  padding: 0.45rem 0.85rem;
-  border-radius: 999px;
-  letter-spacing: 0.12em;
-  font-size: 0.72rem;
+  display: inline-flex;
+  gap: 0.25rem;
+}
+
+.front-language-switcher-button {
+  background: transparent;
+  border: 1px solid var(--mn-color-line);
+  color: var(--mn-color-ink-muted);
+  cursor: pointer;
+  font-family: var(--mn-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  min-height: 1.9rem;
+  min-width: 2.4rem;
+  padding: 0 0.45rem;
   text-transform: uppercase;
-  color: #7a4d14;
-  background: rgba(198, 126, 37, 0.12);
 }
 
-.front-card h1 {
-  margin: 0;
-  font-size: clamp(2.2rem, 4vw, 4rem);
-  line-height: 0.98;
+.front-language-switcher-button-active {
+  border-color: var(--mn-color-ink);
+  color: var(--mn-color-ink);
 }
 
-.front-card p {
-  margin: 0;
-  font-family: "Instrument Sans", "Segoe UI", sans-serif;
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: rgba(34, 28, 22, 0.74);
-}
-
-.front-signals {
+.front-login-page-body {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  flex: 1;
+  grid-template-columns: minmax(0, 1.2fr) 1px 30rem;
+  min-height: 0;
+}
+
+.front-login-page-hero,
+.front-login-page-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+}
+
+.front-login-page-hero {
+  padding: 4rem 4rem 3rem;
+}
+
+.front-login-page-divider {
+  background: var(--mn-color-line);
+}
+
+.front-login-page-panel {
+  padding: 4rem 3.5rem 3rem;
+}
+
+.front-login-page-eyebrow {
+  color: var(--mn-color-accent);
+  font-family: var(--mn-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.front-login-page-hero-title,
+.front-login-page-panel-title {
+  font-family: var(--mn-font-display);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.front-login-page-hero-title {
+  font-size: clamp(3rem, 5.8vw, 4.8rem);
+  line-height: 0.98;
+  margin: 1.4rem 0 0;
+  max-width: 15ch;
+}
+
+.front-login-page-hero-title em,
+.front-login-page-panel-title em {
+  color: var(--mn-color-accent);
+  font-style: italic;
+}
+
+.front-login-page-description,
+.front-login-page-panel-description {
+  color: var(--mn-color-ink-soft);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.front-login-page-description {
+  font-size: 1rem;
+  margin-top: 1.75rem;
+  max-width: 56ch;
+}
+
+.front-login-page-hero-supplementary {
+  border-top: 1px solid var(--mn-color-line);
+  margin-top: 3rem;
+  max-width: 34rem;
+  padding-top: 1.5rem;
+}
+
+.front-login-page-hero-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+.front-login-page-panel-lead-action {
+  align-self: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.front-login-page-panel-title {
+  font-size: clamp(2.15rem, 3vw, 2.8rem);
+  line-height: 0.98;
+  margin: 0.75rem 0 0;
+}
+
+.front-login-page-panel-description {
+  font-size: 0.92rem;
+  margin-top: 0.65rem;
+}
+
+.front-login-page-panel-body {
+  display: grid;
+  flex: 1;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.front-login-page-panel-footer {
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+
+.front-login-server-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.front-login-server-card-offline {
+  opacity: 0.68;
+}
+
+.front-login-server-eyebrow,
+.front-login-separator-label,
+.front-login-hero-footer,
+.front-login-panel-mono {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
+.front-login-server-row {
+  align-items: center;
+  display: flex;
   gap: 1rem;
 }
 
-.front-signals article {
+.front-login-server-glyph {
+  align-items: center;
+  border: 1px solid var(--mn-color-ink);
+  display: flex;
+  font-family: var(--mn-font-display);
+  font-size: 1.8rem;
+  font-weight: 500;
+  height: 3.5rem;
+  justify-content: center;
+  width: 3.5rem;
+}
+
+.front-login-server-glyph-offline {
+  border-color: var(--mn-color-line);
+  color: var(--mn-color-ink-muted);
+}
+
+.front-login-server-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.front-login-server-name {
+  font-family: var(--mn-font-display);
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.front-login-server-name-offline {
+  color: var(--mn-color-ink-soft);
+}
+
+.front-login-server-meta {
+  color: var(--mn-color-ink-soft);
+  font-family: var(--mn-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  margin-top: 0.2rem;
+}
+
+.front-login-server-meta-offline,
+.front-login-hero-footer-muted {
+  color: var(--mn-color-ink-muted);
+}
+
+.front-login-status-row {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.front-login-status-dot {
+  border-radius: 999px;
+  display: inline-flex;
+  height: 0.42rem;
+  width: 0.42rem;
+}
+
+.front-login-status-dot-success {
+  background: var(--mn-color-success);
+}
+
+.front-login-status-dot-offline {
+  background: var(--mn-color-ink-muted);
+}
+
+.front-login-status-label {
+  color: var(--mn-color-success);
+  font-family: var(--mn-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.front-login-status-label-offline {
+  color: var(--mn-color-ink-muted);
+}
+
+.front-login-hero-footer {
+  display: flex;
+  gap: 0.7rem;
+  text-transform: uppercase;
+}
+
+.front-login-form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.front-login-form-disabled {
+  opacity: 0.82;
+}
+
+.front-login-form-fields {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.front-login-field {
+  display: grid;
+  gap: var(--mn-space-2);
+}
+
+.front-login-field-header {
+  align-items: baseline;
+  display: flex;
+  gap: var(--mn-space-2);
+  justify-content: space-between;
+}
+
+.front-login-field-label {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.front-login-field-aside {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.68rem;
+}
+
+.front-login-input,
+.front-login-password-input {
+  background: transparent;
+  border: 0;
+  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
+  color: var(--mn-color-ink);
+  font-size: 0.95rem;
+  min-height: 2.5rem;
+  outline: none;
+  padding: 0.55rem 0.15rem;
+  transition: border-color 160ms ease;
+  width: 100%;
+}
+
+.front-login-input:focus,
+.front-login-password-input:focus {
+  border-bottom-color: var(--mn-color-ink);
+}
+
+.front-login-password-row {
+  align-items: end;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.front-login-password-input {
+  min-width: 0;
+}
+
+.front-login-inline-button {
+  background: transparent;
+  border: 0;
+  color: var(--mn-color-ink-soft);
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 0 0 0.5rem;
+}
+
+.front-login-inline-button:disabled {
+  color: var(--mn-color-ink-muted);
+  cursor: not-allowed;
+}
+
+.front-login-form-meta-row,
+.front-login-link-row-centered {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.front-login-checkbox-row {
+  align-items: center;
+  color: var(--mn-color-ink-soft);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.45rem;
+  font-size: 0.82rem;
+}
+
+.front-login-checkbox {
+  accent-color: var(--mn-color-ink);
+}
+
+.front-login-link,
+.front-login-link-strong {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.82rem;
+  text-decoration: underline;
+  text-underline-offset: 0.22rem;
+}
+
+.front-login-link-strong {
+  color: var(--mn-color-ink);
+}
+
+.front-login-link-disabled {
+  color: var(--mn-color-ink-muted);
+  text-decoration: none;
+}
+
+.front-login-feedback {
+  background: var(--mn-color-paper-strong);
+  border: 1px solid var(--mn-color-line);
+  border-radius: var(--mn-radius-md);
+  color: var(--mn-color-ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  padding: 0.9rem 1rem;
+}
+
+.front-login-feedback-error {
+  background: #f6e6e3;
+  border-color: #d7b1aa;
+  color: #7b241b;
+}
+
+.front-login-feedback-success {
+  background: #e3f0e8;
+  border-color: #a8c9b6;
+  color: #1f5f3f;
+}
+
+.front-login-form-actions {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.front-login-authenticated-stack {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.front-login-user-card {
+  border-top: 1px solid var(--mn-color-line);
+  display: grid;
+  gap: 0.35rem;
+  padding-top: 1.2rem;
+}
+
+.front-login-user-card-label {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.front-login-user-card-name {
+  font-family: var(--mn-font-display);
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
+}
+
+.front-login-user-card-meta {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.9rem;
+}
+
+.front-button {
+  align-items: center;
+  background: transparent;
+  border: var(--mn-hairline) solid var(--mn-color-line);
+  border-radius: var(--mn-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--mn-font-sans);
+  font-weight: 500;
+  justify-content: center;
+  letter-spacing: -0.01em;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.front-button:focus-visible {
+  box-shadow: 0 0 0 5px var(--mn-color-focus);
+  outline: none;
+}
+
+.front-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.front-button-small {
+  font-size: 0.72rem;
+  min-height: 1.5rem;
+  padding: 0 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.front-button-large {
+  font-size: 0.92rem;
+  min-height: 2.25rem;
+  padding: 0 0.95rem;
+}
+
+.front-button-primary {
+  background: var(--mn-color-ink);
+  border-color: var(--mn-color-ink);
+  color: var(--mn-color-paper);
+}
+
+.front-button-primary:hover:not(:disabled) {
+  background: var(--mn-color-ink-soft);
+  border-color: var(--mn-color-ink-soft);
+}
+
+.front-button-secondary {
+  background: transparent;
+  color: var(--mn-color-ink);
+}
+
+.front-button-secondary:hover:not(:disabled) {
+  background: var(--mn-color-paper-strong);
+  border-color: var(--mn-color-ink-muted);
+}
+
+.front-login-primary-button,
+.front-login-secondary-button {
+  min-height: 3rem;
+  width: 100%;
+}
+
+.front-login-link-row-centered {
+  justify-content: center;
+}
+
+.front-login-dot-divider {
+  color: var(--mn-color-ink-faint);
+}
+
+.front-placeholder-page {
+  align-items: center;
+  background: var(--mn-color-paper);
+  color: var(--mn-color-ink);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.front-placeholder-card {
+  border: 1px solid var(--mn-color-line);
+  display: grid;
+  gap: 1rem;
+  max-width: 34rem;
+  padding: 2rem;
+  width: min(100%, 34rem);
+}
+
+.front-placeholder-title {
+  font-family: var(--mn-font-display);
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+.front-placeholder-copy {
+  color: var(--mn-color-ink-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.front-placeholder-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.front-console-copy,
+.front-console-workstream-copy,
+.front-console-stat-detail {
+  color: var(--mn-color-ink-soft);
+  line-height: 1.6;
+}
+
+.front-console-stat-label {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.front-console-stat-value {
+  font-family: var(--mn-font-display);
+  font-size: 1.45rem;
+  letter-spacing: -0.03em;
+}
+.front-console-workstream-title {
+  font-family: var(--mn-font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.front-console-page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.front-console-hero,
+.front-console-section,
+.front-console-stat-card,
+.front-console-workstream-card {
+  border: 1px solid var(--mn-color-line);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.front-console-hero,
+.front-console-section {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.4rem;
+}
+
+.front-console-title {
+  font-family: var(--mn-font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  margin: 0;
+  max-width: 18ch;
+}
+
+.front-console-stats-grid,
+.front-console-workstream-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.front-console-stats-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.front-console-stat-card,
+.front-console-workstream-card {
   display: grid;
   gap: 0.45rem;
-  padding: 1rem;
-  border-radius: 1.2rem;
+  padding: 1.15rem;
+}
+
+.front-console-workstream-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.front-observability-page {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.front-observability-hero,
+.front-observability-panel,
+.front-observability-summary-card,
+.front-observability-detail-card,
+.front-agent-card {
   background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(34, 28, 22, 0.08);
+  border: 1px solid var(--mn-color-line);
 }
 
-.front-signals strong {
-  font-family: "Instrument Sans", "Segoe UI", sans-serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
+.front-observability-hero,
+.front-observability-panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1.4rem;
+}
+
+.front-observability-hero-row,
+.front-observability-panel-header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.front-observability-title,
+.front-observability-section-title,
+.front-agent-card-title {
+  font-family: var(--mn-font-display);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+.front-observability-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.front-observability-section-title {
+  font-size: 1.35rem;
+}
+
+.front-observability-copy,
+.front-observability-meta-row,
+.front-agent-card-subtitle,
+.front-agent-card-metadata dd {
+  color: var(--mn-color-ink-soft);
+}
+
+.front-observability-copy {
+  line-height: 1.6;
+  margin: 0.6rem 0 0;
+  max-width: 70ch;
+}
+
+.front-observability-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-family: var(--mn-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.front-observability-summary-grid,
+.front-observability-detail-grid,
+.front-observability-agent-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.front-observability-summary-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.front-observability-detail-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.front-observability-agent-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.front-observability-summary-card,
+.front-observability-detail-card,
+.front-agent-card {
+  display: grid;
+  gap: 0.55rem;
+  padding: 1.15rem;
+}
+
+.front-observability-feedback {
+  background: var(--mn-color-paper-strong);
+  border: 1px solid var(--mn-color-line);
+  border-radius: var(--mn-radius-md);
+  color: var(--mn-color-ink-soft);
+  line-height: 1.5;
+  padding: 0.9rem 1rem;
+}
+
+.front-observability-feedback-error {
+  background: #f6e6e3;
+  border-color: #d7b1aa;
+  color: #7b241b;
+}
+
+.front-observability-feedback-success {
+  background: #e3f0e8;
+  border-color: #a8c9b6;
+  color: #1f5f3f;
+}
+
+.front-agent-card-header {
+  align-items: start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.front-agent-card-subtitle {
+  font-family: var(--mn-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  margin: 0.2rem 0 0;
+}
+
+.front-agent-card-metadata {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+}
+
+.front-agent-card-metadata div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.front-agent-card-metadata dt {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(34, 28, 22, 0.52);
 }
 
-.front-signals span {
-  font-family: "Instrument Sans", "Segoe UI", sans-serif;
-  font-size: 1rem;
-  color: #221c16;
+.front-agent-card-metadata dd {
+  margin: 0;
+}
+
+.front-agent-badge {
+  border: 1px solid var(--mn-color-line);
+  border-radius: 999px;
+  font-family: var(--mn-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  padding: 0.35rem 0.65rem;
+  text-transform: uppercase;
+}
+
+.front-agent-badge-success {
+  background: #e3f0e8;
+  border-color: #a8c9b6;
+  color: #1f5f3f;
+}
+
+.front-agent-badge-warning {
+  background: #f4ead4;
+  border-color: #d0b785;
+  color: #8a5a14;
+}
+
+.front-agent-badge-danger {
+  background: #f6e6e3;
+  border-color: #d7b1aa;
+  color: #7b241b;
+}
+
+.front-agent-badge-neutral {
+  background: var(--mn-color-paper-strong);
+  color: var(--mn-color-ink-soft);
+}
+
+.front-agent-card-capabilities {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.front-agent-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.front-agent-chip {
+  background: var(--mn-color-paper-strong);
+  border: 1px solid var(--mn-color-line);
+  border-radius: 999px;
+  font-family: var(--mn-font-mono);
+  font-size: 0.7rem;
+  padding: 0.28rem 0.55rem;
+}
+
+.front-agent-chip-empty {
+  color: var(--mn-color-ink-muted);
 }
 
 @media (max-width: 720px) {
-  .front-shell {
+  .front-login-page-topbar {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .front-login-page-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .front-login-page-divider {
+    display: none;
+  }
+
+  .front-login-page-hero,
+  .front-login-page-panel {
+    overflow: visible;
+    padding: 2rem 1.25rem;
+  }
+
+  .front-login-page-hero {
+    padding-bottom: 1rem;
+  }
+
+  .front-login-page-panel {
+    padding-top: 1.25rem;
+  }
+
+  .front-login-page-hero-supplementary {
+    max-width: none;
+  }
+
+  .front-login-page-hero-footer,
+  .front-login-page-panel-footer {
+    margin-top: 0;
+  }
+
+  .front-login-server-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .front-login-form-meta-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .front-placeholder-page {
     padding: 1.25rem;
   }
 
-  .front-card {
-    padding: 1.5rem;
+  .front-console-stats-grid,
+  .front-console-workstream-grid,
+  .front-observability-summary-grid,
+  .front-observability-detail-grid,
+  .front-observability-agent-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .front-signals {
-    grid-template-columns: 1fr;
+  .front-observability-hero-row,
+  .front-observability-panel-header,
+  .front-agent-card-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .front-agent-card-metadata {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

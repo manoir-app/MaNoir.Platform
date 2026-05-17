@@ -1,4 +1,5 @@
 using MaNoir.Core.Contracts.Models.Mesh;
+using MaNoir.Core.DataPublication;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,6 +53,7 @@ public sealed class InternetConnectionMonitoringLogic
         InternetConnection connection = AutomationMeshLogic.UpsertInternetConnection(mesh, refresh, DateTimeOffset.UtcNow);
         bool meshStatusChanged = AutomationMeshLogic.RefreshInternetConnectionStatus(mesh);
         await _automationMeshLogic.SaveAsync(mesh, cancellationToken);
+        MqttDataPublisher.PublishInternetConnectivityStatus(connection, mesh.MainSsid);
 
         return new InternetConnectionMonitoringResult()
         {

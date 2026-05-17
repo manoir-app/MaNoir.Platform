@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2022",
+    "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "useDefineForClassFields": true,
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "allowJs": false,
@@ -11,6 +13,12 @@
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "paths": {
+      "@manoir-app/core-admin-ui-kit/app-brand-header": ["../MaNoir.Core.AdminUi.Kit/src/components/AppBrandHeader.tsx"],
+      "@manoir-app/core-admin-ui-kit/auth-session-store": ["../MaNoir.Core.AdminUi.Kit/src/stores/authSessionStore.ts"],
+      "@manoir-app/core-admin-ui-kit/default-admin-shell": ["../MaNoir.Core.AdminUi.Kit/src/components/DefaultAdminShell.tsx"],
+      "@manoir-app/core-admin-ui-kit/login-page": ["../MaNoir.Core.AdminUi.Kit/src/components/LoginPage.tsx"]
+    },
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,

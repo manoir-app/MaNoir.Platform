@@ -1,5 +1,14 @@
 .root {
+  align-items: end;
+  display: grid;
+  gap: var(--mn-space-4);
   width: 100%;
+}
+
+@media (min-width: 960px) {
+  .root {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
 }
 
 .content {
@@ -33,10 +42,33 @@
   max-width: 18ch;
 }
 
+.page .title {
+  font-size: clamp(2.35rem, 3.4vw, 3.2rem);
+  letter-spacing: -0.045em;
+  max-width: 20ch;
+}
+
 .description {
   color: var(--mn-color-ink-soft);
   font-size: 1rem;
   line-height: 1.5;
   margin: 0;
   max-width: 52rem;
+}
+
+.page .description {
+  max-width: 46rem;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mn-space-2);
+}
+
+@media (max-width: 959px) {
+  .actions {
+    justify-content: flex-start;
+  }
 }

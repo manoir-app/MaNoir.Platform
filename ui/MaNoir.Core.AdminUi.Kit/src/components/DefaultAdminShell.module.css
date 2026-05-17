@@ -1,0 +1,262 @@
+.sidebar {
+  background: var(--mn-color-paper);
+  border-right: 0;
+  display: grid;
+  gap: 1.85rem;
+  grid-template-rows: auto auto 1fr auto;
+  height: 100%;
+  min-height: 100%;
+  box-sizing: border-box;
+  padding: 2.35rem 1.55rem 1.2rem;
+}
+
+.brandBlock,
+.serverCard {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.eyebrow,
+.serverLabel,
+.userLabel,
+.status,
+.navLabel {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.brand {
+  font-family: var(--mn-font-display);
+  font-size: 2.35rem;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  margin: 0;
+}
+
+.copy,
+.serverMeta,
+.navDescription {
+  color: var(--mn-color-ink-soft);
+  line-height: 1.6;
+}
+
+.copy {
+  max-width: 16ch;
+}
+
+.serverName {
+  font-family: var(--mn-font-display);
+  font-size: 1.15rem;
+  letter-spacing: -0.03em;
+}
+
+.serverHeading {
+  align-items: center;
+  display: flex;
+  gap: 0.45rem;
+}
+
+.serverStatusDot {
+  border-radius: 999px;
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 0.5rem;
+  width: 0.5rem;
+}
+
+.serverStatusDotNeutral {
+  background: var(--mn-color-ink-faint);
+}
+
+.serverStatusDotSuccess {
+  background: var(--mn-color-success);
+}
+
+.serverStatusDotWarning {
+  background: var(--mn-color-warning);
+}
+
+.serverStatusDotDanger {
+  background: var(--mn-color-danger);
+}
+
+.serverStatusDotAccent {
+  background: var(--mn-color-accent-strong);
+}
+
+.serverMeta {
+  padding-left: 0.95rem;
+}
+
+.nav {
+  align-content: start;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.navItem {
+  background: transparent;
+  border: 0;
+  border-left: 1px solid transparent;
+  color: inherit;
+  cursor: pointer;
+  display: grid;
+  gap: 0.18rem;
+  margin-left: -0.95rem;
+  padding: 0.5rem 0;
+  padding-left: 0.95rem;
+  text-align: left;
+  text-decoration: none;
+  transition: border-color 160ms ease, color 160ms ease;
+  width: calc(100% + 0.95rem);
+}
+
+.navItem:hover,
+.navItemActive {
+  background: transparent;
+  border-left-color: var(--mn-color-accent);
+}
+
+.navTitle {
+  font-family: var(--mn-font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.navItem:not(.navItemActive) .navTitle {
+  font-family: var(--mn-font-sans);
+  font-weight: 450;
+}
+
+.navItemActive .navTitle {
+  color: var(--mn-color-ink);
+}
+
+.navDescription {
+  font-size: 0.8rem;
+  max-width: 18ch;
+}
+
+.header {
+  border-bottom-color: var(--mn-color-line);
+  padding: 0.55rem 1.2rem;
+}
+
+.headerActions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: flex-end;
+}
+
+.userValue {
+  font-size: 0.98rem;
+  font-weight: 600;
+}
+
+.accountFooter {
+  margin-top: auto;
+  position: relative;
+  border-top: 1px solid var(--mn-color-line);
+  padding-top: 1.25rem;
+}
+
+.accountButton {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--mn-color-ink);
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  font: inherit;
+  gap: 0.75rem;
+  min-height: auto;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.accountButton:hover:not(:disabled) {
+  background: transparent;
+}
+
+.accountButton:disabled {
+  cursor: default;
+  opacity: 0.64;
+}
+
+.accountAvatar {
+  flex: 0 0 auto;
+}
+
+.accountIdentity {
+  display: grid;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.accountGlyph {
+  color: var(--mn-color-ink-muted);
+  font-size: 0.95rem;
+}
+
+.accountButton .userLabel {
+  display: none;
+}
+
+.accountMenu {
+  background: var(--mn-color-paper);
+  border: 1px solid var(--mn-color-line);
+  bottom: calc(100% + 0.5rem);
+  box-shadow: 0 12px 24px rgba(24, 19, 14, 0.08);
+  min-width: 12rem;
+  padding: 0.4rem;
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
+
+.accountMenuAction {
+  background: transparent;
+  border: 0;
+  color: var(--mn-color-ink);
+  cursor: pointer;
+  display: block;
+  font: inherit;
+  padding: 0.7rem 0.75rem;
+  text-align: left;
+  width: 100%;
+}
+
+.accountMenuAction:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.accountMenuAction:disabled {
+  cursor: default;
+  opacity: 0.64;
+}
+
+.content {
+  min-width: 0;
+  padding: 1rem 1rem 1.5rem;
+}
+
+@media (max-width: 720px) {
+  .header,
+  .headerActions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .accountMenu {
+    left: 0;
+    right: auto;
+  }
+}

@@ -4,21 +4,18 @@ using System.Threading.Tasks;
 using MaNoir.Core.Agents;
 using MaNoir.Core.Contracts.Models.Agents;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace MaNoir.Agents.Erza;
 
 public sealed class LifecycleHeartbeatService : BackgroundService
 {
     private readonly AgentRegistryLogic _agentRegistryLogic;
-    private readonly ILogger<LifecycleHeartbeatService> _logger;
     private readonly ErzaRuntime _runtime;
     private bool _isRegistered;
 
-    public LifecycleHeartbeatService(ErzaRuntime runtime, ILogger<LifecycleHeartbeatService> logger)
+    public LifecycleHeartbeatService(ErzaRuntime runtime)
     {
         _agentRegistryLogic = new AgentRegistryLogic();
-        _logger = logger;
         _runtime = runtime;
     }
 
@@ -64,7 +61,7 @@ public sealed class LifecycleHeartbeatService : BackgroundService
             }
             catch (Exception ex)
             {
-                _logger.LogDebug(ex, "Stopping heartbeat update failed for {AgentId}.", _runtime.AgentId);
+                Console.WriteLine($"[{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss}] [Erza] DEBUG Stopping heartbeat update failed for {_runtime.AgentId}. {ex.Message}");
             }
         }
 
