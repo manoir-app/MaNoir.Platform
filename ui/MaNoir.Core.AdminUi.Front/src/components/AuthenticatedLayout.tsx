@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Outlet } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { DefaultAdminShell } from '@manoir-app/core-admin-ui-kit/default-admin-shell';
-import manoirLogo from '../../../../../manoir-app.github.io/static/img/logo.svg';
+import manoirLogo from '../assets/logo.svg';
 import i18n, { resolveSupportedLanguage } from '../i18n';
 import { getLocalMeshSettings } from '../lib/api';
 import { useAuthSessionViewModel } from '../hooks/useAuthSessionViewModel';

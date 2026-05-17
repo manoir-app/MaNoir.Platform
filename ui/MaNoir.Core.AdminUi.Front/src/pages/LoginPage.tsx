@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { AppBrandHeader } from '@manoir-app/core-admin-ui-kit/app-brand-header';
 import { LoginPage as KitLoginPage } from '@manoir-app/core-admin-ui-kit/login-page';
-import manoirLogo from '../../../../../manoir-app.github.io/static/img/logo.svg';
+import manoirLogo from '../assets/logo.svg';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { useAuthSessionViewModel } from '../hooks/useAuthSessionViewModel';
 
