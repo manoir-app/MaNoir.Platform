@@ -1,0 +1,194 @@
+.root {
+  background: var(--mn-color-paper);
+  color: var(--mn-color-ink);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.topBar {
+  align-items: center;
+  border-bottom: 1px solid var(--mn-color-ink);
+  color: var(--mn-color-ink-soft);
+  display: flex;
+  font-family: var(--mn-font-mono);
+  font-size: 0.68rem;
+  gap: 1rem;
+  justify-content: space-between;
+  letter-spacing: 0.16em;
+  padding: 0.9rem 3.5rem;
+  text-transform: uppercase;
+}
+
+.topBarIdentity {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.topBarBrand {
+  color: var(--mn-color-ink);
+  font-weight: 600;
+}
+
+.topBarMeta,
+.topBarStatus {
+  color: var(--mn-color-ink-muted);
+}
+
+.body {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+}
+
+.md .body {
+  grid-template-columns: minmax(0, 1.2fr) 1px 30rem;
+}
+
+.lg .body {
+  grid-template-columns: minmax(0, 1.15fr) 1px 34rem;
+}
+
+.hero,
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+}
+
+.hero {
+  padding: 4rem 4rem 3rem;
+}
+
+.divider {
+  background: var(--mn-color-line);
+}
+
+.panel {
+  padding: 4rem 3.5rem 3rem;
+}
+
+.heroEyebrow,
+.panelEyebrow {
+  color: var(--mn-color-accent);
+  font-family: var(--mn-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.heroTitle,
+.panelTitle {
+  font-family: var(--mn-font-display);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.heroTitle {
+  font-size: clamp(3rem, 5.8vw, 4.8rem);
+  line-height: 0.98;
+  margin-top: 1.4rem;
+  max-width: 15ch;
+}
+
+.heroTitle em,
+.panelTitle em {
+  color: var(--mn-color-accent);
+  font-style: italic;
+}
+
+.heroDescription,
+.panelDescription {
+  color: var(--mn-color-ink-soft);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.heroDescription {
+  font-size: 1rem;
+  margin-top: 1.75rem;
+  max-width: 56ch;
+}
+
+.heroSupplementary {
+  border-top: 1px solid var(--mn-color-line);
+  margin-top: 3rem;
+  max-width: 34rem;
+  padding-top: 1.5rem;
+}
+
+.heroFooter {
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+.panelLeadAction {
+  align-self: flex-start;
+  margin-bottom: 1.25rem;
+}
+
+.panelTitle {
+  font-size: clamp(2.15rem, 3vw, 2.8rem);
+  line-height: 0.98;
+  margin-top: 0.75rem;
+}
+
+.panelDescription {
+  font-size: 0.92rem;
+  margin-top: 0.65rem;
+}
+
+.panelBody {
+  display: grid;
+  flex: 1;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.panelFooter {
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+@media (max-width: 959px) {
+  .topBar {
+    padding: 0.9rem 1.25rem;
+  }
+
+  .body,
+  .md .body,
+  .lg .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .divider {
+    display: none;
+  }
+
+  .hero,
+  .panel {
+    overflow: visible;
+    padding: 2rem 1.25rem;
+  }
+
+  .hero {
+    padding-bottom: 1rem;
+  }
+
+  .panel {
+    padding-top: 1.25rem;
+  }
+
+  .heroSupplementary {
+    max-width: none;
+  }
+
+  .heroFooter,
+  .panelFooter {
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "MaNoir.Agents.Erza": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MONGODB_CONNECTIONSTRING": "mongodb://localhost:27017",
+        "NATS_SERVICE_HOST": "localhost",
+        "NATS_SERVICE_PORT": "4222",
+        "MANOIR_GRAPH_API_BASE_URI": "http://localhost:5243"
+      }
+    }
+  }
+}

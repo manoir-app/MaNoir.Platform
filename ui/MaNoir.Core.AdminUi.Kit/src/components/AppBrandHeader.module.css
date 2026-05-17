@@ -1,0 +1,75 @@
+.root {
+  align-items: center;
+  border-bottom: 1px solid var(--mn-color-ink);
+  color: var(--mn-color-ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  justify-content: space-between;
+  padding: 0.9rem 3.5rem;
+  text-transform: uppercase;
+}
+
+.identity {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.branding {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.7rem;
+  text-transform: none;
+}
+
+.logo {
+  align-items: center;
+  display: inline-flex;
+}
+
+.logo :global(img),
+.logo :global(svg) {
+  display: block;
+  height: 1.2rem;
+  width: 1.2rem;
+}
+
+.brand {
+  color: var(--mn-color-ink);
+  font-family: var(--mn-font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+.meta,
+.tools {
+  color: var(--mn-color-ink-muted);
+}
+
+.meta {
+  text-transform: none;
+}
+
+.tools {
+  align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .root {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 0.9rem 1.25rem;
+  }
+
+  .tools {
+    width: 100%;
+  }
+}

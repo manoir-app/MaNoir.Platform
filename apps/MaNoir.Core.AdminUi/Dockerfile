@@ -5,6 +5,7 @@ ARG TARGETARCH
 
 COPY ["ui/", "./"]
 
+RUN npm --prefix ./MaNoir.Core.AdminUi.Kit install
 RUN npm --prefix ./MaNoir.Core.AdminUi.Bootstrap install
 RUN case "$TARGETARCH" in \
             amd64) npm --prefix ./MaNoir.Core.AdminUi.Bootstrap install --no-save @rolldown/binding-linux-x64-gnu@1.0.0-rc.17 lightningcss-linux-x64-gnu@1.32.0 ;; \

@@ -1,4 +1,5 @@
 using MaNoir.Core.Contracts.Models.Agents;
+using MaNoir.Core.DataPublication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -98,6 +99,7 @@ public sealed class AgentRegistryLogic
         agent.UpdatedAtUtc = now;
 
         await _mongoOperations.SaveAgentAsync(agent, cancellationToken);
+        MqttDataPublisher.PublishAgent(agent);
         return agent;
     }
 
@@ -121,6 +123,7 @@ public sealed class AgentRegistryLogic
         agent.UpdatedAtUtc = now;
 
         await _mongoOperations.SaveAgentAsync(agent, cancellationToken);
+        MqttDataPublisher.PublishAgent(agent);
         return agent;
     }
 

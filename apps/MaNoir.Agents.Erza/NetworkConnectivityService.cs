@@ -15,9 +15,12 @@ public sealed class NetworkConnectivityService : BackgroundService
     private readonly InternetConnectionMonitoringLogic _monitoringLogic;
     private readonly ErzaRuntime _runtime;
 
-    public NetworkConnectivityService(HttpClient httpClient, ErzaRuntime runtime)
+    public NetworkConnectivityService(ErzaRuntime runtime)
     {
-        _httpClient = httpClient;
+        _httpClient = new HttpClient()
+        {
+            Timeout = TimeSpan.FromSeconds(10)
+        };
         _monitoringLogic = new InternetConnectionMonitoringLogic();
         _runtime = runtime;
     }
