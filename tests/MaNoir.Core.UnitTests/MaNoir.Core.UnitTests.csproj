@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\packages\MaNoir.CommunicationHub.Contracts\MaNoir.CommunicationHub.Contracts.csproj" />
     <ProjectReference Include="..\..\packages\MaNoir.Core\MaNoir.Core.csproj" />
     <ProjectReference Include="..\..\packages\MaNoir.Core.Contracts\MaNoir.Core.Contracts.csproj" />
   </ItemGroup>

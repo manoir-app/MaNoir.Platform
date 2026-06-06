@@ -17,6 +17,9 @@
       "@manoir-app/core-admin-ui-kit/app-brand-header": ["../MaNoir.Core.AdminUi.Kit/src/components/AppBrandHeader.tsx"],
       "@manoir-app/core-admin-ui-kit/auth-session-store": ["../MaNoir.Core.AdminUi.Kit/src/stores/authSessionStore.ts"],
       "@manoir-app/core-admin-ui-kit/default-admin-shell": ["../MaNoir.Core.AdminUi.Kit/src/components/DefaultAdminShell.tsx"],
+      "@manoir-app/core-admin-ui-kit/inline-tabs": ["../MaNoir.Core.AdminUi.Kit/src/components/InlineTabs.tsx"],
+      "@manoir-app/core-admin-ui-kit/shell-header": ["../MaNoir.Core.AdminUi.Kit/src/components/ShellHeader.tsx"],
+      "@manoir-app/core-admin-ui-kit/sidebar-nav": ["../MaNoir.Core.AdminUi.Kit/src/components/SidebarNav.tsx"],
       "@manoir-app/core-admin-ui-kit/login-page": ["../MaNoir.Core.AdminUi.Kit/src/components/LoginPage.tsx"]
     },
     "resolveJsonModule": true,

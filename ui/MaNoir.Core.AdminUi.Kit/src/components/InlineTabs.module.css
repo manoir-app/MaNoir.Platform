@@ -22,6 +22,7 @@
   display: inline-flex;
   gap: 0.4rem;
   padding: 0.55rem 0.1rem;
+  text-decoration: none;
 }
 
 .line .tab {
@@ -44,6 +45,12 @@
 .tab:disabled {
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: auto;
 }
 
 .active {

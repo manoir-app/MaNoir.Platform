@@ -3,10 +3,10 @@ import { App } from './App';
 import { AuthenticatedLayout } from './components/AuthenticatedLayout';
 import { AgentRegistryPage } from './pages/AgentRegistryPage';
 import { ConsoleHomePage } from './pages/ConsoleHomePage';
+import { NavigationPlaceholderPage } from './pages/NavigationPlaceholderPage';
 import { PlatformHealthPage } from './pages/PlatformHealthPage';
 
-export const router = createBrowserRouter(
-  [
+const routes = [
     {
       path: '/',
       Component: App,
@@ -16,19 +16,55 @@ export const router = createBrowserRouter(
           children: [
             {
               index: true,
-              Component: ConsoleHomePage,
+              element: <Navigate replace to="/platform/mesh/status" />,
             },
             {
               path: 'console',
-              Component: ConsoleHomePage,
+              element: <Navigate replace to="/platform/mesh/status" />,
             },
             {
               path: 'system/health',
-              Component: PlatformHealthPage,
+              element: <Navigate replace to="/platform/surveillance/services" />,
             },
             {
               path: 'system/agents',
+              element: <Navigate replace to="/platform/surveillance/agents" />,
+            },
+            {
+              path: 'platform',
+              element: <Navigate replace to="/platform/mesh/status" />,
+            },
+            {
+              path: 'platform/mesh/status',
+              Component: ConsoleHomePage,
+            },
+            {
+              path: 'platform/mesh/places',
+              element: (
+                <NavigationPlaceholderPage
+                  descriptionKey="placeholders.meshPlaces.description"
+                  eyebrowKey="placeholders.meshPlaces.eyebrow"
+                  titleKey="placeholders.meshPlaces.title"
+                />
+              ),
+            },
+            {
+              path: 'platform/surveillance/agents',
               Component: AgentRegistryPage,
+            },
+            {
+              path: 'platform/surveillance/services',
+              Component: PlatformHealthPage,
+            },
+            {
+              path: 'platform/extensions/catalog',
+              element: (
+                <NavigationPlaceholderPage
+                  descriptionKey="placeholders.extensionsCatalog.description"
+                  eyebrowKey="placeholders.extensionsCatalog.eyebrow"
+                  titleKey="placeholders.extensionsCatalog.title"
+                />
+              ),
             },
           ],
         },
@@ -38,8 +74,8 @@ export const router = createBrowserRouter(
         },
       ],
     },
-  ],
-  {
-    basename: import.meta.env.BASE_URL,
-  },
-);
+  ];
+
+export function createAdminRouter(basename: string) {
+  return createBrowserRouter(routes, { basename });
+}

@@ -1,20 +1,23 @@
 .root {
-  align-items: center;
+  align-items: stretch;
   border-bottom: 1px solid var(--mn-color-ink);
   color: var(--mn-color-ink-soft);
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1rem;
   justify-content: space-between;
-  padding: 0.9rem 3.5rem;
+  min-height: 3.4rem;
+  padding: 0 3.5rem;
   text-transform: uppercase;
 }
 
 .identity {
-  align-items: center;
+  align-items: stretch;
   display: flex;
+  flex: 1 1 auto;
   flex-wrap: wrap;
   gap: 1rem;
+  min-height: 100%;
   min-width: 0;
 }
 
@@ -47,12 +50,22 @@
 }
 
 .meta,
+.navigation,
 .tools {
   color: var(--mn-color-ink-muted);
 }
 
 .meta {
+  align-items: center;
+  display: inline-flex;
   text-transform: none;
+}
+
+.navigation {
+  align-items: stretch;
+  display: inline-flex;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .tools {
@@ -66,6 +79,7 @@
   .root {
     align-items: flex-start;
     flex-direction: column;
+    min-height: auto;
     padding: 0.9rem 1.25rem;
   }
 

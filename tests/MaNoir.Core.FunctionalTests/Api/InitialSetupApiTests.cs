@@ -96,7 +96,18 @@ public sealed class InitialSetupApiTests
         Assert.IsNotNull(coreAdminContribution.AdminUi);
         Assert.AreEqual(CoreAccessZones.CoreAdminUi, coreAdminContribution.AdminUi.AccessZoneId);
         Assert.AreEqual(AccessLevel.Read, coreAdminContribution.AdminUi.RequiredAccessLevel);
-        Assert.AreEqual("/admin/core", coreAdminContribution.AdminUi.Pages.Single().Url);
+        Assert.AreEqual("Platform", coreAdminContribution.AdminUi.Domain);
+        Assert.AreEqual(5, coreAdminContribution.AdminUi.Pages.Count);
+        CollectionAssert.AreEquivalent(
+        new[]
+        {
+            "/platform/mesh/status",
+            "/platform/mesh/places",
+            "/platform/surveillance/agents",
+            "/platform/surveillance/services",
+            "/platform/extensions/catalog"
+        },
+        coreAdminContribution.AdminUi.Pages.Select(page => page.Url).ToList());
     }
 
     [TestMethod]

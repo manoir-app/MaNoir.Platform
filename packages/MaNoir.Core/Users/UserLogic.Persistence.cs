@@ -2,6 +2,7 @@ using MaNoir.Core.Contracts.Models.Users;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,6 +42,31 @@ public sealed partial class UserLogic
     public Task<User> GetAdminUserAsync(CancellationToken cancellationToken = default)
     {
         return _mongoOperations.GetAdminUserAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Ensures one platform administrator exists for legacy databases initialized before the admin flag was introduced.
+    /// </summary>
+    public async Task<User> EnsureAdminUserExistsAsync(CancellationToken cancellationToken = default)
+    {
+        User adminUser = await GetAdminUserAsync(cancellationToken);
+        if (adminUser != null)
+            return adminUser;
+
+        List<User> mainUsers = await GetMainUsersAsync(cancellationToken);
+        List<User> eligibleMainUsers = [.. mainUsers
+            .Where(user => user != null && !user.IsGuest)
+            .OrderBy(user => NormalizeUserId(user.Id), StringComparer.OrdinalIgnoreCase)];
+
+        if (eligibleMainUsers.Count != 1)
+            return null;
+
+        User promotedUser = eligibleMainUsers[0];
+        if (!SetUserIsAdmin(promotedUser, true))
+            return promotedUser;
+
+        await SaveAsync(promotedUser, cancellationToken);
+        return promotedUser;
     }
 
     /// <summary>

@@ -34,6 +34,22 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
+.bodyWithoutDivider {
+  grid-template-columns: 220px minmax(0, 1fr);
+}
+
+.sm .bodyWithoutDivider {
+  grid-template-columns: 200px minmax(0, 1fr);
+}
+
+.md .bodyWithoutDivider {
+  grid-template-columns: 220px minmax(0, 1fr);
+}
+
+.lg .bodyWithoutDivider {
+  grid-template-columns: 248px minmax(0, 1fr);
+}
+
 .sidebar {
   height: 100%;
   min-height: 0;

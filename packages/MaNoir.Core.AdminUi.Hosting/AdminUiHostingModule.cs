@@ -1,6 +1,7 @@
 using MaNoir.Core.Setup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -16,6 +17,7 @@ public static class AdminUiHostingModule
 {
     private const string BootstrapSpaFolder = "bootstrap";
     private const string FrontSpaFolder = "front";
+    private const string PublicBasePathItemKey = "MaNoir.AdminUi.PublicBasePath";
 
     /// <summary>
     /// Adds the Core Admin UI hosting services and conventions to the target application builder.
@@ -24,6 +26,11 @@ public static class AdminUiHostingModule
     /// <returns>The same <paramref name="builder"/> instance for chaining.</returns>
     public static WebApplicationBuilder AddMaNoirCoreAdminUiHosting(this WebApplicationBuilder builder)
     {
+        AdminUiHostingOptions options = new AdminUiHostingOptions();
+        builder.Configuration.GetSection("MaNoir:AdminUi:Hosting").Bind(options);
+        options.PublicBasePath ??= Environment.GetEnvironmentVariable("MANOIR_ADMINUI_PUBLIC_BASE_PATH");
+
+        builder.Services.AddSingleton(options);
         builder.Services.AddHealthChecks();
         return builder;
     }
@@ -35,8 +42,20 @@ public static class AdminUiHostingModule
     /// <returns>The same <paramref name="app"/> instance for chaining.</returns>
     public static WebApplication UseMaNoirCoreAdminUiHosting(this WebApplication app)
     {
+        AdminUiHostingOptions options = app.Services.GetRequiredService<AdminUiHostingOptions>();
+
         app.Use(async (context, next) =>
         {
+            string publicBasePath = NormalizePublicBasePath(options.PublicBasePath);
+            PathString requestPath = context.Request.Path;
+
+            if (!string.IsNullOrWhiteSpace(publicBasePath)
+                && requestPath.StartsWithSegments(publicBasePath, StringComparison.OrdinalIgnoreCase, out PathString remainder))
+            {
+                context.Items[PublicBasePathItemKey] = publicBasePath;
+                context.Request.Path = remainder.HasValue ? remainder : new PathString("/");
+            }
+
             if (ShouldRemapRootStaticAssetRequest(context.Request.Path)
                 && !RootStaticFileExists(app.Environment, context.Request.Path))
             {
@@ -141,12 +160,14 @@ public static class AdminUiHostingModule
 
         if (!remapToRoot)
         {
-            await context.Response.SendFileAsync(candidateFile, context.RequestAborted);
+            string prefixedIndexHtml = await File.ReadAllTextAsync(candidateFile, context.RequestAborted);
+            prefixedIndexHtml = RewriteSpaIndex(prefixedIndexHtml, spaFolder, ResolveRequestPublicBasePath(context), string.Concat("/", spaFolder));
+            await context.Response.WriteAsync(prefixedIndexHtml, context.RequestAborted);
             return;
         }
 
         string indexHtml = await File.ReadAllTextAsync(candidateFile, context.RequestAborted);
-        indexHtml = RewriteSpaIndexForRoot(indexHtml, spaFolder);
+        indexHtml = RewriteSpaIndex(indexHtml, spaFolder, ResolveRequestPublicBasePath(context), "/");
         await context.Response.WriteAsync(indexHtml, context.RequestAborted);
     }
 
@@ -156,11 +177,55 @@ public static class AdminUiHostingModule
         return Path.Combine(environment.ContentRootPath, "wwwroot", relativePath);
     }
 
-    private static string RewriteSpaIndexForRoot(string indexHtml, string spaFolder)
+    private static string RewriteSpaIndex(string indexHtml, string spaFolder, string publicBasePath, string routerBasePath)
     {
-        string absolutePrefix = $"/{spaFolder}/";
-        return indexHtml
-            .Replace($"\"{absolutePrefix}", "\"/")
-            .Replace($"'{absolutePrefix}", "'/");
+        string normalizedPublicBasePath = NormalizePublicBasePath(publicBasePath);
+        string assetPrefix = string.IsNullOrWhiteSpace(normalizedPublicBasePath)
+            ? $"/{spaFolder}/"
+            : $"{normalizedPublicBasePath}/{spaFolder}/";
+
+        string rewrittenHtml = indexHtml
+            .Replace($"\"/{spaFolder}/", $"\"{assetPrefix}")
+            .Replace($"'/{spaFolder}/", $"'{assetPrefix}");
+
+        string normalizedRouterBasePath = NormalizeRouterBasePath(routerBasePath);
+        string runtimeScript = $"<script>window.__MANOIR_ADMIN_UI_CONFIG__={{routerBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedRouterBasePath)}}};</script>";
+        return rewrittenHtml.Replace("<head>", $"<head>{runtimeScript}");
+    }
+
+    private static string ResolveRequestPublicBasePath(HttpContext context)
+    {
+        if (context.Items.TryGetValue(PublicBasePathItemKey, out object publicBasePath)
+            && publicBasePath is string stringValue
+            && !string.IsNullOrWhiteSpace(stringValue))
+        {
+            return stringValue;
+        }
+
+        return null;
+    }
+
+    private static string NormalizePublicBasePath(string publicBasePath)
+    {
+        if (string.IsNullOrWhiteSpace(publicBasePath))
+            return null;
+
+        string trimmedPath = publicBasePath.Trim();
+        if (!trimmedPath.StartsWith("/", StringComparison.Ordinal))
+            trimmedPath = "/" + trimmedPath;
+
+        return trimmedPath.Length > 1 ? trimmedPath.TrimEnd('/') : trimmedPath;
+    }
+
+    private static string NormalizeRouterBasePath(string routerBasePath)
+    {
+        if (string.IsNullOrWhiteSpace(routerBasePath) || string.Equals(routerBasePath, "/", StringComparison.Ordinal))
+            return "/";
+
+        string trimmedPath = routerBasePath.Trim();
+        if (!trimmedPath.StartsWith("/", StringComparison.Ordinal))
+            trimmedPath = "/" + trimmedPath;
+
+        return trimmedPath.EndsWith("/", StringComparison.Ordinal) ? trimmedPath : trimmedPath + "/";
     }
 }

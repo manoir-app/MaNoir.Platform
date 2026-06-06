@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
+using MaNoir.Core.Users;
 
 namespace MaNoir.Core.Api;
 
@@ -76,6 +77,7 @@ public static class CoreApiModule
 
     public static WebApplication UseMaNoirCoreApi(this WebApplication app)
     {
+        new UserLogic().EnsureAdminUserExistsAsync().GetAwaiter().GetResult();
         app.RegisterPlugin(CorePluginDescriptorProvider.Create(typeof(CoreApiModule).Assembly.GetName().Version?.ToString(3)));
 
         app.UseExceptionHandler(exceptionHandlerApp =>

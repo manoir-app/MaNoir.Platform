@@ -20,6 +20,7 @@ export interface DefaultAdminShellProps extends React.HTMLAttributes<HTMLDivElem
   sidebarEyebrow?: React.ReactNode;
   sidebarBrand: React.ReactNode;
   sidebarDescription?: React.ReactNode;
+  sidebarNavigation?: React.ReactNode;
   serverLabel?: React.ReactNode;
   serverName: React.ReactNode;
   serverMeta?: React.ReactNode;
@@ -30,6 +31,7 @@ export interface DefaultAdminShellProps extends React.HTMLAttributes<HTMLDivElem
   topBarBrand: React.ReactNode;
   topBarLogo?: React.ReactNode;
   topBarMeta?: React.ReactNode;
+  topBarNavigation?: React.ReactNode;
   topBarStatus?: React.ReactNode;
   topBarActions?: React.ReactNode;
   userLabel?: React.ReactNode;
@@ -69,16 +71,18 @@ export function DefaultAdminShell({
   onLogout,
   serverLabel,
   serverMeta,
-  serverName,
+  serverName: _serverName,
   serverStatus,
   serverStatusTone = 'neutral',
   sidebarBrand,
   sidebarDescription,
   sidebarEyebrow,
+  sidebarNavigation,
   topBarActions,
   topBarBrand,
   topBarLogo,
   topBarMeta,
+  topBarNavigation,
   userLabel,
   userValue,
   ...props
@@ -125,31 +129,28 @@ export function DefaultAdminShell({
         {sidebarDescription ? <p className={styles.copy}>{sidebarDescription}</p> : null}
       </div>
 
-      <div className={styles.serverCard}>
-        {serverLabel ? <div className={styles.serverLabel}>{serverLabel}</div> : null}
-        <div className={styles.serverHeading}>
-          <span
-            aria-label={typeof serverStatus === 'string' ? serverStatus : undefined}
-            className={cx(styles.serverStatusDot, styles[`serverStatusDot${serverStatusTone.charAt(0).toUpperCase()}${serverStatusTone.slice(1)}`])}
-            role={serverStatus ? 'status' : undefined}
-            title={typeof serverStatus === 'string' ? serverStatus : undefined}
-          />
-          <div className={styles.serverName}>{serverName}</div>
-        </div>
-        {serverMeta ? (
-          <div className={styles.serverMeta}>
-            {serverMeta ? <span>{serverMeta}</span> : null}
-          </div>
-        ) : null}
-      </div>
-
-      <nav aria-label={navigationAriaLabel} className={styles.nav}>
-        {navigationItems.map((item) => (
-          <React.Fragment key={item.id}>{renderNavItem(item)}</React.Fragment>
-        ))}
-      </nav>
+      {sidebarNavigation ? sidebarNavigation : (
+        <nav aria-label={navigationAriaLabel} className={styles.nav}>
+          {navigationItems.map((item) => (
+            <React.Fragment key={item.id}>{renderNavItem(item)}</React.Fragment>
+          ))}
+        </nav>
+      )}
 
       <div className={styles.accountFooter}>
+        {serverLabel || serverMeta || serverStatus ? (
+          <div className={styles.serverFooterInfo}>
+            <span
+              aria-label={typeof serverStatus === 'string' ? serverStatus : undefined}
+              className={cx(styles.serverStatusDot, styles.serverFooterStatusDot, styles[`serverStatusDot${serverStatusTone.charAt(0).toUpperCase()}${serverStatusTone.slice(1)}`])}
+              role={serverStatus ? 'status' : undefined}
+              title={typeof serverStatus === 'string' ? serverStatus : undefined}
+            />
+            {serverLabel ? <span className={styles.serverFooterLabel}>{serverLabel}</span> : null}
+            {serverMeta ? <span className={styles.serverFooterMeta}>{serverMeta}</span> : null}
+          </div>
+        ) : null}
+
         <button
           aria-expanded={accountMenuOpen}
           className={styles.accountButton}
@@ -162,7 +163,7 @@ export function DefaultAdminShell({
           <Avatar
             className={styles.accountAvatar}
             name={typeof userValue === 'string' ? userValue : undefined}
-            size="md"
+            size="sm"
           />
           <span className={styles.accountIdentity}>
             {userLabel ? <span className={styles.userLabel}>{userLabel}</span> : null}
@@ -191,17 +192,20 @@ export function DefaultAdminShell({
   );
 
   const topBar = (
-    <AppBrandHeader
-      actions={topBarActions ? <div className={styles.headerActions}>{topBarActions}</div> : undefined}
-      brand={topBarBrand}
-      className={styles.header}
-      logo={topBarLogo}
-      meta={topBarMeta}
-    />
+    <div className={styles.headerShell}>
+      <AppBrandHeader
+        actions={topBarActions ? <div className={styles.headerActions}>{topBarActions}</div> : undefined}
+        brand={topBarBrand}
+        className={styles.header}
+        logo={topBarLogo}
+        meta={topBarMeta}
+        navigation={topBarNavigation ? <div className={styles.headerInlineNavigation}>{topBarNavigation}</div> : undefined}
+      />
+    </div>
   );
 
   return (
-    <AdminShell className={className} contentClassName={styles.content} sidebar={sidebar} sidebarSize="lg" topBar={topBar} {...props}>
+    <AdminShell className={className} contentClassName={styles.content} showDivider={false} sidebar={sidebar} sidebarSize="lg" topBar={topBar} {...props}>
       {children}
     </AdminShell>
   );

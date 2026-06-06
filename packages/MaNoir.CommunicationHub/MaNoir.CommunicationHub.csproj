@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <IsPackable>true</IsPackable>
+    <Description>Persistance et operations concretes du Communication Hub MaNoir.</Description>
+    <PackageTags>manoir;platform;communication-hub;chat;mongo</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MaNoir.CommunicationHub.Contracts\MaNoir.CommunicationHub.Contracts.csproj" />
+    <ProjectReference Include="..\MaNoir.Core\MaNoir.Core.csproj" />
+  </ItemGroup>
+
+</Project>
