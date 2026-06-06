@@ -70,11 +70,17 @@
 }
 
 .compact {
-  padding: 1.75rem 2rem 2.5rem;
+  padding:
+    var(--mn-shell-content-top, 1.75rem)
+    var(--mn-shell-content-inline, 1.55rem)
+    var(--mn-shell-content-bottom, 2.5rem);
 }
 
 .comfortable {
-  padding: 2.5rem 3.5rem 4rem;
+  padding:
+    var(--mn-shell-content-top-comfortable, 2.5rem)
+    var(--mn-shell-content-inline-comfortable, 3.5rem)
+    var(--mn-shell-content-bottom-comfortable, 4rem);
 }
 
 @media (max-width: 959px) {
@@ -90,6 +96,9 @@
 
   .compact,
   .comfortable {
-    padding: 1.5rem 1.25rem 2rem;
+    padding:
+      var(--mn-shell-content-top-mobile, 1.5rem)
+      var(--mn-shell-content-inline-mobile, 1.25rem)
+      var(--mn-shell-content-bottom-mobile, 2rem);
   }
 }

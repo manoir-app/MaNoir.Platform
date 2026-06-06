@@ -102,6 +102,7 @@ export function AuthenticatedLayout() {
 
   return (
     <DefaultAdminShell
+      contentPadding="compact"
       logoutDisabled={isSubmitting}
       logoutLabel={isSubmitting ? t('common.actions.loggingOut') : t('common.actions.logout')}
       navigationAriaLabel={t('navigation.main')}

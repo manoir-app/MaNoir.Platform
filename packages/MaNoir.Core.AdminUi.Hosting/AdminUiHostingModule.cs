@@ -36,11 +36,11 @@ public static class AdminUiHostingModule
     }
 
     /// <summary>
-    /// Enables static file hosting and SPA fallback resolution for the Core Admin UI frontends.
+    /// Applies the public base path rewrite middleware so reverse-proxy-prefixed requests can reach the API and static host.
     /// </summary>
     /// <param name="app">Application pipeline to configure.</param>
     /// <returns>The same <paramref name="app"/> instance for chaining.</returns>
-    public static WebApplication UseMaNoirCoreAdminUiHosting(this WebApplication app)
+    public static WebApplication UseMaNoirCoreAdminUiPublicBasePath(this WebApplication app)
     {
         AdminUiHostingOptions options = app.Services.GetRequiredService<AdminUiHostingOptions>();
 
@@ -56,6 +56,21 @@ public static class AdminUiHostingModule
                 context.Request.Path = remainder.HasValue ? remainder : new PathString("/");
             }
 
+            await next();
+        });
+
+        return app;
+    }
+
+    /// <summary>
+    /// Enables static file hosting and SPA fallback resolution for the Core Admin UI frontends.
+    /// </summary>
+    /// <param name="app">Application pipeline to configure.</param>
+    /// <returns>The same <paramref name="app"/> instance for chaining.</returns>
+    public static WebApplication UseMaNoirCoreAdminUiHosting(this WebApplication app)
+    {
+        app.Use(async (context, next) =>
+        {
             if (ShouldRemapRootStaticAssetRequest(context.Request.Path)
                 && !RootStaticFileExists(app.Environment, context.Request.Path))
             {
@@ -189,7 +204,7 @@ public static class AdminUiHostingModule
             .Replace($"'/{spaFolder}/", $"'{assetPrefix}");
 
         string normalizedRouterBasePath = NormalizeRouterBasePath(routerBasePath);
-        string runtimeScript = $"<script>window.__MANOIR_ADMIN_UI_CONFIG__={{routerBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedRouterBasePath)}}};</script>";
+        string runtimeScript = $"<script>window.__MANOIR_ADMIN_UI_CONFIG__={{routerBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedRouterBasePath)},publicBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedPublicBasePath)}}};</script>";
         return rewrittenHtml.Replace("<head>", $"<head>{runtimeScript}");
     }
 
@@ -201,6 +216,10 @@ public static class AdminUiHostingModule
         {
             return stringValue;
         }
+
+        AdminUiHostingOptions options = context.RequestServices.GetService<AdminUiHostingOptions>();
+        if (!string.IsNullOrWhiteSpace(options?.PublicBasePath))
+            return options.PublicBasePath;
 
         return null;
     }

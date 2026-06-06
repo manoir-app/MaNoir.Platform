@@ -9,3 +9,17 @@ services:
       NATS_SERVICE_HOST: ${NATS_SERVICE_HOST}
       NATS_SERVICE_PORT: ${NATS_SERVICE_PORT}
       MANOIR_ADMINUI_PUBLIC_BASE_PATH: /platform
+
+  erza:
+    image: ghcr.io/manoir-app/manoir-agents-erza:latest
+    container_name: manoir-platform-erza
+    restart: unless-stopped
+    environment:
+      MONGODB_CONNECTIONSTRING: mongodb://${MONGODB_SERVICE_HOST}:${MONGODB_SERVICE_PORT}
+      NATS_SERVICE_HOST: ${NATS_SERVICE_HOST}
+      NATS_SERVICE_PORT: ${NATS_SERVICE_PORT}
+      MANOIR_MESH_ID: ${MANOIR_MESH_ID:-local}
+      ERZA_AGENT_ID: ${ERZA_AGENT_ID:-erza}
+      ERZA_DISPLAY_NAME: ${ERZA_DISPLAY_NAME:-Erza}
+      ERZA_TOPICS: ${ERZA_TOPICS:-users.presence.*,system.mesh.*}
+      ERZA_CAPABILITIES: ${ERZA_CAPABILITIES:-presence,mesh.monitoring}
