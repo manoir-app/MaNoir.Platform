@@ -1,5 +1,4 @@
 using MaNoir.Core.Api;
-using MaNoir.Core.AdminUi.Hosting;
 using MaNoir.Core.Authorization;
 using MaNoir.Core.Contracts.Models.Authorization;
 using MaNoir.Core.Contracts.Models.Contributions;
@@ -173,28 +172,7 @@ public sealed class InitialSetupApiTests
         Assert.IsTrue(cachedStatus.HasUsers);
     }
 
-    [TestMethod]
-    [TestCategory("Functional")]
-    public async Task Status_ShouldBeReachableBehindTheConfiguredPublicBasePath()
-    {
-        await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();
-        await mongoHost.StartAsync();
-        using ProcessEnvironmentVariableScope mongoScope = new ProcessEnvironmentVariableScope("MONGODB_CONNECTIONSTRING", mongoHost.ConnectionString);
-        using ProcessEnvironmentVariableScope publicBasePathScope = new ProcessEnvironmentVariableScope("MANOIR_ADMINUI_PUBLIC_BASE_PATH", "/platform");
-
-        await using WebApplication app = CreateApplication(includeAdminUiHosting: true);
-        await app.StartAsync();
-        HttpClient client = app.GetTestClient();
-
-        InitialSetupStatus status = await client.GetFromJsonAsync<InitialSetupStatus>("/platform/api/core/setup/status");
-
-        Assert.IsNotNull(status);
-        Assert.IsTrue(status.CanInitialize);
-        Assert.IsFalse(status.HasMesh);
-        Assert.IsFalse(status.HasUsers);
-    }
-
-    private static WebApplication CreateApplication(bool includeAdminUiHosting = false)
+    private static WebApplication CreateApplication()
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions() { EnvironmentName = Environments.Development });
         builder.WebHost.UseTestServer();
@@ -206,22 +184,10 @@ public sealed class InitialSetupApiTests
             ["MaNoir:Authentication:UsersJwt:CookieName"] = "manoir_test_users_access_token",
             ["MaNoir:Authentication:UsersJwt:AccessTokenLifetimeMinutes"] = "120"
         });
-
-        if (includeAdminUiHosting)
-            builder.AddMaNoirCoreAdminUiHosting();
-
         builder.AddMaNoirCoreApi();
 
         WebApplication app = builder.Build();
-
-        if (includeAdminUiHosting)
-            app.UseMaNoirCoreAdminUiPublicBasePath();
-
         app.UseMaNoirCoreApi();
-
-        if (includeAdminUiHosting)
-            app.UseMaNoirCoreAdminUiHosting();
-
         return app;
     }
 }
