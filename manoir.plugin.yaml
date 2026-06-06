@@ -1,0 +1,91 @@
+apiVersion: manoir/v1
+kind: PluginManifest
+
+plugin:
+  pluginId: core
+  repoUrl: https://github.com/manoir-app/MaNoir.Platform
+  displayName: MaNoir Platform Core
+  publisher: MaNoir
+  version: 0.0.0-dev
+  minimumMaNoirVersion: 0.0.0
+
+catalog:
+  accessZones:
+    - id: core.admin-ui
+      label:
+        en: Core Admin UI
+      description:
+        en: Access to the Core administration user interface.
+    - id: core.authorization
+      label:
+        en: Core Authorization
+      description:
+        en: Manage Core user grants and admin delegation.
+    - id: core.files.general.write
+      label:
+        en: Core General Files Write
+      description:
+        en: Upload or delete authenticated files stored in shared module spaces.
+    - id: core.files.public.write
+      label:
+        en: Core Public Files Write
+      description:
+        en: Upload or delete publicly readable files stored in shared module spaces.
+    - id: core.mesh.settings
+      label:
+        en: Core Mesh Settings
+      description:
+        en: Configure local mesh settings such as published frontend URLs.
+  contributions:
+    - id: core.admin.pages
+      kind: AdminUiPage
+      label:
+        en: Core admin
+      description:
+        en: Core administration pages.
+      canCreateInstances: false
+      adminUi:
+        domain: Platform
+        accessZoneId: core.admin-ui
+        requiredAccessLevel: Read
+        pages:
+          - category: Mesh
+            name: Status
+            relativePath: /platform/mesh/status
+            labels:
+              en: General status
+              fr-FR: Statut general
+          - category: Mesh
+            name: Places
+            relativePath: /platform/mesh/places
+            labels:
+              en: Places and rooms
+              fr-FR: Lieux et pieces
+          - category: Surveillance
+            name: Agents
+            relativePath: /platform/surveillance/agents
+            labels:
+              en: Agents
+              fr-FR: Agents
+          - category: Surveillance
+            name: Services
+            relativePath: /platform/surveillance/services
+            labels:
+              en: Services
+              fr-FR: Services
+          - category: Extensions
+            name: Catalog
+            relativePath: /platform/extensions/catalog
+            labels:
+              en: Plugins and contributions
+              fr-FR: Plugins et contributions
+
+deployment:
+  group: platform
+  adminUi:
+    pathPrefix: /platform
+    composeService: core
+    port: 8080
+  artifacts:
+    - kind: compose
+      path: deploy/docker-compose.yml

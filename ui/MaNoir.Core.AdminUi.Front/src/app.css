@@ -15,6 +15,61 @@ body {
   min-height: 100vh;
 }
 
+.front-domain-shell-header {
+  border-bottom: 0;
+  padding: 0;
+  width: auto;
+}
+
+.front-domain-tab-label {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.front-domain-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 1rem;
+  width: 1rem;
+}
+
+.front-auth-sidebar-nav {
+  background: transparent;
+  border-right: 0;
+  min-height: auto;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.front-placeholder-surface {
+  background: var(--mn-color-paper);
+  border: 1px solid var(--mn-color-line);
+  display: grid;
+  gap: 1rem;
+  min-height: 16rem;
+  padding: 1.75rem;
+}
+
+.front-placeholder-surface-title {
+  font-family: var(--mn-font-display);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  line-height: 0.98;
+  margin: 0;
+  max-width: 14ch;
+}
+
+.front-placeholder-surface-copy {
+  color: var(--mn-color-ink-soft);
+  line-height: 1.65;
+  margin: 0;
+  max-width: 60ch;
+}
+
 .front-login-page {
   background: var(--mn-color-paper);
   color: var(--mn-color-ink);

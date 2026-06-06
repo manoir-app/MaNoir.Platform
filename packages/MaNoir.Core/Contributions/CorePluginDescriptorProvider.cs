@@ -34,20 +34,64 @@ public static class CorePluginDescriptorProvider
                     CanCreateInstances = false,
                     AdminUi = new AdminUiContributionDefinitionData()
                     {
-                        Domain = "Core",
+                        Domain = "Platform",
                         AccessZoneId = CoreAccessZones.CoreAdminUi,
                         RequiredAccessLevel = AccessLevel.Read,
                         Pages =
                         [
                             new AdminUiPageDefinition()
                             {
-                                Category = "General",
-                                Name = "Home",
-                                Url = "/admin/core",
+                                Category = "Mesh",
+                                Name = "Status",
+                                Url = "/platform/mesh/status",
                                 Labels = new Dictionary<string, string>()
                                 {
-                                    ["en"] = "Core",
-                                    ["fr-FR"] = "Noyau"
+                                    ["en"] = "General status",
+                                    ["fr-FR"] = "Statut general"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
+                                Category = "Mesh",
+                                Name = "Places",
+                                Url = "/platform/mesh/places",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Places and rooms",
+                                    ["fr-FR"] = "Lieux et pieces"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
+                                Category = "Surveillance",
+                                Name = "Agents",
+                                Url = "/platform/surveillance/agents",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Agents",
+                                    ["fr-FR"] = "Agents"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
+                                Category = "Surveillance",
+                                Name = "Services",
+                                Url = "/platform/surveillance/services",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Services",
+                                    ["fr-FR"] = "Services"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
+                                Category = "Extensions",
+                                Name = "Catalog",
+                                Url = "/platform/extensions/catalog",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Plugins and contributions",
+                                    ["fr-FR"] = "Plugins et contributions"
                                 }
                             }
                         ]

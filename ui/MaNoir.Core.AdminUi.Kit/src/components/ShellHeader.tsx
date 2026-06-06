@@ -105,31 +105,37 @@ export function ShellHeader({
       return;
     }
 
-    const gap = isCompact ? 16 : 28;
+    const gap = isCompact ? 6 : 8;
     const reserve = title ? (isCompact ? 20 : 32) : 0;
     const availableWidth = Math.max(rootWidth - titleWidth - reserve, 0);
     const plusWidth = overflowMeasureRef.current?.getBoundingClientRect().width ?? 0;
+    const itemWidths = items.map((item) => itemMeasureRefs.current.get(item.id)?.getBoundingClientRect().width ?? 0);
 
-    let nextVisibleCount = items.length;
-    let consumedWidth = 0;
+    const computeVisibleCount = (reserveOverflow: boolean) => {
+      let nextVisibleCount = items.length;
+      let consumedWidth = 0;
 
-    for (let index = 0; index < items.length; index += 1) {
-      const width = itemMeasureRefs.current.get(items[index].id)?.getBoundingClientRect().width ?? 0;
-      const nextWidth = index === 0 ? width : consumedWidth + gap + width;
-      const remaining = items.length - index - 1;
-      const overflowReserve = remaining > 0 ? gap + plusWidth : 0;
+      for (let index = 0; index < items.length; index += 1) {
+        const width = itemWidths[index] ?? 0;
+        const nextWidth = index === 0 ? width : consumedWidth + gap + width;
+        const remaining = items.length - index - 1;
+        const overflowReserve = reserveOverflow && remaining > 0 ? gap + plusWidth : 0;
 
-      if (nextWidth + overflowReserve > availableWidth) {
-        nextVisibleCount = index;
-        break;
+        if (nextWidth + overflowReserve > availableWidth) {
+          nextVisibleCount = index;
+          break;
+        }
+
+        consumedWidth = nextWidth;
       }
 
-      consumedWidth = nextWidth;
-    }
+      return nextVisibleCount;
+    };
 
-    if (nextVisibleCount === 0 && items.length > 0 && plusWidth > 0 && plusWidth <= availableWidth) {
-      setVisibleCount(0);
-      return;
+    let nextVisibleCount = computeVisibleCount(false);
+
+    if (nextVisibleCount < items.length) {
+      nextVisibleCount = computeVisibleCount(true);
     }
 
     if (nextVisibleCount === 0 && items.length > 0) {

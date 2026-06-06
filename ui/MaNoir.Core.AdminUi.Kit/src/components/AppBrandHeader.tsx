@@ -7,6 +7,7 @@ export interface AppBrandHeaderProps extends Omit<React.HTMLAttributes<HTMLEleme
   brand: React.ReactNode;
   logo?: React.ReactNode;
   meta?: React.ReactNode;
+  navigation?: React.ReactNode;
 }
 
 export function AppBrandHeader({
@@ -15,6 +16,7 @@ export function AppBrandHeader({
   className,
   logo,
   meta,
+  navigation,
   ...props
 }: AppBrandHeaderProps) {
   return (
@@ -25,6 +27,7 @@ export function AppBrandHeader({
           <span className={styles.brand}>{brand}</span>
         </div>
         {meta ? <span className={styles.meta}>{meta}</span> : null}
+        {navigation ? <div className={styles.navigation}>{navigation}</div> : null}
       </div>
       {actions ? <div className={styles.tools}>{actions}</div> : null}
     </header>

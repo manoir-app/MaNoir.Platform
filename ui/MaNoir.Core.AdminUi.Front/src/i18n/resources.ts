@@ -47,6 +47,20 @@ export const resources = {
         activeSession: 'Active session',
         userLabel: 'User',
       },
+      domains: {
+        ariaLabel: 'Domain switcher',
+        current: 'Current domain: {{domain}}',
+        more: 'More',
+        platform: {
+          label: 'General',
+        },
+        homeAutomation: {
+          label: 'Home Automation',
+        },
+        dailyLife: {
+          label: 'Daily Life',
+        },
+      },
       navigation: {
         main: 'Main navigation',
         console: {
@@ -60,6 +74,34 @@ export const resources = {
         agents: {
           label: 'Agents',
           description: 'Registry, heartbeat freshness and runtime states',
+        },
+      },
+      navigationTree: {
+        mesh: {
+          title: 'Mesh',
+          status: 'General status',
+          places: 'Places and rooms',
+        },
+        surveillance: {
+          title: 'Monitoring',
+          agents: 'Agents',
+          services: 'Services',
+        },
+        extensions: {
+          title: 'Extensions',
+          catalog: 'Plugins and contributions',
+        },
+      },
+      placeholders: {
+        meshPlaces: {
+          eyebrow: 'Mesh · topology',
+          title: 'Places and rooms will connect here.',
+          description: 'This area is ready to host the topology tree, room configuration and the first local mesh placement tools.',
+        },
+        extensionsCatalog: {
+          eyebrow: 'Extensions · catalog',
+          title: 'Plugins and UI contributions will converge here.',
+          description: 'This page is reserved for the future catalog view that will connect installed plugins, published Admin UI pages and exposed local services.',
         },
       },
       agentState: {
@@ -267,6 +309,20 @@ export const resources = {
         activeSession: 'Session active',
         userLabel: 'Utilisateur',
       },
+      domains: {
+        ariaLabel: 'Changement de domaine',
+        current: 'Domaine courant : {{domain}}',
+        more: 'Plus',
+        platform: {
+          label: 'General',
+        },
+        homeAutomation: {
+          label: 'Home Automation',
+        },
+        dailyLife: {
+          label: 'Vie quotidienne',
+        },
+      },
       navigation: {
         main: 'Navigation principale',
         console: {
@@ -280,6 +336,34 @@ export const resources = {
         agents: {
           label: 'Agents',
           description: 'Registre, fraicheur des heartbeats et etat runtime',
+        },
+      },
+      navigationTree: {
+        mesh: {
+          title: 'Mesh',
+          status: 'Statut general',
+          places: 'Lieux et pieces',
+        },
+        surveillance: {
+          title: 'Surveillance',
+          agents: 'Agents',
+          services: 'Services',
+        },
+        extensions: {
+          title: 'Extensions',
+          catalog: 'Plugins et contributions',
+        },
+      },
+      placeholders: {
+        meshPlaces: {
+          eyebrow: 'Mesh · topologie',
+          title: 'Les lieux et les pieces viendront se brancher ici.',
+          description: 'Cette zone est prete a accueillir l arbre de topologie, la configuration des pieces et les premiers outils de placement de la mesh locale.',
+        },
+        extensionsCatalog: {
+          eyebrow: 'Extensions · catalogue',
+          title: 'Les plugins et contributions UI convergeront ici.',
+          description: 'Cette page est reservee a la future vue catalogue qui raccordera les plugins installes, les pages Admin UI publiees et les services locaux exposes.',
         },
       },
       agentState: {

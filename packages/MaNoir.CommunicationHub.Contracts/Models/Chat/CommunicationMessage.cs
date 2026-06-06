@@ -1,0 +1,251 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace MaNoir.CommunicationHub.Contracts.Models.Chat;
+
+/// <summary>
+/// Represents a message emitted inside a Communication Hub channel.
+/// </summary>
+public sealed class CommunicationMessage
+{
+    /// <summary>
+    /// Initializes a new message contract instance.
+    /// </summary>
+    public CommunicationMessage()
+    {
+        Parts = [];
+        Metadata = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// Gets or sets the canonical message identifier.
+    /// </summary>
+    public string Id { get; set; }
+
+    /// <summary>
+    /// Gets or sets the channel that owns the message.
+    /// </summary>
+    public string ChannelId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the participant identifier that produced the message.
+    /// </summary>
+    public string SenderParticipantId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the message classification.
+    /// </summary>
+    public CommunicationMessageKind Kind { get; set; }
+
+    /// <summary>
+    /// Gets or sets the UTC timestamp of message emission.
+    /// </summary>
+    public DateTimeOffset SentAt { get; set; }
+
+    /// <summary>
+    /// Gets or sets a short plain-text preview useful for notifications or summaries.
+    /// </summary>
+    public string PreviewText { get; set; }
+
+    /// <summary>
+    /// Gets or sets the content parts that compose the message.
+    /// </summary>
+    public List<CommunicationMessagePart> Parts { get; set; }
+
+    /// <summary>
+    /// Gets or sets optional metadata attached to the message.
+    /// </summary>
+    public Dictionary<string, string> Metadata { get; set; }
+}
+
+/// <summary>
+/// Represents one renderable or processable part of a communication message.
+/// </summary>
+public sealed class CommunicationMessagePart
+{
+    /// <summary>
+    /// Gets or sets the part kind.
+    /// </summary>
+    public CommunicationMessagePartKind Kind { get; set; }
+
+    /// <summary>
+    /// Gets or sets the MIME type when the content kind needs an explicit format hint.
+    /// </summary>
+    public string MimeType { get; set; }
+
+    /// <summary>
+    /// Gets or sets the textual content when the part carries inline text.
+    /// </summary>
+    public string Text { get; set; }
+
+    /// <summary>
+    /// Gets or sets a URL when the part references an external resource.
+    /// </summary>
+    public string Url { get; set; }
+
+    /// <summary>
+    /// Gets or sets the optional file name associated with the part.
+    /// </summary>
+    public string FileName { get; set; }
+
+    /// <summary>
+    /// Gets or sets an optional JSON payload for structured or rich content.
+    /// </summary>
+    public string PayloadJson { get; set; }
+}
+
+/// <summary>
+/// Describes the structural shape of a communication channel.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CommunicationChannelKind
+{
+    /// <summary>
+    /// A one-to-one conversation.
+    /// </summary>
+    Direct = 0,
+
+    /// <summary>
+    /// A multi-participant conversation.
+    /// </summary>
+    Group = 1,
+
+    /// <summary>
+    /// A channel primarily used to fan out messages.
+    /// </summary>
+    Broadcast = 2,
+
+    /// <summary>
+    /// A system-owned conversation surface.
+    /// </summary>
+    System = 3,
+}
+
+/// <summary>
+/// Describes the origin category of a participant.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CommunicationParticipantKind
+{
+    /// <summary>
+    /// A human user identity.
+    /// </summary>
+    User = 0,
+
+    /// <summary>
+    /// An autonomous agent identity.
+    /// </summary>
+    Agent = 1,
+
+    /// <summary>
+    /// A platform or infrastructure service identity.
+    /// </summary>
+    Service = 2,
+
+    /// <summary>
+    /// An identity originating from an external system.
+    /// </summary>
+    ExternalIdentity = 3,
+}
+
+/// <summary>
+/// Describes the role of a participant inside a channel.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CommunicationParticipantRole
+{
+    /// <summary>
+    /// Standard participant of a channel.
+    /// </summary>
+    Member = 0,
+
+    /// <summary>
+    /// Participant allowed to moderate interactions.
+    /// </summary>
+    Moderator = 1,
+
+    /// <summary>
+    /// Participant owning the channel.
+    /// </summary>
+    Owner = 2,
+
+    /// <summary>
+    /// Read-mostly or audit participant.
+    /// </summary>
+    Observer = 3,
+
+    /// <summary>
+    /// Platform-owned system participant.
+    /// </summary>
+    System = 4,
+}
+
+/// <summary>
+/// Describes the semantic kind of a message.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CommunicationMessageKind
+{
+    /// <summary>
+    /// Standard conversational message.
+    /// </summary>
+    Standard = 0,
+
+    /// <summary>
+    /// Message generated by the platform itself.
+    /// </summary>
+    System = 1,
+
+    /// <summary>
+    /// Message representing an event or state transition.
+    /// </summary>
+    Event = 2,
+
+    /// <summary>
+    /// Message carrying an external signal normalized by the hub.
+    /// </summary>
+    ExternalSignal = 3,
+}
+
+/// <summary>
+/// Describes the content shape of a message part.
+/// </summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum CommunicationMessagePartKind
+{
+    /// <summary>
+    /// Inline plain text content.
+    /// </summary>
+    PlainText = 0,
+
+    /// <summary>
+    /// Inline markdown content.
+    /// </summary>
+    Markdown = 1,
+
+    /// <summary>
+    /// Inline HTML fragment content.
+    /// </summary>
+    HtmlFragment = 2,
+
+    /// <summary>
+    /// Structured JSON payload content.
+    /// </summary>
+    StructuredPayload = 3,
+
+    /// <summary>
+    /// Image content or reference.
+    /// </summary>
+    Image = 4,
+
+    /// <summary>
+    /// File attachment or file pointer.
+    /// </summary>
+    FileReference = 5,
+
+    /// <summary>
+    /// Reference to an external linked resource.
+    /// </summary>
+    ExternalReference = 6,
+}

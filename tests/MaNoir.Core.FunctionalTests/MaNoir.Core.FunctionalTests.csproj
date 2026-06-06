@@ -24,7 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\apps\MaNoir.Agents.Erza\MaNoir.Agents.Erza.csproj" />
     <ProjectReference Include="..\..\apps\MaNoir.Core.Api\MaNoir.Core.Api.csproj" />
+    <ProjectReference Include="..\..\packages\MaNoir.CommunicationHub\MaNoir.CommunicationHub.csproj" />
+    <ProjectReference Include="..\..\packages\MaNoir.CommunicationHub.Contracts\MaNoir.CommunicationHub.Contracts.csproj" />
     <ProjectReference Include="..\..\packages\MaNoir.Core\MaNoir.Core.csproj" />
     <ProjectReference Include="..\..\packages\MaNoir.Core.Contracts\MaNoir.Core.Contracts.csproj" />
   </ItemGroup>

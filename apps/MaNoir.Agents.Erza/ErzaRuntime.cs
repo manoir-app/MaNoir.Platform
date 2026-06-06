@@ -14,12 +14,14 @@ public sealed class ErzaRuntime
 {
     private static readonly string[] FixedMessageTopics = [
         "users.presence.*",
-        "system.mesh.*"
+        "system.mesh.*",
+        "system.auth.users.*"
     ];
 
     private static readonly string[] FixedCapabilities = [
         "presence",
-        "mesh.monitoring"
+        "mesh.monitoring",
+        "security.monitoring"
     ];
 
     public string AgentId => "erza";

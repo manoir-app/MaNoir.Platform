@@ -46,6 +46,38 @@ export interface AutomationMeshLocalSettings {
   countryId?: string | null;
 }
 
+export interface AdminNavigationDomainSummary {
+  id: string;
+  label: string;
+  icon: string;
+  href?: string | null;
+}
+
+export interface AdminNavigationDomainsResponse {
+  domains: AdminNavigationDomainSummary[];
+}
+
+export interface AdminNavigationPage {
+  id: string;
+  contributionId: string;
+  pluginId: string;
+  category: string;
+  name: string;
+  label: string;
+  href: string;
+}
+
+export interface AdminNavigationSection {
+  id: string;
+  label: string;
+  pages: AdminNavigationPage[];
+}
+
+export interface AdminDomainNavigationResponse {
+  domain: AdminNavigationDomainSummary;
+  sections: AdminNavigationSection[];
+}
+
 export type AgentState = 'unknown' | 'starting' | 'ready' | 'degraded' | 'stopping' | 'stopped';
 
 export interface RegisteredAgentModel {
@@ -90,6 +122,14 @@ export function getServerInfo() {
 
 export function getLocalMeshSettings() {
   return requestJson<AutomationMeshLocalSettings>('/system/mesh/local/settings');
+}
+
+export function getAdminNavigationDomains() {
+  return requestJson<AdminNavigationDomainsResponse>('/system/admin-navigation');
+}
+
+export function getAdminNavigationDomain(domainId: string) {
+  return requestJson<AdminDomainNavigationResponse>(`/system/admin-navigation/domains/${encodeURIComponent(domainId)}`);
 }
 
 export function getRegisteredAgents(meshId?: string) {

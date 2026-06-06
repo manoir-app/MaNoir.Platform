@@ -1,0 +1,11 @@
+services:
+  core:
+    image: ghcr.io/manoir-app/manoir-core-adminui:latest
+    container_name: manoir-platform-core
+    restart: unless-stopped
+    environment:
+      HOMEAUTOMATION_AUTH_JWT_SIGNING_KEY: ${HOMEAUTOMATION_AUTH_JWT_SIGNING_KEY}
+      MONGODB_CONNECTIONSTRING: mongodb://${MONGODB_SERVICE_HOST}:${MONGODB_SERVICE_PORT}
+      NATS_SERVICE_HOST: ${NATS_SERVICE_HOST}
+      NATS_SERVICE_PORT: ${NATS_SERVICE_PORT}
+      MANOIR_ADMINUI_PUBLIC_BASE_PATH: /platform
