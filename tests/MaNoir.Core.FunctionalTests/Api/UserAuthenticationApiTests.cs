@@ -4,12 +4,15 @@ using MaNoir.Core.Contracts.Models.Authorization;
 using MaNoir.Core.Contracts.Models.Users;
 using MaNoir.Core.FunctionalTests.Infrastructure;
 using MaNoir.Core.Users;
+using Home.Common.Messages;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NATS.Client;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -164,11 +167,67 @@ public sealed class UserAuthenticationApiTests
 
     [TestMethod]
     [TestCategory("Functional")]
-    public async Task ChangePassword_ShouldInvalidateThePreviousPasswordAndAcceptTheNewOne()
+    public async Task Login_ShouldPublishFailedLoginEventToNatsAndPersistState()
     {
+        await using NatsFunctionalTestHost natsHost = new NatsFunctionalTestHost();
+        await natsHost.StartAsync();
         await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();
         await mongoHost.StartAsync();
         using ProcessEnvironmentVariableScope mongoScope = new ProcessEnvironmentVariableScope("MONGODB_CONNECTIONSTRING", mongoHost.ConnectionString);
+        using ProcessEnvironmentVariableScope natsHostScope = new ProcessEnvironmentVariableScope("NATS_SERVICE_HOST", natsHost.Host);
+        using ProcessEnvironmentVariableScope natsPortScope = new ProcessEnvironmentVariableScope("NATS_SERVICE_PORT", natsHost.Port.ToString());
+        using ProcessEnvironmentVariableScope compatPortScope = new ProcessEnvironmentVariableScope("NATS_PORT_4222_TCP_PROTO", null);
+
+        UserLogic userLogic = new UserLogic();
+        await userLogic.SaveAsync(new User()
+        {
+            Id = "eric",
+            IsGuest = false,
+            IsMain = true
+        });
+        await userLogic.SetPasswordAsync("eric", "P@ssword-42");
+
+        ConnectionFactory factory = new ConnectionFactory();
+        using IConnection connection = factory.CreateConnection(natsHost.ConnectionString);
+        using ISyncSubscription subscription = connection.SubscribeSync(UserLoginFailedMessage.TopicName);
+        connection.Flush();
+
+        await using WebApplication app = CreateApplication();
+        await app.StartAsync();
+        HttpClient client = app.GetTestClient();
+
+        HttpResponseMessage loginResponse = await client.PostAsJsonAsync("/api/core/auth/users/login?isInteractive=false", new UserLoginRequest()
+        {
+            UserId = "eric",
+            Password = "wrong-password"
+        });
+
+        Msg message = subscription.NextMessage(5000);
+        UserLoginFailedMessage payload = BaseMessage.ReadAs<UserLoginFailedMessage>(Encoding.UTF8.GetString(message.Data));
+        UserFailedLoginState state = await new UserFailedLoginStateTracker().GetAsync("eric");
+
+        Assert.AreEqual(HttpStatusCode.Unauthorized, loginResponse.StatusCode);
+        Assert.IsNotNull(payload);
+        Assert.AreEqual(UserLoginFailedMessage.TopicName, message.Subject);
+        Assert.AreEqual("eric", payload.UserId);
+        Assert.AreEqual(1, payload.FailedCount);
+        Assert.IsNotNull(state);
+        Assert.AreEqual(1, state.FailedCount);
+        Assert.AreEqual("eric", state.UserId);
+    }
+
+    [TestMethod]
+    [TestCategory("Functional")]
+    public async Task ChangePassword_ShouldInvalidateThePreviousPasswordAndAcceptTheNewOne()
+    {
+        await using NatsFunctionalTestHost natsHost = new NatsFunctionalTestHost();
+        await natsHost.StartAsync();
+        await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();
+        await mongoHost.StartAsync();
+        using ProcessEnvironmentVariableScope mongoScope = new ProcessEnvironmentVariableScope("MONGODB_CONNECTIONSTRING", mongoHost.ConnectionString);
+        using ProcessEnvironmentVariableScope natsHostScope = new ProcessEnvironmentVariableScope("NATS_SERVICE_HOST", natsHost.Host);
+        using ProcessEnvironmentVariableScope natsPortScope = new ProcessEnvironmentVariableScope("NATS_SERVICE_PORT", natsHost.Port.ToString());
+        using ProcessEnvironmentVariableScope compatPortScope = new ProcessEnvironmentVariableScope("NATS_PORT_4222_TCP_PROTO", null);
 
         UserLogic userLogic = new UserLogic();
         await userLogic.SaveAsync(new User()
@@ -177,6 +236,11 @@ public sealed class UserAuthenticationApiTests
             IsGuest = false
         });
         await userLogic.SetPasswordAsync("sarah", "P@ssword-42");
+
+        ConnectionFactory factory = new ConnectionFactory();
+        using IConnection connection = factory.CreateConnection(natsHost.ConnectionString);
+        using ISyncSubscription subscription = connection.SubscribeSync(UserPasswordChangedMessage.TopicName);
+        connection.Flush();
 
         await using WebApplication app = CreateApplication();
         await app.StartAsync();
@@ -198,8 +262,13 @@ public sealed class UserAuthenticationApiTests
         });
 
         HttpResponseMessage changePasswordResponse = await client.SendAsync(changePasswordRequest);
+        Msg passwordChangedMessage = subscription.NextMessage(5000);
+        UserPasswordChangedMessage passwordChangedPayload = BaseMessage.ReadAs<UserPasswordChangedMessage>(Encoding.UTF8.GetString(passwordChangedMessage.Data));
 
         Assert.AreEqual(HttpStatusCode.NoContent, changePasswordResponse.StatusCode);
+        Assert.IsNotNull(passwordChangedPayload);
+        Assert.AreEqual(UserPasswordChangedMessage.TopicName, passwordChangedMessage.Subject);
+        Assert.AreEqual("sarah", passwordChangedPayload.UserId);
 
         HttpResponseMessage oldPasswordLoginResponse = await client.PostAsJsonAsync("/api/core/auth/users/login?isInteractive=false", new UserLoginRequest()
         {

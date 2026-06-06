@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -29,7 +30,17 @@ public sealed class UserAuthenticationController : ControllerBase
 
         User user = await new UserLogic().AuthenticateByPasswordAsync(request.UserId, request.Password, HttpContext.RequestAborted);
         if (user == null)
+        {
+            UserFailedLoginState state = await new UserFailedLoginStateTracker().RegisterFailedLoginAttemptAsync(
+                request.UserId,
+                HttpContext.Connection.RemoteIpAddress?.ToString(),
+                Request.Headers.UserAgent.ToString(),
+                HttpContext.RequestAborted);
+
+            UserAuthenticationInterprocessPublisher.TryPublishFailedLogin(state);
+
             throw new InvalidUserCredentialsException();
+        }
 
         CoreApiAuthenticationOptions options = HttpContext.RequestServices.GetRequiredService<CoreApiAuthenticationOptions>();
         UserAuthenticationResponse response = CoreApiUserTokenIssuer.Issue(user, options);
@@ -68,6 +79,12 @@ public sealed class UserAuthenticationController : ControllerBase
             return Unauthorized();
 
         await new UserLogic().ChangePasswordAsync(userId, request.CurrentPassword, request.NewPassword, HttpContext.RequestAborted);
+        UserAuthenticationInterprocessPublisher.TryPublishPasswordChanged(
+            userId,
+            DateTimeOffset.UtcNow,
+            HttpContext.Connection.RemoteIpAddress?.ToString(),
+            Request.Headers.UserAgent.ToString());
+
         return NoContent();
     }
 

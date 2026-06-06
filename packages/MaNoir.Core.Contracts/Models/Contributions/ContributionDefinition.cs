@@ -238,7 +238,13 @@ public sealed class AdminUiPageDefinition
     public string Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the page URL.
+    /// Gets or sets the page route relative to the Admin UI host.
+    /// </summary>
+    public string RelativePath { get; set; }
+
+    /// <summary>
+    /// Gets or sets the legacy page URL.
+    /// Prefer RelativePath for pages that should be composed under the deployed Admin UI base path.
     /// </summary>
     public string Url { get; set; }
 

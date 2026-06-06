@@ -1,17 +1,17 @@
 .sidebar {
+  --sidebar-inline-padding: 1.55rem;
   background: var(--mn-color-paper);
-  border-right: 0;
+  border-right: var(--mn-hairline) solid var(--mn-color-line);
   display: grid;
   gap: 1.85rem;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
   height: 100%;
   min-height: 100%;
   box-sizing: border-box;
-  padding: 2.35rem 1.55rem 1.2rem;
+  padding: 2.35rem var(--sidebar-inline-padding) 1.2rem;
 }
 
-.brandBlock,
-.serverCard {
+.brandBlock {
   display: grid;
   gap: 0.45rem;
 }
@@ -37,7 +37,6 @@
 }
 
 .copy,
-.serverMeta,
 .navDescription {
   color: var(--mn-color-ink-soft);
   line-height: 1.6;
@@ -45,18 +44,6 @@
 
 .copy {
   max-width: 16ch;
-}
-
-.serverName {
-  font-family: var(--mn-font-display);
-  font-size: 1.15rem;
-  letter-spacing: -0.03em;
-}
-
-.serverHeading {
-  align-items: center;
-  display: flex;
-  gap: 0.45rem;
 }
 
 .serverStatusDot {
@@ -85,10 +72,6 @@
 
 .serverStatusDotAccent {
   background: var(--mn-color-accent-strong);
-}
-
-.serverMeta {
-  padding-left: 0.95rem;
 }
 
 .nav {
@@ -143,7 +126,22 @@
 
 .header {
   border-bottom-color: var(--mn-color-line);
-  padding: 0.55rem 1.2rem;
+  padding: 0 1.2rem;
+}
+
+.headerShell {
+  background: var(--mn-color-paper);
+}
+
+.headerNavigation {
+  padding: 0;
+}
+
+.headerInlineNavigation {
+  align-self: stretch;
+  display: flex;
+  height: 100%;
+  min-width: 0;
 }
 
 .headerActions {
@@ -155,15 +153,58 @@
 }
 
 .userValue {
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   font-weight: 600;
+  line-height: 1.1;
 }
 
 .accountFooter {
+  border-top: 1px solid var(--mn-color-line);
   margin-top: auto;
   position: relative;
-  border-top: 1px solid var(--mn-color-line);
-  padding-top: 1.25rem;
+  margin-inline: calc(-1 * var(--sidebar-inline-padding));
+  padding-inline: var(--sidebar-inline-padding);
+  padding-top: 0.75rem;
+}
+
+.serverFooterInfo {
+  align-items: center;
+  border-bottom: 1px solid var(--mn-color-line);
+  color: var(--mn-color-ink-muted);
+  display: flex;
+  gap: 0.45rem;
+  margin-bottom: 0.55rem;
+  margin-inline: calc(-1 * var(--sidebar-inline-padding));
+  min-width: 0;
+  overflow: hidden;
+  padding-inline: var(--sidebar-inline-padding);
+  padding-bottom: 0.55rem;
+  white-space: nowrap;
+}
+
+.serverFooterStatusDot {
+  height: 0.4rem;
+  width: 0.4rem;
+}
+
+.serverFooterLabel,
+.serverFooterMeta {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.serverFooterLabel {
+  color: var(--mn-color-ink-muted);
+  font-family: var(--mn-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.serverFooterMeta {
+  color: var(--mn-color-ink-soft);
+  font-size: 0.78rem;
 }
 
 .accountButton {
@@ -175,7 +216,7 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   font: inherit;
-  gap: 0.75rem;
+  gap: 0.45rem;
   min-height: auto;
   padding: 0;
   text-align: left;
@@ -197,13 +238,13 @@
 
 .accountIdentity {
   display: grid;
-  gap: 0.05rem;
+  gap: 0;
   min-width: 0;
 }
 
 .accountGlyph {
   color: var(--mn-color-ink-muted);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
 }
 
 .accountButton .userLabel {

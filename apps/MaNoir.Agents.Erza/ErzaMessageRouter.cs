@@ -6,11 +6,13 @@ namespace MaNoir.Agents.Erza;
 public sealed class ErzaMessageRouter
 {
     private readonly PresenceLogic _presenceLogic;
+    private readonly ErzaSecurityCommunicationPublisher _securityPublisher;
     private readonly ErzaRuntime _runtime;
 
     public ErzaMessageRouter(ErzaRuntime runtime)
     {
         _presenceLogic = new PresenceLogic();
+        _securityPublisher = new ErzaSecurityCommunicationPublisher();
         _runtime = runtime;
     }
 
@@ -25,6 +27,10 @@ public sealed class ErzaMessageRouter
                 return HandleActivity(messageBody);
             case PresenceChangedMessage.TopicName:
                 return HandlePresenceChanged();
+            case UserLoginFailedMessage.TopicName:
+                return HandleUserLoginFailed(messageBody);
+            case UserPasswordChangedMessage.TopicName:
+                return HandleUserPasswordChanged(messageBody);
             default:
                 return MessageResponse.OK;
         }
@@ -44,6 +50,26 @@ public sealed class ErzaMessageRouter
     private MessageResponse HandlePresenceChanged()
     {
         _presenceLogic.RefreshMeshPrivacyModeAsync().GetAwaiter().GetResult();
+        return MessageResponse.OK;
+    }
+
+    private MessageResponse HandleUserLoginFailed(string messageBody)
+    {
+        UserLoginFailedMessage message = BaseMessage.ReadAs<UserLoginFailedMessage>(messageBody);
+        if (message == null || string.IsNullOrWhiteSpace(message.UserId))
+            return MessageResponse.GenericFail;
+
+        _securityPublisher.ProcessFailedLoginAsync(message.UserId).GetAwaiter().GetResult();
+        return MessageResponse.OK;
+    }
+
+    private MessageResponse HandleUserPasswordChanged(string messageBody)
+    {
+        UserPasswordChangedMessage message = BaseMessage.ReadAs<UserPasswordChangedMessage>(messageBody);
+        if (message == null || string.IsNullOrWhiteSpace(message.UserId))
+            return MessageResponse.GenericFail;
+
+        _securityPublisher.ProcessPasswordChangedAsync(message.UserId, message.ChangedAtUtc, message.RemoteAddress, message.UserAgent).GetAwaiter().GetResult();
         return MessageResponse.OK;
     }
 }

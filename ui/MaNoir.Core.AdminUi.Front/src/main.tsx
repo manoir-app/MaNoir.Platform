@@ -4,7 +4,10 @@ import { RouterProvider } from 'react-router/dom';
 import '../../MaNoir.Core.AdminUi.Kit/src/styles/tokens.css';
 import '../../MaNoir.Core.AdminUi.Kit/src/styles/base.css';
 import './i18n';
-import { router } from './router';
+import { createAdminRouter } from './router';
+import { getRouterBasePath } from './runtimeConfig';
+
+const router = createAdminRouter(getRouterBasePath());
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

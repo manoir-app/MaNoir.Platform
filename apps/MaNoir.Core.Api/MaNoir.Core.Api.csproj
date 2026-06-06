@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <ProjectReference Include="..\..\packages\MaNoir.CommunicationHub\MaNoir.CommunicationHub.csproj" />
+    <ProjectReference Include="..\..\packages\MaNoir.CommunicationHub.Contracts\MaNoir.CommunicationHub.Contracts.csproj" />
     <ProjectReference Include="..\..\packages\MaNoir.Core\MaNoir.Core.csproj" />
     <ProjectReference Include="..\..\packages\MaNoir.Core.Contracts\MaNoir.Core.Contracts.csproj" />
   </ItemGroup>
