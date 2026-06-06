@@ -17,6 +17,8 @@ export interface DefaultAdminShellNavItem {
 
 export interface DefaultAdminShellProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
+  contentClassName?: string;
+  contentPadding?: 'none' | 'compact' | 'comfortable';
   sidebarEyebrow?: React.ReactNode;
   sidebarBrand: React.ReactNode;
   sidebarDescription?: React.ReactNode;
@@ -64,6 +66,8 @@ function renderNavItem(item: DefaultAdminShellNavItem) {
 export function DefaultAdminShell({
   children,
   className,
+  contentClassName,
+  contentPadding,
   logoutDisabled = false,
   logoutLabel,
   navigationAriaLabel,
@@ -205,7 +209,16 @@ export function DefaultAdminShell({
   );
 
   return (
-    <AdminShell className={className} contentClassName={styles.content} showDivider={false} sidebar={sidebar} sidebarSize="lg" topBar={topBar} {...props}>
+    <AdminShell
+      className={cx(styles.shell, className)}
+      contentClassName={cx(styles.content, contentClassName)}
+      contentPadding={contentPadding}
+      showDivider={false}
+      sidebar={sidebar}
+      sidebarSize="lg"
+      topBar={topBar}
+      {...props}
+    >
       {children}
     </AdminShell>
   );

@@ -1,5 +1,21 @@
+.shell {
+  --mn-shell-sidebar-inline-padding: 1.55rem;
+  --mn-shell-header-inline-padding: 1.55rem;
+  --mn-shell-content-inline: 2.15rem;
+  --mn-shell-content-top: 2.35rem;
+  --mn-shell-content-bottom: 2.5rem;
+  --mn-shell-content-inline-comfortable: 3.5rem;
+  --mn-shell-content-top-comfortable: 2.5rem;
+  --mn-shell-content-bottom-comfortable: 4rem;
+  --mn-shell-content-inline-mobile: 1.25rem;
+  --mn-shell-content-top-mobile: 1.5rem;
+  --mn-shell-content-bottom-mobile: 2rem;
+  --mn-app-header-gutter: var(--mn-shell-header-inline-padding);
+  --mn-app-header-gutter-mobile: var(--mn-shell-content-inline-mobile);
+}
+
 .sidebar {
-  --sidebar-inline-padding: 1.55rem;
+  --sidebar-inline-padding: var(--mn-shell-sidebar-inline-padding);
   background: var(--mn-color-paper);
   border-right: var(--mn-hairline) solid var(--mn-color-line);
   display: grid;
@@ -126,7 +142,6 @@
 
 .header {
   border-bottom-color: var(--mn-color-line);
-  padding: 0 1.2rem;
 }
 
 .headerShell {
@@ -286,7 +301,6 @@
 
 .content {
   min-width: 0;
-  padding: 1rem 1rem 1.5rem;
 }
 
 @media (max-width: 720px) {

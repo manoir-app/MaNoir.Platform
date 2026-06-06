@@ -48,6 +48,64 @@ export interface AutomationMeshLocalSettings {
   countryId?: string | null;
 }
 
+export interface LocationElementPropertiesModel {
+  temperature?: number | null;
+  humidity?: number | null;
+  pressure?: number | null;
+  occupancy?: number | null;
+  moreProperties?: Record<string, string> | null;
+}
+
+export interface LocationPointModel {
+  x: number;
+  y: number;
+}
+
+export interface LocationWallModel {
+  points?: LocationPointModel[] | null;
+  thickness?: number;
+}
+
+export interface LocationRoomModel {
+  id: string;
+  name: string;
+  roomMappingForServices?: Record<string, string[]> | null;
+  groupMappingForServices?: Record<string, string[]> | null;
+  roomKind: number;
+  floorLevel: number;
+  properties?: LocationElementPropertiesModel | null;
+  shape?: LocationPointModel[] | null;
+  walls?: LocationWallModel[] | null;
+  measureAggregationRules?: unknown[] | null;
+}
+
+export interface LocationZoneModel {
+  id: string;
+  name: string;
+  rooms?: LocationRoomModel[] | null;
+  properties?: LocationElementPropertiesModel | null;
+  measureAggregationRules?: unknown[] | null;
+}
+
+export interface LocationModel {
+  id: string;
+  name: string;
+  hasAutomationsMesh: boolean;
+  kind: number;
+  coordinates?: {
+    longitude: number;
+    latitude: number;
+  } | null;
+  streetAddress?: string | null;
+  zipCode?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  zones?: LocationZoneModel[] | null;
+  properties?: LocationElementPropertiesModel | null;
+  measureAggregationRules?: unknown[] | null;
+}
+
 export interface AdminNavigationDomainSummary {
   id: string;
   label: string;
@@ -124,6 +182,21 @@ export function getServerInfo() {
 
 export function getLocalMeshSettings() {
   return requestJson<AutomationMeshLocalSettings>('/system/mesh/local/settings');
+}
+
+export function getLocations() {
+  return requestJson<LocationModel[]>('/system/locations');
+}
+
+export function getLocation(locationId: string) {
+  return requestJson<LocationModel>(`/system/locations/${encodeURIComponent(locationId)}`);
+}
+
+export function upsertLocation(locationId: string, request: LocationModel) {
+  return requestJson<LocationModel>(`/system/locations/${encodeURIComponent(locationId)}`, {
+    method: 'PUT',
+    body: JSON.stringify(request),
+  });
 }
 
 export function getAdminNavigationDomains() {

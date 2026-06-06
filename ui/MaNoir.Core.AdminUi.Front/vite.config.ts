@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
         '@manoir-app/core-admin-ui-kit/app-brand-header': resolve(__dirname, '../MaNoir.Core.AdminUi.Kit/src/components/AppBrandHeader.tsx'),
         '@manoir-app/core-admin-ui-kit/auth-session-store': resolve(__dirname, '../MaNoir.Core.AdminUi.Kit/src/stores/authSessionStore.ts'),
         '@manoir-app/core-admin-ui-kit/default-admin-shell': resolve(__dirname, '../MaNoir.Core.AdminUi.Kit/src/components/DefaultAdminShell.tsx'),
+        '@manoir-app/core-admin-ui-kit/dialog': resolve(__dirname, '../MaNoir.Core.AdminUi.Kit/src/components/Dialog.tsx'),
         '@manoir-app/core-admin-ui-kit/inline-tabs': resolve(__dirname, '../MaNoir.Core.AdminUi.Kit/src/components/InlineTabs.tsx'),
         '@manoir-app/core-admin-ui-kit/login-page': resolve(__dirname, '../MaNoir.Core.AdminUi.Kit/src/components/LoginPage.tsx'),
         '@manoir-app/core-admin-ui-kit/shell-header': resolve(__dirname, '../MaNoir.Core.AdminUi.Kit/src/components/ShellHeader.tsx'),
