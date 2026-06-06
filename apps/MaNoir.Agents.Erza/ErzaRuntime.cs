@@ -8,6 +8,7 @@ using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.Contracts.Models.Agents;
 using MaNoir.Core.Users;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MaNoir.Agents.Erza;
 
@@ -26,6 +27,11 @@ public sealed class ErzaRuntime
         "mesh.monitoring",
         "security.monitoring"
     ];
+
+    public ErzaRuntime()
+        : this(NullLogger<ErzaRuntime>.Instance)
+    {
+    }
 
     public ErzaRuntime(ILogger<ErzaRuntime> logger)
     {
