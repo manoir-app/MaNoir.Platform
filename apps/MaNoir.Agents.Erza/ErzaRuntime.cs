@@ -7,11 +7,15 @@ using Home.Common.Messages;
 using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.Contracts.Models.Agents;
 using MaNoir.Core.Users;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace MaNoir.Agents.Erza;
 
 public sealed class ErzaRuntime
 {
+    private readonly ILogger<ErzaRuntime> _logger;
+
     private static readonly string[] FixedMessageTopics = [
         "users.presence.*",
         "system.mesh.*",
@@ -23,6 +27,16 @@ public sealed class ErzaRuntime
         "mesh.monitoring",
         "security.monitoring"
     ];
+
+    public ErzaRuntime()
+        : this(NullLogger<ErzaRuntime>.Instance)
+    {
+    }
+
+    public ErzaRuntime(ILogger<ErzaRuntime> logger)
+    {
+        _logger = logger;
+    }
 
     public string AgentId => "erza";
 
@@ -59,47 +73,47 @@ public sealed class ErzaRuntime
 
     public void ReportStarting()
     {
-        LogInfo($"Starting agent {AgentId} for mesh {MeshId}.");
+        _logger.LogInformation("Starting agent {AgentId} for mesh {MeshId}.", AgentId, MeshId);
     }
 
     public void ReportHeartbeat()
     {
-        LogInfo($"Heartbeat emitted by agent {AgentId} for mesh {MeshId}.");
+        _logger.LogInformation("Heartbeat emitted by agent {AgentId} for mesh {MeshId}.", AgentId, MeshId);
     }
 
     public void ReportRegistrationSucceeded(RegisteredAgent agent)
     {
-        LogInfo($"Agent {agent.AgentId} registered in mesh {agent.MeshId} with state {agent.State}.");
+        _logger.LogInformation("Agent {AgentId} registered in mesh {MeshId} with state {State}.", agent.AgentId, agent.MeshId, agent.State);
     }
 
     public void ReportRegistrationFailed(Exception exception)
     {
-        LogWarning($"Agent {AgentId} could not register in mesh {MeshId}.", exception);
+        _logger.LogWarning(exception, "Agent {AgentId} could not register in mesh {MeshId}.", AgentId, MeshId);
     }
 
     public void ReportHeartbeatFailed(Exception exception)
     {
-        LogWarning($"Heartbeat failed for agent {AgentId} in mesh {MeshId}.", exception);
+        _logger.LogWarning(exception, "Heartbeat failed for agent {AgentId} in mesh {MeshId}.", AgentId, MeshId);
     }
 
     public void ReportStopping()
     {
-        LogInfo($"Stopping agent {AgentId}.");
+        _logger.LogInformation("Stopping agent {AgentId}.", AgentId);
     }
 
     public void ReportTopicsSubscribed()
     {
-        LogInfo($"Agent {AgentId} subscribed to topics: {string.Join(", ", MessageTopics)}.");
+        _logger.LogInformation("Agent {AgentId} subscribed to topics: {Topics}.", AgentId, string.Join(", ", MessageTopics));
     }
 
     public void ReportInterprocessStopped()
     {
-        LogInfo($"Interprocess listener stopped for agent {AgentId}.");
+        _logger.LogInformation("Interprocess listener stopped for agent {AgentId}.", AgentId);
     }
 
     public void RunPresenceMaintenance()
     {
-        LogInfo($"Presence maintenance iteration executed by {AgentId}.");
+        _logger.LogInformation("Presence maintenance iteration executed by {AgentId}.", AgentId);
     }
 
     public void PublishPresenceChanges(PresenceChangeSet changeSet)
@@ -115,7 +129,9 @@ public sealed class ErzaRuntime
             });
         }
 
-        LogInfo($"Presence changed for users: {string.Join(", ", changeSet.NewlyPresentUserIds.Concat(changeSet.NewlyAbsentUserIds).Distinct(StringComparer.OrdinalIgnoreCase))}.");
+        _logger.LogInformation(
+            "Presence changed for users: {UserIds}.",
+            string.Join(", ", changeSet.NewlyPresentUserIds.Concat(changeSet.NewlyAbsentUserIds).Distinct(StringComparer.OrdinalIgnoreCase)));
     }
 
     public void ReportNetworkConnectivityRefresh(InternetConnection connection, bool meshStatusChanged)
@@ -123,7 +139,12 @@ public sealed class ErzaRuntime
         if (connection == null)
             return;
 
-        LogInfo($"Network connectivity refreshed for {connection.Id} with status {connection.Status}. Mesh status changed: {meshStatusChanged}. Message: {connection.LastMessage}");
+        _logger.LogInformation(
+            "Network connectivity refreshed for {ConnectionId} with status {Status}. Mesh status changed: {MeshStatusChanged}. Message: {Message}",
+            connection.Id,
+            connection.Status,
+            meshStatusChanged,
+            connection.LastMessage);
     }
 
     public AgentRegistrationRequest CreateRegistrationRequest(AgentState state, string statusMessage = null)
@@ -163,13 +184,4 @@ public sealed class ErzaRuntime
         return string.IsNullOrWhiteSpace(configuredValue) ? null : configuredValue.Trim();
     }
 
-    private static void LogInfo(string message)
-    {
-        Console.WriteLine($"[{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss}] [Erza] {message}");
-    }
-
-    private static void LogWarning(string message, Exception exception)
-    {
-        Console.WriteLine($"[{DateTimeOffset.Now:yyyy-MM-dd HH:mm:ss}] [Erza] WARNING {message} {exception.Message}");
-    }
 }
