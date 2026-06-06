@@ -1,3 +1,5 @@
+import { getCoreApiBaseUrl } from '../runtimeConfig';
+
 export interface ProblemDetails {
   type?: string;
   title?: string;
@@ -103,7 +105,7 @@ export class ApiProblemError extends Error {
   }
 }
 
-const apiBaseUrl = import.meta.env.VITE_CORE_API_BASE_URL?.replace(/\/$/, '') ?? '/api/core';
+const apiBaseUrl = getCoreApiBaseUrl();
 
 export function loginUser(request: UserAuthenticationRequest, isInteractive = true) {
   return requestJson<UserAuthenticationResponse>(`/auth/users/login?isInteractive=${isInteractive ? 'true' : 'false'}`, {

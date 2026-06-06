@@ -189,7 +189,7 @@ public static class AdminUiHostingModule
             .Replace($"'/{spaFolder}/", $"'{assetPrefix}");
 
         string normalizedRouterBasePath = NormalizeRouterBasePath(routerBasePath);
-        string runtimeScript = $"<script>window.__MANOIR_ADMIN_UI_CONFIG__={{routerBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedRouterBasePath)}}};</script>";
+        string runtimeScript = $"<script>window.__MANOIR_ADMIN_UI_CONFIG__={{routerBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedRouterBasePath)},publicBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedPublicBasePath)}}};</script>";
         return rewrittenHtml.Replace("<head>", $"<head>{runtimeScript}");
     }
 
