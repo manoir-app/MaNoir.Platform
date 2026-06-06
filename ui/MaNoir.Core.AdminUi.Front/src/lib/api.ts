@@ -154,6 +154,23 @@ export interface RegisteredAgentModel {
   updatedAtUtc: string;
 }
 
+export interface PlatformLogEntryModel {
+  timestampUtc: string;
+  message: string;
+  labels: Record<string, string>;
+}
+
+export interface PlatformLogQueryResponseModel {
+  query: string;
+  serviceName?: string | null;
+  contains?: string | null;
+  startUtc: string;
+  endUtc: string;
+  direction: string;
+  limit: number;
+  entries: PlatformLogEntryModel[];
+}
+
 export class ApiProblemError extends Error {
   constructor(
     public readonly status: number,
@@ -215,6 +232,48 @@ export function getRegisteredAgents(meshId?: string) {
 export function getRegisteredAgent(agentId: string, meshId = 'local') {
   const search = meshId ? `?meshId=${encodeURIComponent(meshId)}` : '';
   return requestJson<RegisteredAgentModel>(`/system/agents/${encodeURIComponent(agentId)}${search}`);
+}
+
+export function getLogServices() {
+  return requestJson<string[]>('/system/logs/services');
+}
+
+export function getLogEntries(request: {
+  serviceName?: string;
+  contains?: string;
+  limit?: number;
+  direction?: 'backward' | 'forward';
+  startUtc?: string;
+  endUtc?: string;
+}) {
+  const search = new URLSearchParams();
+
+  if (request.serviceName) {
+    search.set('serviceName', request.serviceName);
+  }
+
+  if (request.contains) {
+    search.set('contains', request.contains);
+  }
+
+  if (request.limit) {
+    search.set('limit', String(request.limit));
+  }
+
+  if (request.direction) {
+    search.set('direction', request.direction);
+  }
+
+  if (request.startUtc) {
+    search.set('startUtc', request.startUtc);
+  }
+
+  if (request.endUtc) {
+    search.set('endUtc', request.endUtc);
+  }
+
+  const suffix = search.size > 0 ? `?${search.toString()}` : '';
+  return requestJson<PlatformLogQueryResponseModel>(`/system/logs/entries${suffix}`);
 }
 
 export function logoutUser() {

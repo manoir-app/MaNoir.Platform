@@ -6,6 +6,7 @@ import { ConsoleHomePage } from './pages/ConsoleHomePage';
 import { MeshPlacesPage } from './pages/MeshPlacesPage';
 import { NavigationPlaceholderPage } from './pages/NavigationPlaceholderPage';
 import { PlatformHealthPage } from './pages/PlatformHealthPage';
+import { PlatformLogsPage } from './pages/PlatformLogsPage';
 
 const routes = [
     {
@@ -50,6 +51,10 @@ const routes = [
             {
               path: 'platform/surveillance/services',
               Component: PlatformHealthPage,
+            },
+            {
+              path: 'platform/surveillance/logs',
+              Component: PlatformLogsPage,
             },
             {
               path: 'platform/extensions/catalog',

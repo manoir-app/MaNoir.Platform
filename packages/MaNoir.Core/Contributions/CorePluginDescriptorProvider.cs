@@ -85,6 +85,17 @@ public static class CorePluginDescriptorProvider
                             },
                             new AdminUiPageDefinition()
                             {
+                                Category = "Surveillance",
+                                Name = "Logs",
+                                Url = "/platform/surveillance/logs",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Logs",
+                                    ["fr-FR"] = "Journaux"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
                                 Category = "Extensions",
                                 Name = "Catalog",
                                 Url = "/platform/extensions/catalog",
