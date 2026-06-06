@@ -2,7 +2,9 @@ apiVersion: manoir/v1
 kind: PluginManifest
 
 plugin:
-  pluginId: core
+  pluginRoot: core
+  pluginCategory: mainservices
+  pluginId: platform
   repoUrl: https://github.com/manoir-app/MaNoir.Platform
   displayName: MaNoir Platform Core
   publisher: MaNoir
@@ -38,7 +40,7 @@ catalog:
         en: Configure local mesh settings such as published frontend URLs.
   contributions:
     - id: core.admin.pages
-      kind: AdminUiPage
+      kind: adminui.page
       label:
         en: Core admin
       description:
