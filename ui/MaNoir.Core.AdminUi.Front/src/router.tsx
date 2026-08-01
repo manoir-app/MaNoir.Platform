@@ -3,10 +3,8 @@ import { App } from './App';
 import { AuthenticatedLayout } from './components/AuthenticatedLayout';
 import { AgentRegistryPage } from './pages/AgentRegistryPage';
 import { ConsoleHomePage } from './pages/ConsoleHomePage';
-import { MeshPlacesPage } from './pages/MeshPlacesPage';
 import { NavigationPlaceholderPage } from './pages/NavigationPlaceholderPage';
 import { PlatformHealthPage } from './pages/PlatformHealthPage';
-import { PlatformLogsPage } from './pages/PlatformLogsPage';
 
 const routes = [
     {
@@ -42,7 +40,13 @@ const routes = [
             },
             {
               path: 'platform/mesh/places',
-              Component: MeshPlacesPage,
+              element: (
+                <NavigationPlaceholderPage
+                  descriptionKey="placeholders.meshPlaces.description"
+                  eyebrowKey="placeholders.meshPlaces.eyebrow"
+                  titleKey="placeholders.meshPlaces.title"
+                />
+              ),
             },
             {
               path: 'platform/surveillance/agents',
@@ -51,10 +55,6 @@ const routes = [
             {
               path: 'platform/surveillance/services',
               Component: PlatformHealthPage,
-            },
-            {
-              path: 'platform/surveillance/logs',
-              Component: PlatformLogsPage,
             },
             {
               path: 'platform/extensions/catalog',
