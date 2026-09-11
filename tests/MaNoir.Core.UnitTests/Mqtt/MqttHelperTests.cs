@@ -44,6 +44,55 @@ public sealed class MqttDataPublisherTests
 
     [TestMethod]
     [TestCategory("Unit")]
+    public void ResolveBrokerOptions_ShouldUsePrimaryEnvironmentVariablesAndCredentials()
+    {
+        string previousMqttHost = Environment.GetEnvironmentVariable("MQTT_SERVICE_HOST");
+        string previousMqttPort = Environment.GetEnvironmentVariable("MQTT_SERVICE_PORT");
+        string previousMqttUsername = Environment.GetEnvironmentVariable("MQTT_SERVICE_USERNAME");
+        string previousMqttPassword = Environment.GetEnvironmentVariable("MQTT_SERVICE_PASSWORD");
+
+        try
+        {
+            Environment.SetEnvironmentVariable("MQTT_SERVICE_HOST", "mqtt-primary");
+            Environment.SetEnvironmentVariable("MQTT_SERVICE_PORT", "2884");
+            Environment.SetEnvironmentVariable("MQTT_SERVICE_USERNAME", "test-user");
+            Environment.SetEnvironmentVariable("MQTT_SERVICE_PASSWORD", "test-password");
+
+            (string host, int port, string username, string password) options = MqttConnectionManager.ResolveBrokerOptions();
+
+            Assert.AreEqual("mqtt-primary", options.host);
+            Assert.AreEqual(2884, options.port);
+            Assert.AreEqual("test-user", options.username);
+            Assert.AreEqual("test-password", options.password);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable("MQTT_SERVICE_HOST", previousMqttHost);
+            Environment.SetEnvironmentVariable("MQTT_SERVICE_PORT", previousMqttPort);
+            Environment.SetEnvironmentVariable("MQTT_SERVICE_USERNAME", previousMqttUsername);
+            Environment.SetEnvironmentVariable("MQTT_SERVICE_PASSWORD", previousMqttPassword);
+        }
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void MqttConnectionManager_Start_ShouldRejectMissingClientName()
+    {
+        Assert.ThrowsExactly<ArgumentException>(() => MqttConnectionManager.Shared.Start(" "));
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void MqttConnectionManager_Stop_ShouldBeIdempotent()
+    {
+        MqttConnectionManager.Shared.Stop();
+        MqttConnectionManager.Shared.Stop();
+
+        Assert.IsFalse(MqttConnectionManager.Shared.IsStarted);
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
     public void BuildMeshPropertyPublication_ShouldUseLegacyTopic()
     {
         (string topic, string payload) publication = MqttDataPublisher.BuildMeshPropertyPublication("privacyMode", "none");
