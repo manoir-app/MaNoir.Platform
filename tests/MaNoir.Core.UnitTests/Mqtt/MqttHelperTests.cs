@@ -78,7 +78,7 @@ public sealed class MqttDataPublisherTests
     [TestCategory("Unit")]
     public void MqttConnectionManager_Start_ShouldRejectMissingClientName()
     {
-        Assert.ThrowsExactly<ArgumentException>(() => MqttConnectionManager.Shared.Start(" "));
+        Assert.ThrowsException<ArgumentException>(() => MqttConnectionManager.Shared.Start(" "));
     }
 
     [TestMethod]
