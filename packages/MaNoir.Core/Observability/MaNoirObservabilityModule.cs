@@ -67,6 +67,8 @@ public static class MaNoirObservabilityModule
         string serviceVersion = Assembly.GetEntryAssembly()?.GetName().Version?.ToString(3)
             ?? typeof(MaNoirObservabilityModule).Assembly.GetName().Version?.ToString(3)
             ?? "0.0.0";
+        ResourceBuilder resourceBuilder = ResourceBuilder.CreateDefault()
+            .AddService(serviceName, serviceVersion: serviceVersion, serviceInstanceId: Environment.MachineName);
         string tracesEndpoint = ResolveEnvironmentValue("MANOIR_OTEL_TRACES_ENDPOINT", null);
         string logsEndpoint = ResolveEnvironmentValue("MANOIR_OTEL_LOGS_ENDPOINT", null);
         string metricsEndpoint = ResolveEnvironmentValue("MANOIR_OTEL_METRICS_ENDPOINT", null);
@@ -114,6 +116,7 @@ public static class MaNoirObservabilityModule
 
         loggingBuilder.AddOpenTelemetry(logging =>
         {
+            logging.SetResourceBuilder(resourceBuilder);
             logging.IncludeFormattedMessage = true;
             logging.IncludeScopes = true;
             logging.ParseStateValues = true;

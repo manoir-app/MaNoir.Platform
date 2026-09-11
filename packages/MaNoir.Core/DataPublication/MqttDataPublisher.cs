@@ -4,7 +4,6 @@ using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.Contracts.Models.Users;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Extensions.ManagedClient;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,32 +17,13 @@ namespace MaNoir.Core.DataPublication;
 public static class MqttDataPublisher
 {
     private const string DefaultClientName = "core-publication";
-    private static IManagedMqttClient _client;
-
     /// <summary>
     /// Starts the managed MQTT client with the configured broker endpoint.
     /// </summary>
     /// <param name="name">Logical client prefix used to build the MQTT client identifier.</param>
     public static void Start(string name)
     {
-        if (_client != null)
-        {
-            return;
-        }
-
-        (string server, int port) = ResolveBrokerEndpoint();
-
-        ManagedMqttClientOptions options = new ManagedMqttClientOptionsBuilder()
-            .WithAutoReconnectDelay(TimeSpan.FromSeconds(5))
-            .WithClientOptions(new MqttClientOptionsBuilder()
-                .WithClientId(name + "-" + Environment.MachineName)
-                .WithTcpServer(server, port)
-                .WithKeepAlivePeriod(TimeSpan.FromMinutes(10))
-                .Build())
-            .Build();
-
-        _client = new MqttFactory().CreateManagedMqttClient();
-        _client.StartAsync(options).GetAwaiter().GetResult();
+        MqttConnectionManager.Shared.Start(name);
     }
 
     /// <summary>
@@ -51,14 +31,7 @@ public static class MqttDataPublisher
     /// </summary>
     public static void Stop()
     {
-        if (_client == null)
-        {
-            return;
-        }
-
-        _client.StopAsync().GetAwaiter().GetResult();
-        _client.Dispose();
-        _client = null;
+        MqttConnectionManager.Shared.Stop();
     }
 
     /// <summary>
@@ -129,30 +102,8 @@ public static class MqttDataPublisher
 
     internal static (string server, int port) ResolveBrokerEndpoint()
     {
-        string server = Environment.GetEnvironmentVariable("MQTT_SERVICE_HOST");
-        if (string.IsNullOrWhiteSpace(server))
-        {
-            server = Environment.GetEnvironmentVariable("MOSQUITTO_SERVICE_HOST");
-        }
-
-        if (string.IsNullOrWhiteSpace(server))
-        {
-            server = "localhost";
-        }
-
-        int port = 1883;
-        string portValue = Environment.GetEnvironmentVariable("MQTT_SERVICE_PORT");
-        if (string.IsNullOrWhiteSpace(portValue))
-        {
-            portValue = Environment.GetEnvironmentVariable("MOSQUITTO_SERVICE_PORT");
-        }
-
-        if (!string.IsNullOrWhiteSpace(portValue) && !int.TryParse(portValue, out port))
-        {
-            port = 1883;
-        }
-
-        return (server, port);
+        (string host, int port, string username, string password) options = MqttConnectionManager.ResolveBrokerOptions();
+        return (options.host, options.port);
     }
 
     internal static (string topic, string payload) BuildMeshPropertyPublication(string property, string value)
@@ -247,7 +198,7 @@ public static class MqttDataPublisher
         if (retain)
             message.Retain = true;
 
-        _client.EnqueueAsync(message).GetAwaiter().GetResult();
+        MqttConnectionManager.Shared.EnqueueAsync(message).GetAwaiter().GetResult();
     }
 
     private static string ResolveCurrentLocationId(User user)
@@ -325,7 +276,7 @@ public static class MqttDataPublisher
 
     private static void EnsureStarted()
     {
-        if (_client == null)
+        if (!MqttConnectionManager.Shared.IsStarted)
         {
             Start(DefaultClientName);
         }

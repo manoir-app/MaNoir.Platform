@@ -4,12 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using OpenTelemetry.Exporter;
-using OpenTelemetry.Logs;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -24,7 +18,6 @@ public static class AdminUiHostingModule
     private const string BootstrapSpaFolder = "bootstrap";
     private const string FrontSpaFolder = "front";
     private const string PublicBasePathItemKey = "MaNoir.AdminUi.PublicBasePath";
-    private const string DefaultMetricsPath = "/metrics";
 
     /// <summary>
     /// Adds the Core Admin UI hosting services and conventions to the target application builder.
@@ -39,16 +32,15 @@ public static class AdminUiHostingModule
 
         builder.Services.AddSingleton(options);
         builder.Services.AddHealthChecks();
-        AddObservability(builder, "manoir-core-adminui");
         return builder;
     }
 
     /// <summary>
-    /// Applies the public base path rewrite middleware so reverse-proxy-prefixed requests can reach the API and static host.
+    /// Enables static file hosting and SPA fallback resolution for the Core Admin UI frontends.
     /// </summary>
     /// <param name="app">Application pipeline to configure.</param>
     /// <returns>The same <paramref name="app"/> instance for chaining.</returns>
-    public static WebApplication UseMaNoirCoreAdminUiPublicBasePath(this WebApplication app)
+    public static WebApplication UseMaNoirCoreAdminUiHosting(this WebApplication app)
     {
         AdminUiHostingOptions options = app.Services.GetRequiredService<AdminUiHostingOptions>();
 
@@ -64,21 +56,6 @@ public static class AdminUiHostingModule
                 context.Request.Path = remainder.HasValue ? remainder : new PathString("/");
             }
 
-            await next();
-        });
-
-        return app;
-    }
-
-    /// <summary>
-    /// Enables static file hosting and SPA fallback resolution for the Core Admin UI frontends.
-    /// </summary>
-    /// <param name="app">Application pipeline to configure.</param>
-    /// <returns>The same <paramref name="app"/> instance for chaining.</returns>
-    public static WebApplication UseMaNoirCoreAdminUiHosting(this WebApplication app)
-    {
-        app.Use(async (context, next) =>
-        {
             if (ShouldRemapRootStaticAssetRequest(context.Request.Path)
                 && !RootStaticFileExists(app.Environment, context.Request.Path))
             {
@@ -91,64 +68,9 @@ public static class AdminUiHostingModule
 
         app.UseStaticFiles();
         app.MapHealthChecks("/healthz");
-        app.MapPrometheusScrapingEndpoint(ResolveMetricsPath());
 
         app.MapFallback(context => HandleSpaFallbackAsync(app, context));
         return app;
-    }
-
-    private static void AddObservability(WebApplicationBuilder builder, string defaultServiceName)
-    {
-        string serviceName = ResolveEnvironmentValue("OTEL_SERVICE_NAME", defaultServiceName);
-        string serviceVersion = typeof(AdminUiHostingModule).Assembly.GetName().Version?.ToString(3) ?? "0.0.0";
-        string tracesEndpoint = ResolveEnvironmentValue("MANOIR_OTEL_TRACES_ENDPOINT", null);
-        string logsEndpoint = ResolveEnvironmentValue("MANOIR_OTEL_LOGS_ENDPOINT", null);
-
-        builder.Services.AddOpenTelemetry()
-            .ConfigureResource(resource => resource.AddService(serviceName, serviceVersion: serviceVersion, serviceInstanceId: Environment.MachineName))
-            .WithTracing(tracing =>
-            {
-                tracing.AddAspNetCoreInstrumentation();
-                tracing.AddHttpClientInstrumentation();
-
-                if (!string.IsNullOrWhiteSpace(tracesEndpoint))
-                {
-                    tracing.AddOtlpExporter(options =>
-                    {
-                        options.Endpoint = new Uri(tracesEndpoint, UriKind.Absolute);
-                        options.Protocol = OtlpExportProtocol.HttpProtobuf;
-                    });
-                }
-            })
-            .WithMetrics(metrics =>
-            {
-                metrics.AddAspNetCoreInstrumentation();
-                metrics.AddHttpClientInstrumentation();
-                metrics.AddRuntimeInstrumentation();
-                metrics.AddPrometheusExporter();
-            });
-
-        builder.Logging.AddOpenTelemetry(logging =>
-        {
-            logging.IncludeFormattedMessage = true;
-            logging.IncludeScopes = true;
-            logging.ParseStateValues = true;
-
-            if (!string.IsNullOrWhiteSpace(logsEndpoint))
-            {
-                logging.AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(logsEndpoint, UriKind.Absolute);
-                    options.Protocol = OtlpExportProtocol.HttpProtobuf;
-                });
-			}
-		});
-    }
-
-    private static string ResolveMetricsPath()
-    {
-        string configuredValue = Environment.GetEnvironmentVariable("MANOIR_PROMETHEUS_METRICS_PATH");
-        return string.IsNullOrWhiteSpace(configuredValue) ? DefaultMetricsPath : configuredValue.Trim();
     }
 
     private static async Task HandleSpaFallbackAsync(WebApplication app, HttpContext context)
@@ -280,10 +202,6 @@ public static class AdminUiHostingModule
             return stringValue;
         }
 
-        AdminUiHostingOptions options = context.RequestServices.GetService<AdminUiHostingOptions>();
-        if (!string.IsNullOrWhiteSpace(options?.PublicBasePath))
-            return options.PublicBasePath;
-
         return null;
     }
 
@@ -309,11 +227,5 @@ public static class AdminUiHostingModule
             trimmedPath = "/" + trimmedPath;
 
         return trimmedPath.EndsWith("/", StringComparison.Ordinal) ? trimmedPath : trimmedPath + "/";
-    }
-
-    private static string ResolveEnvironmentValue(string environmentVariableName, string defaultValue)
-    {
-        string configuredValue = Environment.GetEnvironmentVariable(environmentVariableName);
-        return string.IsNullOrWhiteSpace(configuredValue) ? defaultValue : configuredValue.Trim();
     }
 }

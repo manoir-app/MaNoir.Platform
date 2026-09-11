@@ -116,4 +116,45 @@ public sealed class MqttDataPublisherFunctionalTests
             await client.DisconnectAsync();
         }
     }
+
+    [TestMethod]
+    [TestCategory("Functional")]
+    public async Task Start_ShouldReuseSharedConnectionForMultipleLogicalConsumers()
+    {
+        await using MosquittoFunctionalTestHost host = new MosquittoFunctionalTestHost();
+        await host.StartAsync();
+        using ProcessEnvironmentVariableScope hostScope = new ProcessEnvironmentVariableScope("MQTT_SERVICE_HOST", host.Host);
+        using ProcessEnvironmentVariableScope portScope = new ProcessEnvironmentVariableScope("MQTT_SERVICE_PORT", host.Port.ToString());
+        using ProcessEnvironmentVariableScope mosquittoHostScope = new ProcessEnvironmentVariableScope("MOSQUITTO_SERVICE_HOST", null);
+        using ProcessEnvironmentVariableScope mosquittoPortScope = new ProcessEnvironmentVariableScope("MOSQUITTO_SERVICE_PORT", null);
+        using IMqttClient client = new MqttFactory().CreateMqttClient();
+        TaskCompletionSource<string> receivedPayload = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        client.ApplicationMessageReceivedAsync += args =>
+        {
+            receivedPayload.TrySetResult(Encoding.UTF8.GetString(args.ApplicationMessage.Payload ?? Array.Empty<byte>()));
+            return Task.CompletedTask;
+        };
+
+        await client.ConnectAsync(new MqttClientOptionsBuilder()
+            .WithClientId("functional-shared-connection-subscriber")
+            .WithTcpServer(host.Host, host.Port)
+            .Build());
+        await client.SubscribeAsync("manoir/mesh/properties/sharedConnection");
+
+        try
+        {
+            MqttDataPublisher.Start("functional-first-consumer");
+            MqttDataPublisher.Start("functional-second-consumer");
+
+            Assert.IsTrue(MqttConnectionManager.Shared.IsStarted);
+            MqttDataPublisher.PublishMeshProperty("sharedConnection", "ok");
+            Assert.AreEqual("ok", await receivedPayload.Task.WaitAsync(TimeSpan.FromSeconds(5)));
+        }
+        finally
+        {
+            MqttDataPublisher.Stop();
+            await client.DisconnectAsync();
+        }
+    }
 }
