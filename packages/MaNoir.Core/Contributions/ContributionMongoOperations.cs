@@ -70,6 +70,21 @@ public sealed class ContributionMongoOperations
             cancellationToken);
     }
 
+    public async Task UpdatePluginRuntimeStateAsync(string pluginId, IReadOnlyList<DeployedComponent> components, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(pluginId))
+            throw new ArgumentException("The plugin identifier cannot be empty.", nameof(pluginId));
+
+        InstalledPlugin plugin = await GetInstalledPluginCoreAsync(pluginId.Trim().ToLowerInvariant(), cancellationToken);
+        if (plugin == null)
+            return;
+
+        plugin.DeployedComponents = components == null ? [] : [.. components];
+        plugin.IsHealthy = PluginHealthEvaluator.IsHealthy(plugin.DeployedComponents);
+        plugin.LastSeenUtc = DateTimeOffset.UtcNow;
+        await SaveInstalledPluginAsync(plugin, cancellationToken);
+    }
+
     /// <summary>
     /// Gets a contribution definition by identifier.
     /// </summary>

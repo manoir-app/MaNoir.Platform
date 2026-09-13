@@ -44,8 +44,6 @@ public sealed class ErzaRuntime
 
     public string DisplayName => "Erza";
 
-    public string LocalLocationId => ResolveOptionalEnvironmentValue("MANOIR_LOCAL_LOCATION_ID");
-
     public string MachineName => Environment.MachineName;
 
     public string GraphApiBaseUri => ResolveEnvironmentValue("MANOIR_GRAPH_API_BASE_URI", "http://localhost:5243");
@@ -176,12 +174,6 @@ public sealed class ErzaRuntime
     {
         string configuredValue = Environment.GetEnvironmentVariable(environmentVariableName);
         return string.IsNullOrWhiteSpace(configuredValue) ? defaultValue : configuredValue;
-    }
-
-    private static string ResolveOptionalEnvironmentValue(string environmentVariableName)
-    {
-        string configuredValue = Environment.GetEnvironmentVariable(environmentVariableName);
-        return string.IsNullOrWhiteSpace(configuredValue) ? null : configuredValue.Trim();
     }
 
 }

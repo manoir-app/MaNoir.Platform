@@ -1,4 +1,5 @@
 using Home.Common.Messages;
+using MaNoir.Core.Contributions;
 using MaNoir.Core.Contracts.Models.Contributions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
@@ -38,7 +39,21 @@ public sealed class ContributionInterprocessMessageTests
         Assert.AreEqual(PluginCatalogPublicationMessage.PublishTopic, new PluginCatalogPublicationMessage().Topic);
         Assert.AreEqual(ContributionDefinitionsChangedMessage.TopicName, new ContributionDefinitionsChangedMessage().Topic);
         Assert.AreEqual(ContributionInstancesChangedMessage.TopicName, new ContributionInstancesChangedMessage().Topic);
+        Assert.AreEqual(PluginRuntimeStateMessage.PublishTopic, new PluginRuntimeStateMessage().Topic);
         Assert.AreEqual("sarah.contribution.secrets.resolve", new ContributionSecretsRequestMessage("sarah", "instance-01", "public-key").Topic);
+    }
+
+    [TestMethod]
+    [TestCategory("Unit")]
+    public void PluginHealthEvaluator_ShouldBeUnhealthyWhenAllComponentsAreDown()
+    {
+        Assert.IsFalse(PluginHealthEvaluator.IsHealthy([
+            new DeployedComponent() { Type = "docker", Name = "agent-erza", Status = DeployedComponentStatus.Failed },
+            new DeployedComponent() { Type = "docker", Name = "agent-sarah", Status = DeployedComponentStatus.Unhealthy }
+        ]));
+        Assert.IsTrue(PluginHealthEvaluator.IsHealthy([
+            new DeployedComponent() { Type = "docker", Name = "agent-erza", Status = DeployedComponentStatus.Running }
+        ]));
     }
 
     [TestMethod]

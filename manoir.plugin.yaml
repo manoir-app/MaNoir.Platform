@@ -81,6 +81,12 @@ catalog:
             labels:
               en: Plugins and contributions
               fr-FR: Plugins et contributions
+          - category: Extensions
+            name: Installed
+            relativePath: /platform/extensions/installed
+            labels:
+              en: Installed plugins
+              fr-FR: Plugins installes
 
 deployment:
   group: platform

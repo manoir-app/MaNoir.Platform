@@ -22,6 +22,7 @@ public static class CorePluginDescriptorProvider
             Version = string.IsNullOrWhiteSpace(version) ? "0.0.0" : version,
             Description = "Core platform capabilities.",
             Publisher = "MaNoir",
+            RepositoryUrl = "https://github.com/manoir-app/MaNoir.Platform",
             AccessZones = [.. CoreAccessZones.GetDefinitions()],
             Contributions =
             [
@@ -103,6 +104,17 @@ public static class CorePluginDescriptorProvider
                                 {
                                     ["en"] = "Plugins and contributions",
                                     ["fr-FR"] = "Plugins et contributions"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
+                                Category = "Extensions",
+                                Name = "Installed",
+                                Url = "/platform/extensions/installed",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Installed plugins",
+                                    ["fr-FR"] = "Plugins installes"
                                 }
                             }
                         ]

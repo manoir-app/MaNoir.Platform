@@ -31,6 +31,20 @@ namespace Home.Common.Messages
         public string PluginId { get; set; }
     }
 
+    public sealed class PluginRuntimeStateMessage : BaseMessage
+    {
+        public const string PublishTopic = "system.plugin.runtime.state";
+
+        public PluginRuntimeStateMessage() : base(PublishTopic)
+        {
+            Components = [];
+        }
+
+        public string PluginId { get; set; }
+
+        public List<DeployedComponent> Components { get; set; }
+    }
+
     public class ContributionInstancesChangedMessage : BaseMessage
     {
         public const string TopicName = "system.contribution.instances.changed";

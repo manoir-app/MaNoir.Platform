@@ -1,12 +1,12 @@
 services:
   mongodb:
-    image: mongo:8.0
-    container_name: manoir-core-mongodb
+    image: mongo:8
+    container_name: manoir-shared-mongo
     restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
-      - manoir-core-mongo-data:/data/db
+      - manoir-shared-mongo:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -15,15 +15,27 @@ services:
       start_period: 10s
 
   nats:
-    image: nats:2.10-alpine
-    container_name: manoir-core-nats
+    image: nats:2.14.0
+    container_name: manoir-shared-nats
     restart: unless-stopped
     ports:
       - "4222:4222"
 
+  redis:
+    image: redis:7.4
+    container_name: manoir-shared-redis
+    restart: unless-stopped
+    volumes:
+      - manoir-shared-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   mosquitto:
-    image: eclipse-mosquitto:2.0.20
-    container_name: manoir-core-mosquitto
+    image: eclipse-mosquitto:2
+    container_name: manoir-shared-mqtt
     restart: unless-stopped
     entrypoint:
       - sh
@@ -52,4 +64,5 @@ services:
       ERZA_CAPABILITIES: ${ERZA_CAPABILITIES:-presence,mesh.monitoring}
 
 volumes:
-  manoir-core-mongo-data:
+  manoir-shared-mongo:
+  manoir-shared-redis:

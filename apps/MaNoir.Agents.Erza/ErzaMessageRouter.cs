@@ -1,4 +1,6 @@
 using Home.Common.Messages;
+using MaNoir.Core.Contracts.Models.Mesh;
+using MaNoir.Core.Mesh;
 using MaNoir.Core.Users;
 
 namespace MaNoir.Agents.Erza;
@@ -42,7 +44,8 @@ public sealed class ErzaMessageRouter
         if (message?.Data == null)
             return MessageResponse.GenericFail;
 
-        PresenceChangeSet changeSet = _presenceLogic.HandleActivityAsync(message.Data, _runtime.LocalLocationId).GetAwaiter().GetResult();
+        AutomationMesh mesh = new AutomationMeshLogic().GetLocalAsync().GetAwaiter().GetResult();
+        PresenceChangeSet changeSet = _presenceLogic.HandleActivityAsync(message.Data, mesh?.LocationId).GetAwaiter().GetResult();
         _runtime.PublishPresenceChanges(changeSet);
         return MessageResponse.OK;
     }

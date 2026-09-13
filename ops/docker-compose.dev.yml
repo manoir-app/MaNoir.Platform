@@ -1,12 +1,41 @@
 services:
+  core:
+    build:
+      context: ..
+      dockerfile: apps/MaNoir.Core.AdminUi/Dockerfile
+    image: manoir-core-adminui:dev
+    container_name: manoir-core-adminui
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      nats:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      MONGODB_CONNECTIONSTRING: mongodb://mongodb:27017
+      NATS_SERVICE_HOST: nats
+      NATS_SERVICE_PORT: 4222
+      MANOIR_ADMINUI_PUBLIC_BASE_PATH: /
+      HOMEAUTOMATION_AUTH_JWT_SIGNING_KEY: ${HOMEAUTOMATION_AUTH_JWT_SIGNING_KEY:-development-jwt-signing-key-for-manoir-core-2026}
+      MANOIR_OBSERVABILITY_ENABLED: "true"
+      MANOIR_LOGS_LOKI_URL: http://loki:3100/
+      MANOIR_OTEL_LOGS_ENDPOINT: http://loki:3100/otlp/v1/logs
+      HOMEAUTOMATION_APIKEY: ${HOMEAUTOMATION_APIKEY:-development-master-key}
+      HOMEAUTOMATION_SECRETS_SALT: ${HOMEAUTOMATION_SECRETS_SALT:-DCxbEk3JBKYhSG01XY0H2g==}
+    ports:
+      - "8080:8080"
+
   mongodb:
-    image: mongo:8.0
-    container_name: manoir-core-mongodb
+    image: mongo:8
+    container_name: manoir-shared-mongo
     restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
-      - manoir-core-mongo-data:/data/db
+      - manoir-shared-mongo:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
@@ -15,15 +44,81 @@ services:
       start_period: 10s
 
   nats:
-    image: nats:2.10-alpine
-    container_name: manoir-core-nats
+    image: nats:2.14.0
+    container_name: manoir-shared-nats
     restart: unless-stopped
     ports:
       - "4222:4222"
 
+  redis:
+    image: redis:7.4
+    container_name: manoir-shared-redis
+    restart: unless-stopped
+    volumes:
+      - manoir-shared-redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  loki:
+    image: grafana/loki:3.5.0
+    container_name: manoir-shared-loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yaml
+    volumes:
+      - manoir-shared-loki:/loki
+    ports:
+      - "3100:3100"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:3100/ready | grep -q ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  gaia:
+    build:
+      context: ../../Manoir.Ops
+      dockerfile: apps/MaNoir.PlatformOps.AdminUi/Dockerfile
+    image: ${GAIA_IMAGE:-manoir-agents-gaia:local}
+    container_name: manoir-agents-gaia
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      nats:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+      MONGODB_CONNECTIONSTRING: mongodb://mongodb:27017
+      NATS_SERVICE_HOST: nats
+      NATS_SERVICE_PORT: 4222
+      MANOIR_MESH_ID: ${MANOIR_MESH_ID:-local}
+      HOMEAUTOMATION_APIKEY: ${HOMEAUTOMATION_APIKEY:-development-master-key}
+      HOMEAUTOMATION_AUTH_JWT_SIGNING_KEY: ${HOMEAUTOMATION_AUTH_JWT_SIGNING_KEY:-development-jwt-signing-key-for-manoir-core-2026}
+      HOMEAUTOMATION_SECRETS_SALT: ${HOMEAUTOMATION_SECRETS_SALT:-DCxbEk3JBKYhSG01XY0H2g==}
+      MANOIR_CORE_ADMINUI_HOST_PORT: 8080
+      MANOIR_DEVELOPMENT_INSTANCE: "true"
+      MANOIR_OBSERVABILITY_ENABLED: "true"
+      MANOIR_LOGS_LOKI_URL: http://loki:3100/
+      MANOIR_OTEL_LOGS_ENDPOINT: http://loki:3100/otlp/v1/logs
+      Gaia__AutoEnsureSharedServicesOnStartup: "false"
+      Gaia__EnsureIntervalSeconds: 300
+      Gaia__SharedServicesRootPath: /home-automation/shared-services
+      Gaia__PluginRepositoriesRootPath: /home-automation/plugins
+      Gaia__RuntimeStatePath: /home-automation/gaia/runtime-state.json
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - manoir-core-home-automation:/home-automation
+    ports:
+      - "5056:8080"
+
   mosquitto:
-    image: eclipse-mosquitto:2.0.20
-    container_name: manoir-core-mosquitto
+    image: eclipse-mosquitto:2
+    container_name: manoir-shared-mqtt
     restart: unless-stopped
     entrypoint:
       - sh
@@ -32,5 +127,35 @@ services:
     ports:
       - "1883:1883"
 
+  erza:
+    build:
+      context: ..
+      dockerfile: apps/MaNoir.Agents.Erza/Dockerfile
+    image: manoir-agents-erza:dev
+    container_name: manoir-agents-erza
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      nats:
+        condition: service_started
+    environment:
+      MONGODB_CONNECTIONSTRING: mongodb://mongodb:27017
+      NATS_SERVICE_HOST: nats
+      NATS_SERVICE_PORT: 4222
+      MANOIR_MESH_ID: ${MANOIR_MESH_ID:-local}
+      ERZA_AGENT_ID: ${ERZA_AGENT_ID:-erza}
+      ERZA_DISPLAY_NAME: ${ERZA_DISPLAY_NAME:-Erza}
+      ERZA_TOPICS: ${ERZA_TOPICS:-users.presence.*,system.mesh.*}
+      ERZA_CAPABILITIES: ${ERZA_CAPABILITIES:-presence,mesh.monitoring}
+
 volumes:
-  manoir-core-mongo-data:
+  manoir-shared-mongo:
+  manoir-core-home-automation:
+  manoir-shared-loki:
+  manoir-shared-redis:
+
+networks:
+  default:
+    name: manoir
+    external: true

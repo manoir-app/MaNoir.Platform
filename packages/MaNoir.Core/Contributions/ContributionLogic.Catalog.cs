@@ -76,6 +76,7 @@ public sealed partial class ContributionLogic
                 LastPublishedAtUtc = plugin.LastPublishedAtUtc,
                 LastPublishedCatalogFingerprint = plugin.LastPublishedCatalogFingerprint,
                 HasNewFeatures = plugin.HasNewFeatures,
+                DeployedComponents = plugin.DeployedComponents == null ? [] : [.. plugin.DeployedComponents],
                 Contributions = [.. plugin.Contributions
                     .Where(contribution => contribution != null && contribution.Kind == kind)
                     .OrderBy(contribution => contribution.Id, StringComparer.OrdinalIgnoreCase)]
@@ -128,6 +129,7 @@ public sealed partial class ContributionLogic
         plugin.LastPublishedCatalogFingerprint = fingerprint;
         plugin.LastPublishedAtUtc = now;
         plugin.LastSeenUtc = now;
+        plugin.IsHealthy = true;
         plugin.Contributions = preparedDefinitions;
 
         await _mongoOperations.SaveInstalledPluginAsync(plugin, cancellationToken);

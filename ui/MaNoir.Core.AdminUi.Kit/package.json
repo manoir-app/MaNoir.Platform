@@ -28,6 +28,7 @@
   },
   "scripts": {
     "build": "vite build",
+    "postbuild": "node -e \"import('node:fs/promises').then(async ({copyFile}) => copyFile('dist/src/index.d.ts', 'dist/index.d.ts'))\"",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "typecheck": "tsc --noEmit",
