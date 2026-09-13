@@ -188,6 +188,15 @@ export interface PluginInstallationResponseModel {
   message?: string | null;
 }
 
+export interface PluginInstallationStatusModel {
+  response?: string | null;
+  operationId?: string | null;
+  repositoryUrl?: string | null;
+  status?: string | null;
+  step?: string | null;
+  message?: string | null;
+}
+
 export type AgentState = 'unknown' | 'starting' | 'ready' | 'degraded' | 'stopping' | 'stopped';
 
 export interface RegisteredAgentModel {
@@ -394,4 +403,8 @@ async function createProblemError(response: Response) {
   }
 
   return new ApiProblemError(response.status, problem ?? { status: response.status, title: 'Request failed' });
+}
+
+export function getPluginInstallationStatus(operationId: string) {
+  return requestJson<PluginInstallationStatusModel>(`/system/extensions/install/${encodeURIComponent(operationId)}`);
 }

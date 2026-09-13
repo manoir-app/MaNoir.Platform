@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { catalogDomains, pluginCatalog, type CatalogPlugin } from '../data/pluginCatalog';
-import { getInstalledPlugins, installPlugin, validatePluginRepository, type PluginRepositoryValidationModel } from '../lib/api';
+import { getInstalledPlugins, getPluginInstallationStatus, installPlugin, validatePluginRepository, type PluginRepositoryValidationModel } from '../lib/api';
 
 export function PluginCatalogPage() {
   const { t } = useTranslation();
@@ -87,11 +87,28 @@ export function PluginCatalogPage() {
       const response = await installPlugin(repositoryUrl);
       setInstallationMessage(response.message ?? t('extensions.catalog.installDialog.accepted'));
       setInstallationMessageKind('success');
-      const installedPlugins = await getInstalledPlugins();
-      setInstalledPluginKeys(new Set(installedPlugins.map((plugin) => {
-        const installedRepositoryUrl = plugin.repositoryUrl?.trim().replace(/\/+$/, '').toLocaleLowerCase();
-        return installedRepositoryUrl || plugin.id.trim().toLocaleLowerCase();
-      })));
+      if (!response.operationId) return;
+
+      for (let attempt = 0; attempt < 30; attempt += 1) {
+        const status = await getPluginInstallationStatus(response.operationId);
+        setInstallationMessage(status.message ?? status.step ?? response.message ?? t('extensions.catalog.installDialog.accepted'));
+        if (status.status === 'completed') {
+          const installedPlugins = await getInstalledPlugins();
+          setInstalledPluginKeys(new Set(installedPlugins.map((plugin) => {
+            const installedRepositoryUrl = plugin.repositoryUrl?.trim().replace(/\/+$/, '').toLocaleLowerCase();
+            return installedRepositoryUrl || plugin.id.trim().toLocaleLowerCase();
+          })));
+          setSelectedPlugin(null);
+          return;
+        }
+        if (status.status === 'failed') {
+          throw new Error(status.message ?? t('extensions.catalog.installDialog.failed'));
+        }
+
+        await new Promise((resolve) => window.setTimeout(resolve, 1000));
+      }
+
+      throw new Error(t('extensions.catalog.installDialog.timeout'));
     } catch (error) {
       setInstallationMessage(error instanceof Error ? error.message : t('extensions.catalog.installDialog.failed'));
       setInstallationMessageKind('error');
