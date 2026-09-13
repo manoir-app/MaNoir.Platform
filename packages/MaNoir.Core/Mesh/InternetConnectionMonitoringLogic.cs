@@ -37,7 +37,7 @@ public sealed class InternetConnectionMonitoringLogic
     /// </summary>
     /// <remarks>
     /// <para>
-    /// This helper creates the local mesh on demand when it does not exist yet, which makes it suitable for autonomous monitoring workers.
+    /// The local mesh must already exist before an autonomous monitoring worker starts.
     /// </para>
     /// </remarks>
     public async Task<InternetConnectionMonitoringResult> RefreshLocalConnectionAsync(
@@ -49,7 +49,10 @@ public sealed class InternetConnectionMonitoringLogic
         if (refresh == null || string.IsNullOrWhiteSpace(refresh.ConnectionId))
             return null;
 
-        AutomationMesh mesh = await _automationMeshLogic.GetOrCreateLocalAsync(machineName, graphApiBaseUri, cancellationToken);
+        AutomationMesh mesh = await _automationMeshLogic.GetLocalAsync(cancellationToken);
+        if (mesh == null)
+            return null;
+
         InternetConnection connection = AutomationMeshLogic.UpsertInternetConnection(mesh, refresh, DateTimeOffset.UtcNow);
         bool meshStatusChanged = AutomationMeshLogic.RefreshInternetConnectionStatus(mesh);
         await _automationMeshLogic.SaveAsync(mesh, cancellationToken);

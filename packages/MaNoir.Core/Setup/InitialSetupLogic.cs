@@ -96,7 +96,7 @@ public sealed class InitialSetupLogic
         {
             HasMesh = hasMesh,
             HasUsers = hasUsers,
-            CanInitialize = !hasMesh && !hasUsers
+            CanInitialize = !hasUsers
         };
 
         if (hasMesh && hasUsers)
@@ -132,7 +132,11 @@ public sealed class InitialSetupLogic
 
         try
         {
-            AutomationMesh mesh = AutomationMeshLogic.CreateLocalMesh(machineName, graphApiBaseUri);
+            AutomationMesh mesh = await _meshLogic.GetLocalAsync(cancellationToken);
+            meshCreated = mesh == null;
+            if (meshCreated)
+                mesh = AutomationMeshLogic.CreateLocalMesh(machineName, graphApiBaseUri);
+
             if (normalizedLanguageId != null || normalizedTimeZoneId != null)
                 AutomationMeshLogic.ApplySettings(mesh, normalizedLanguageId, normalizedTimeZoneId);
 
@@ -145,8 +149,6 @@ public sealed class InitialSetupLogic
             await _meshLogic.SaveAsync(mesh, cancellationToken);
             if (normalizedPublicBaseDomain != null)
                 AutomationMeshInterprocessPublisher.TryPublishPublicBaseDomainChanged(mesh.Id, null, mesh.PublicBaseDomain);
-
-            meshCreated = true;
 
             User createdUser = await _userLogic.UpsertUserAsync(normalizedAdminUserId, new User()
             {
