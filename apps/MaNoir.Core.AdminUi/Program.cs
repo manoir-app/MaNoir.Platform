@@ -1,5 +1,6 @@
 using MaNoir.Core.AdminUi.Hosting;
 using MaNoir.Core.Api;
+using MaNoir.Core.Setup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,13 +12,22 @@ public static class Program
 	{
 		WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-		builder.AddMaNoirCoreAdminUiHosting();
+		builder.AddMaNoirAdminUiHosting(options =>
+		{
+			options.SpaFolders = new[] { "bootstrap", "front" };
+			options.DefaultSpaFolderResolver = async cancellationToken =>
+			{
+				var status = await new InitialSetupLogic().GetStatusAsync(cancellationToken);
+				return status?.CanInitialize == true ? "bootstrap" : "front";
+			};
+		});
 		builder.AddMaNoirCoreApi();
 
 		WebApplication app = builder.Build();
 
+		app.UseMaNoirAdminUiHosting();
+		app.UseRouting();
 		app.UseMaNoirCoreApi();
-		app.UseMaNoirCoreAdminUiHosting();
 
 		app.Run();
 	}
