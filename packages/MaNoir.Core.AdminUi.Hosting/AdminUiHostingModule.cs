@@ -197,16 +197,12 @@ public static class AdminUiHostingModule
             assetPrefix = string.IsNullOrWhiteSpace(normalizedPublicBasePath) ? "/" : $"{normalizedPublicBasePath}/";
 
         string rewrittenHtml = string.IsNullOrWhiteSpace(spaFolder)
-            ? indexHtml
-                .Replace("src=\"/", $"src=\"{assetPrefix}")
-                .Replace("href=\"/", $"href=\"{assetPrefix}")
-                .Replace("src='/", $"src='{assetPrefix}")
-                .Replace("href='/", $"href='{assetPrefix}")
+            ? AdminUiHostingRewrite.RewriteRootSpaAssetReferences(indexHtml, assetPrefix)
             : indexHtml
                 .Replace($"\"/{spaFolder}/", $"\"{assetPrefix}")
                 .Replace($"'/{spaFolder}/", $"'{assetPrefix}");
 
-        string normalizedRouterBasePath = NormalizeRouterBasePath(routerBasePath);
+        string normalizedRouterBasePath = AdminUiHostingRewrite.ResolveRouterBasePath(routerBasePath, normalizedPublicBasePath);
         string runtimeScript = $"<script>window.__MANOIR_ADMIN_UI_CONFIG__={{routerBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedRouterBasePath)},publicBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedPublicBasePath)}}};</script>";
         return rewrittenHtml.Replace("<head>", $"<head>{runtimeScript}");
     }
