@@ -6,7 +6,7 @@ import styles from './SearchInput.module.css';
 
 export type SearchInputVariant = 'framed' | 'bare';
 
-export interface SearchInputProps extends Omit<TextFieldProps, 'type'> {
+export interface SearchInputProps extends Omit<TextFieldProps, 'type' | 'variant'> {
   label?: React.ReactNode;
   hint?: React.ReactNode;
   error?: React.ReactNode;
