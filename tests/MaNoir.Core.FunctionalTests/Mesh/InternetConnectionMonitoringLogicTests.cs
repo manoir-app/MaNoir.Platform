@@ -20,6 +20,7 @@ public sealed class InternetConnectionMonitoringLogicTests
 
         InternetConnectionMonitoringLogic logic = new InternetConnectionMonitoringLogic();
         AutomationMeshLogic meshLogic = new AutomationMeshLogic();
+        await meshLogic.SaveAsync(AutomationMeshLogic.CreateLocalMesh("tests-host", "https://localhost"));
 
         InternetConnectionMonitoringResult upResult = await logic.RefreshLocalConnectionAsync(
             new InternetConnectionStatusRefresh()

@@ -4,6 +4,7 @@ using MaNoir.Core.Contracts.Models.Authorization;
 using MaNoir.Core.Contracts.Models.Contributions;
 using MaNoir.Core.DataAccess;
 using MaNoir.Core.Contributions;
+using MaNoir.Core.Contracts.Models.Mesh;
 using MaNoir.Core.Contracts.Models.Setup;
 using MaNoir.Core.Contracts.Models.Users;
 using MaNoir.Core.FunctionalTests.Infrastructure;
@@ -113,14 +114,51 @@ public sealed class InitialSetupApiTests
 
     [TestMethod]
     [TestCategory("Functional")]
-    public async Task Initialize_ShouldReturnConflictProblemDetailsWhenTheInstanceIsAlreadyInitialized()
+    public async Task Initialize_ShouldReuseAnExistingMeshWhenNoUserExists()
     {
         await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();
         await mongoHost.StartAsync();
         using ProcessEnvironmentVariableScope mongoScope = new ProcessEnvironmentVariableScope("MONGODB_CONNECTIONSTRING", mongoHost.ConnectionString);
 
         AutomationMeshLogic meshLogic = new AutomationMeshLogic();
-        await meshLogic.SaveAsync(AutomationMeshLogic.CreateLocalMesh("machine-a", "https://localhost:5001"));
+        await meshLogic.SaveAsync(AutomationMeshLogic.CreateLocalMesh("erza-host", "http://core:8080/api/graph"));
+
+        await using WebApplication app = CreateApplication();
+        await app.StartAsync();
+        HttpClient client = app.GetTestClient();
+
+        InitialSetupStatus status = await client.GetFromJsonAsync<InitialSetupStatus>("/api/core/setup/status");
+        HttpResponseMessage initializeResponse = await client.PostAsJsonAsync("/api/core/setup/initialize", new InitialSetupRequest()
+        {
+            AdminUserId = "sarah",
+            AdminPassword = "P@ssword-42"
+        });
+
+        Assert.IsNotNull(status);
+        Assert.IsTrue(status.CanInitialize);
+        Assert.IsTrue(status.HasMesh);
+        Assert.IsFalse(status.HasUsers);
+        Assert.AreEqual(HttpStatusCode.OK, initializeResponse.StatusCode);
+
+        AutomationMesh persistedMesh = await meshLogic.GetLocalAsync();
+        Assert.IsNotNull(persistedMesh);
+        Assert.AreEqual("erza-host", persistedMesh.MainServer.Id);
+    }
+
+    [TestMethod]
+    [TestCategory("Functional")]
+    public async Task Initialize_ShouldReturnConflictProblemDetailsWhenAUserAlreadyExists()
+    {
+        await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();
+        await mongoHost.StartAsync();
+        using ProcessEnvironmentVariableScope mongoScope = new ProcessEnvironmentVariableScope("MONGODB_CONNECTIONSTRING", mongoHost.ConnectionString);
+
+        UserLogic userLogic = new UserLogic();
+        await userLogic.UpsertUserAsync("existing-admin", new User()
+        {
+            IsAdmin = true,
+            IsMain = true
+        });
 
         await using WebApplication app = CreateApplication();
         await app.StartAsync();
