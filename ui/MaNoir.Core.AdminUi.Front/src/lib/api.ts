@@ -138,6 +138,56 @@ export interface AdminDomainNavigationResponse {
   sections: AdminNavigationSection[];
 }
 
+export interface ContributionDefinitionModel {
+  id: string;
+  pluginId: string;
+  kind: string;
+  label?: string | null;
+  description?: string | null;
+  tags: string[];
+}
+
+export interface InstalledPluginModel {
+  id: string;
+  label?: string | null;
+  version?: string | null;
+  description?: string | null;
+  publisher?: string | null;
+  repositoryUrl?: string | null;
+  isEnabled: boolean;
+  isHealthy: boolean;
+  deployedComponents: DeployedComponentModel[];
+  contributions: ContributionDefinitionModel[];
+}
+
+export interface DeployedComponentModel {
+  type: string;
+  name: string;
+  status: DeployedComponentStatus;
+  observedAtUtc: string;
+}
+
+export type DeployedComponentStatus = 'Unknown' | 'Running' | 'Healthy' | 'Unhealthy' | 'Stopped' | 'Failed';
+
+export interface PluginRepositoryValidationModel {
+  repositoryUrl?: string | null;
+  status: 'missing' | 'unsupported' | 'notFound' | 'unavailable' | 'official' | 'nonOfficial';
+  provider?: string | null;
+  exists: boolean;
+  isOfficial: boolean;
+  isSupported: boolean;
+  canInstall: boolean;
+  message?: string | null;
+}
+
+export interface PluginInstallationResponseModel {
+  response?: string | null;
+  operationId?: string | null;
+  repositoryUrl?: string | null;
+  status?: string | null;
+  message?: string | null;
+}
+
 export type AgentState = 'unknown' | 'starting' | 'ready' | 'degraded' | 'stopping' | 'stopped';
 
 export interface RegisteredAgentModel {
@@ -222,6 +272,21 @@ export function getAdminNavigationDomains() {
 
 export function getAdminNavigationDomain(domainId: string) {
   return requestJson<AdminDomainNavigationResponse>(`/system/admin-navigation/domains/${encodeURIComponent(domainId)}`);
+}
+
+export function getInstalledPlugins() {
+  return requestJson<InstalledPluginModel[]>('/system/extensions/installed');
+}
+
+export function validatePluginRepository(repositoryUrl: string) {
+  return requestJson<PluginRepositoryValidationModel>(`/system/extensions/repositories/validate?repositoryUrl=${encodeURIComponent(repositoryUrl)}`);
+}
+
+export function installPlugin(repositoryUrl: string) {
+  return requestJson<PluginInstallationResponseModel>('/system/extensions/install', {
+    method: 'POST',
+    body: JSON.stringify({ repositoryUrl }),
+  });
 }
 
 export function getRegisteredAgents(meshId?: string) {

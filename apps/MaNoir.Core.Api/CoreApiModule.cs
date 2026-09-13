@@ -27,6 +27,13 @@ public static class CoreApiModule
         CoreApiAuthenticationOptions options = ResolveAuthenticationOptions(builder.Configuration, builder.Environment);
 
         builder.Services.AddSingleton(options);
+        builder.Services.AddSingleton<PluginRepositoryValidator>();
+        builder.Services.AddHostedService<PluginRuntimeStateListener>();
+        builder.Services.AddHttpClient(PluginRepositoryValidator.HttpClientName, client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(8);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("MaNoir-Core-Plugin-Validator/1.0");
+        });
         builder.Services.AddProblemDetails(problemDetailsOptions =>
         {
             problemDetailsOptions.CustomizeProblemDetails = context =>

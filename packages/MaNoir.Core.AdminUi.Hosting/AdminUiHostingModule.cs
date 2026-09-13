@@ -229,6 +229,9 @@ public static class AdminUiHostingModule
             return null;
 
         string trimmedPath = publicBasePath.Trim();
+        if (string.Equals(trimmedPath, "/", StringComparison.Ordinal))
+            return null;
+
         if (!trimmedPath.StartsWith("/", StringComparison.Ordinal))
             trimmedPath = "/" + trimmedPath;
 

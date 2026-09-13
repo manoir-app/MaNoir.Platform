@@ -1,5 +1,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using MaNoir.Core.Contracts.Models.Authorization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 
@@ -13,9 +15,10 @@ public sealed class InstalledPlugin
     public InstalledPlugin()
     {
         IsEnabled = true;
-        IsHealthy = true;
+        IsHealthy = false;
         DependencyRepositoryUrls = [];
         Contributions = [];
+        DeployedComponents = [];
     }
 
     /// <summary>
@@ -93,6 +96,30 @@ public sealed class InstalledPlugin
     /// Gets or sets the contributions published by this installed plugin.
     /// </summary>
     public List<ContributionDefinition> Contributions { get; set; }
+
+    public List<DeployedComponent> DeployedComponents { get; set; }
+}
+
+[JsonConverter(typeof(StringEnumConverter))]
+public enum DeployedComponentStatus
+{
+    Unknown,
+    Running,
+    Healthy,
+    Unhealthy,
+    Stopped,
+    Failed
+}
+
+public sealed class DeployedComponent
+{
+    public string Type { get; set; }
+
+    public string Name { get; set; }
+
+    public DeployedComponentStatus Status { get; set; }
+
+    public DateTimeOffset ObservedAtUtc { get; set; }
 }
 
 /// <summary>

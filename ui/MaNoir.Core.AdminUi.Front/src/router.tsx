@@ -5,6 +5,8 @@ import { AgentRegistryPage } from './pages/AgentRegistryPage';
 import { ConsoleHomePage } from './pages/ConsoleHomePage';
 import { NavigationPlaceholderPage } from './pages/NavigationPlaceholderPage';
 import { PlatformHealthPage } from './pages/PlatformHealthPage';
+import { InstalledPluginsPage } from './pages/InstalledPluginsPage';
+import { PluginCatalogPage } from './pages/PluginCatalogPage';
 
 const routes = [
     {
@@ -58,13 +60,11 @@ const routes = [
             },
             {
               path: 'platform/extensions/catalog',
-              element: (
-                <NavigationPlaceholderPage
-                  descriptionKey="placeholders.extensionsCatalog.description"
-                  eyebrowKey="placeholders.extensionsCatalog.eyebrow"
-                  titleKey="placeholders.extensionsCatalog.title"
-                />
-              ),
+              Component: PluginCatalogPage,
+            },
+            {
+              path: 'platform/extensions/installed',
+              Component: InstalledPluginsPage,
             },
           ],
         },

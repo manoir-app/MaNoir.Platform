@@ -98,7 +98,7 @@ public sealed class InitialSetupApiTests
         Assert.AreEqual(CoreAccessZones.CoreAdminUi, coreAdminContribution.AdminUi.AccessZoneId);
         Assert.AreEqual(AccessLevel.Read, coreAdminContribution.AdminUi.RequiredAccessLevel);
         Assert.AreEqual("Platform", coreAdminContribution.AdminUi.Domain);
-        Assert.AreEqual(6, coreAdminContribution.AdminUi.Pages.Count);
+        Assert.AreEqual(7, coreAdminContribution.AdminUi.Pages.Count);
         CollectionAssert.AreEquivalent(
         new[]
         {
@@ -107,7 +107,8 @@ public sealed class InitialSetupApiTests
             "/platform/surveillance/agents",
             "/platform/surveillance/services",
             "/platform/surveillance/logs",
-            "/platform/extensions/catalog"
+            "/platform/extensions/catalog",
+            "/platform/extensions/installed"
         },
         coreAdminContribution.AdminUi.Pages.Select(page => page.Url).ToList());
     }

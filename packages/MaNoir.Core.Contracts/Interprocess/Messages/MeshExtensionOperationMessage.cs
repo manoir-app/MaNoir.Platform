@@ -10,6 +10,7 @@ namespace Home.Common.Messages
     {
 
         public const string TopicCreate = "system.extensions.create";
+        public const string TopicInstall = "system.extensions.install";
         public const string TopicRestart = "system.extensions.restart";
         public const string TopicTerminate = "system.extensions.terminate";
 
@@ -23,5 +24,22 @@ namespace Home.Common.Messages
         }
 
         public string ExtensionId { get; set; }
+
+        public string RepositoryUrl { get; set; }
+
+        public string OperationId { get; set; }
+
+        public string RequestedByUserId { get; set; }
+    }
+
+    public sealed class PluginInstallationResponse : MessageResponse
+    {
+        public string OperationId { get; set; }
+
+        public string RepositoryUrl { get; set; }
+
+        public string Status { get; set; }
+
+        public string Message { get; set; }
     }
 }
