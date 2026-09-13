@@ -11,6 +11,7 @@ namespace Home.Common.Messages
 
         public const string TopicCreate = "system.extensions.create";
         public const string TopicInstall = "system.extensions.install";
+        public const string TopicInstallStatus = "system.extensions.install.status";
         public const string TopicRestart = "system.extensions.restart";
         public const string TopicTerminate = "system.extensions.terminate";
 
@@ -39,6 +40,26 @@ namespace Home.Common.Messages
         public string RepositoryUrl { get; set; }
 
         public string Status { get; set; }
+
+        public string Message { get; set; }
+    }
+
+    public sealed class PluginInstallationStatusRequest : MeshExtensionOperationMessage
+    {
+        public PluginInstallationStatusRequest() : base(TopicInstallStatus)
+        {
+        }
+    }
+
+    public sealed class PluginInstallationStatusResponse : MessageResponse
+    {
+        public string OperationId { get; set; }
+
+        public string RepositoryUrl { get; set; }
+
+        public string Status { get; set; }
+
+        public string Step { get; set; }
 
         public string Message { get; set; }
     }

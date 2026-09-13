@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\packages\MaNoir.CommunicationHub.Contracts\MaNoir.CommunicationHub.Contracts.csproj" />
+    <ProjectReference Include="..\..\packages\MaNoir.Core.AdminUi.Hosting\MaNoir.Core.AdminUi.Hosting.csproj" />
     <ProjectReference Include="..\..\packages\MaNoir.Core\MaNoir.Core.csproj" />
     <ProjectReference Include="..\..\packages\MaNoir.Core.Contracts\MaNoir.Core.Contracts.csproj" />
   </ItemGroup>

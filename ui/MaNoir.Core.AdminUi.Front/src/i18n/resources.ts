@@ -137,6 +137,7 @@ export const resources = {
             accepted: 'Installation request accepted by Gaia.',
             failed: 'The installation request could not be started.',
             installing: 'Starting installation...',
+            timeout: 'The installation is still running. Check the installed plugins shortly.',
           },
         },
         installed: {
@@ -599,6 +600,7 @@ export const resources = {
             accepted: 'La demande d installation a ete acceptee par Gaia.',
             failed: 'La demande d installation n a pas pu etre lancee.',
             installing: 'Lancement de l installation...',
+            timeout: 'L installation est toujours en cours. Verifiez les plugins installes dans quelques instants.',
           },
         },
         installed: {

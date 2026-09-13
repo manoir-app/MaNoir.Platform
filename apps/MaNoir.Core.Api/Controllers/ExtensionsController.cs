@@ -83,6 +83,23 @@ public sealed class ExtensionsController : ControllerBase
             });
         }
     }
+
+    [HttpGet("install/{operationId}")]
+    public async Task<ActionResult<PluginInstallationStatusResponse>> GetInstallationStatus(string operationId, CancellationToken cancellationToken)
+    {
+        string currentUserId = CoreApiUserContext.GetUserId(this);
+        if (string.IsNullOrWhiteSpace(currentUserId))
+            return Unauthorized();
+
+        PluginInstallationStatusRequest message = new PluginInstallationStatusRequest()
+        {
+            OperationId = operationId
+        };
+        PluginInstallationStatusResponse response = await Task.Run(
+            () => NatsInterprocess.Request<PluginInstallationStatusResponse>(message.Topic, message, 5000),
+            cancellationToken);
+        return response?.Response == "ok" ? Ok(response) : NotFound(response);
+    }
 }
 
 public sealed class PluginInstallationRequest
