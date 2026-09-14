@@ -11,35 +11,47 @@ public sealed class AdminUiHostingRewriteTests
     {
         string routerBasePath = AdminUiHostingRewrite.ResolveRouterBasePath("/", "/home-automation");
 
-        Assert.AreEqual("/home-automation/", routerBasePath);
+        // No trailing slash: React Router basename must equal window.location.pathname exactly.
+        Assert.AreEqual("/home-automation", routerBasePath);
     }
 
     [TestMethod]
-    public void ResolveRouterBasePath_ShouldPreserveExplicitSpaBasePath()
+    public void ResolveRouterBasePath_ShouldCombinePublicBasePathWithExplicitSpaBasePath()
     {
         string routerBasePath = AdminUiHostingRewrite.ResolveRouterBasePath("/front", "/platform");
 
-        Assert.AreEqual("/front/", routerBasePath);
+        Assert.AreEqual("/platform/front", routerBasePath);
     }
 
     [TestMethod]
-    public void RewriteRootSpaAssetReferences_ShouldRewriteRelativeAndAbsoluteReferences()
+    public void ResolveRouterBasePath_ShouldKeepExplicitSpaBasePathWhenNoPublicBasePathExists()
     {
-        string indexHtml = "<script src=\"./assets/app.js\"></script><link href='/assets/app.css'>";
+        string routerBasePath = AdminUiHostingRewrite.ResolveRouterBasePath("/front", publicBasePath: null);
 
-        string rewrittenHtml = AdminUiHostingRewrite.RewriteRootSpaAssetReferences(indexHtml, "/home-automation/");
-
-        StringAssert.Contains(rewrittenHtml, "src=\"/home-automation/assets/app.js");
-        StringAssert.Contains(rewrittenHtml, "href='/home-automation/assets/app.css");
+        Assert.AreEqual("/front", routerBasePath);
     }
 
     [TestMethod]
-    public void RewriteRootSpaAssetReferences_ShouldKeepRootReferencesWhenNoPublicBasePathExists()
+    public void ResolveAssetPrefix_ShouldCombinePublicBasePathAndSpaFolder()
     {
-        string indexHtml = "<script src=\"./assets/app.js\"></script>";
+        string assetPrefix = AdminUiHostingRewrite.ResolveAssetPrefix("front", "/platform");
 
-        string rewrittenHtml = AdminUiHostingRewrite.RewriteRootSpaAssetReferences(indexHtml, "/");
+        Assert.AreEqual("/platform/front/", assetPrefix);
+    }
 
-        StringAssert.Contains(rewrittenHtml, "src=\"/assets/app.js");
+    [TestMethod]
+    public void ResolveAssetPrefix_ShouldUseRootWhenNoPublicBasePathAndNoSpaFolderExist()
+    {
+        string assetPrefix = AdminUiHostingRewrite.ResolveAssetPrefix(spaFolder: null, publicBasePath: "/");
+
+        Assert.AreEqual("/", assetPrefix);
+    }
+
+    [TestMethod]
+    public void ResolveAssetPrefix_ShouldUseSpaFolderAloneWhenNoPublicBasePathExists()
+    {
+        string assetPrefix = AdminUiHostingRewrite.ResolveAssetPrefix("bootstrap", publicBasePath: null);
+
+        Assert.AreEqual("/bootstrap/", assetPrefix);
     }
 }

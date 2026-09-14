@@ -7,22 +7,30 @@ internal static class AdminUiHostingRewrite
         string normalizedRouterBasePath = NormalizeRouterBasePath(routerBasePath);
         string normalizedPublicBasePath = NormalizePublicBasePath(publicBasePath);
 
-        return normalizedRouterBasePath == "/" && normalizedPublicBasePath != null
-            ? NormalizeRouterBasePath(normalizedPublicBasePath)
-            : normalizedRouterBasePath;
+        // React Router's basename must equal window.location.pathname exactly (no trailing slash),
+        // so it always combines with the public prefix instead of dropping it.
+        if (normalizedRouterBasePath == "/")
+            return normalizedPublicBasePath ?? "/";
+
+        return normalizedPublicBasePath == null
+            ? normalizedRouterBasePath
+            : normalizedPublicBasePath + normalizedRouterBasePath;
     }
 
-    internal static string RewriteRootSpaAssetReferences(string indexHtml, string assetPrefix)
+    /// <summary>
+    /// Resolves the single asset prefix used to build the SPA's &lt;base href&gt; tag, for the given SPA folder and public base path.
+    /// </summary>
+    internal static string ResolveAssetPrefix(string spaFolder, string publicBasePath)
     {
-        return indexHtml
-            .Replace("src=\"/", $"src=\"{assetPrefix}")
-            .Replace("href=\"/", $"href=\"{assetPrefix}")
-            .Replace("src='/", $"src='{assetPrefix}")
-            .Replace("href='/", $"href='{assetPrefix}")
-            .Replace("src=\"./", $"src=\"{assetPrefix}")
-            .Replace("href=\"./", $"href=\"{assetPrefix}")
-            .Replace("src='./", $"src='{assetPrefix}")
-            .Replace("href='./", $"href='{assetPrefix}");
+        string normalizedPublicBasePath = NormalizePublicBasePath(publicBasePath);
+        string trimmedSpaFolder = string.IsNullOrWhiteSpace(spaFolder) ? null : spaFolder.Trim('/');
+
+        if (string.IsNullOrWhiteSpace(trimmedSpaFolder))
+            return string.IsNullOrWhiteSpace(normalizedPublicBasePath) ? "/" : $"{normalizedPublicBasePath}/";
+
+        return string.IsNullOrWhiteSpace(normalizedPublicBasePath)
+            ? $"/{trimmedSpaFolder}/"
+            : $"{normalizedPublicBasePath}/{trimmedSpaFolder}/";
     }
 
     private static string NormalizePublicBasePath(string publicBasePath)
@@ -46,6 +54,7 @@ internal static class AdminUiHostingRewrite
         if (!trimmedPath.StartsWith("/"))
             trimmedPath = "/" + trimmedPath;
 
-        return trimmedPath.TrimEnd('/') + "/";
+        // No trailing slash: React Router rejects a basename that doesn't match location.pathname exactly.
+        return trimmedPath.TrimEnd('/');
     }
 }
