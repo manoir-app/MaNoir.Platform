@@ -23,23 +23,26 @@ public sealed class AdminUiHostingRewriteTests
     }
 
     [TestMethod]
-    public void RewriteRootSpaAssetReferences_ShouldRewriteRelativeAndAbsoluteReferences()
+    public void ResolveAssetPrefix_ShouldCombinePublicBasePathAndSpaFolder()
     {
-        string indexHtml = "<script src=\"./assets/app.js\"></script><link href='/assets/app.css'>";
+        string assetPrefix = AdminUiHostingRewrite.ResolveAssetPrefix("front", "/platform");
 
-        string rewrittenHtml = AdminUiHostingRewrite.RewriteRootSpaAssetReferences(indexHtml, "/home-automation/");
-
-        StringAssert.Contains(rewrittenHtml, "src=\"/home-automation/assets/app.js");
-        StringAssert.Contains(rewrittenHtml, "href='/home-automation/assets/app.css");
+        Assert.AreEqual("/platform/front/", assetPrefix);
     }
 
     [TestMethod]
-    public void RewriteRootSpaAssetReferences_ShouldKeepRootReferencesWhenNoPublicBasePathExists()
+    public void ResolveAssetPrefix_ShouldUseRootWhenNoPublicBasePathAndNoSpaFolderExist()
     {
-        string indexHtml = "<script src=\"./assets/app.js\"></script>";
+        string assetPrefix = AdminUiHostingRewrite.ResolveAssetPrefix(spaFolder: null, publicBasePath: "/");
 
-        string rewrittenHtml = AdminUiHostingRewrite.RewriteRootSpaAssetReferences(indexHtml, "/");
+        Assert.AreEqual("/", assetPrefix);
+    }
 
-        StringAssert.Contains(rewrittenHtml, "src=\"/assets/app.js");
+    [TestMethod]
+    public void ResolveAssetPrefix_ShouldUseSpaFolderAloneWhenNoPublicBasePathExists()
+    {
+        string assetPrefix = AdminUiHostingRewrite.ResolveAssetPrefix("bootstrap", publicBasePath: null);
+
+        Assert.AreEqual("/bootstrap/", assetPrefix);
     }
 }

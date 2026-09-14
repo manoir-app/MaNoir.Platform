@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -101,12 +102,12 @@ public static class AdminUiHostingModule
             if (requestPath.StartsWithSegments($"/{spaFolder}", StringComparison.OrdinalIgnoreCase, out PathString spaRemainder)
                 && !HasFileExtension(spaRemainder))
             {
-                await SendSpaIndexAsync(app.Environment, context, spaFolder, remapToRoot: false);
+                await SendSpaIndexAsync(app.Environment, app.Logger, context, spaFolder, remapToRoot: false);
                 return;
             }
         }
 
-        await SendSpaIndexAsync(app.Environment, context, await ResolveDefaultSpaFolderAsync(options, context.RequestAborted), remapToRoot: true);
+        await SendSpaIndexAsync(app.Environment, app.Logger, context, await ResolveDefaultSpaFolderAsync(options, context.RequestAborted), remapToRoot: true);
     }
 
     private static bool ShouldRemapRootStaticAssetRequest(PathString path, AdminUiHostingOptions options)
@@ -151,7 +152,7 @@ public static class AdminUiHostingModule
         return File.Exists(candidateFile);
     }
 
-    private static async Task SendSpaIndexAsync(IHostEnvironment environment, HttpContext context, string spaFolder, bool remapToRoot)
+    private static async Task SendSpaIndexAsync(IHostEnvironment environment, ILogger logger, HttpContext context, string spaFolder, bool remapToRoot)
     {
         string candidateFile = GetWebRootFilePath(environment, string.IsNullOrWhiteSpace(spaFolder) ? "/index.html" : $"/{spaFolder}/index.html");
         if (!File.Exists(candidateFile))
@@ -160,6 +161,12 @@ public static class AdminUiHostingModule
             await context.Response.WriteAsync($"The Admin UI bundle '{spaFolder}' is not available.");
             return;
         }
+
+        string publicBasePath = ResolveRequestPublicBasePath(context);
+        logger.LogInformation(
+            "Serving Admin UI SPA index for folder '{SpaFolder}' with public base path '{PublicBasePath}'.",
+            string.IsNullOrWhiteSpace(spaFolder) ? "<root>" : spaFolder,
+            publicBasePath ?? "<none>");
 
         context.Response.ContentType = "text/html; charset=utf-8";
         if (HttpMethods.IsHead(context.Request.Method))
@@ -170,13 +177,13 @@ public static class AdminUiHostingModule
         if (!remapToRoot)
         {
             string prefixedIndexHtml = await File.ReadAllTextAsync(candidateFile, context.RequestAborted);
-            prefixedIndexHtml = RewriteSpaIndex(prefixedIndexHtml, spaFolder, ResolveRequestPublicBasePath(context), string.Concat("/", spaFolder));
+            prefixedIndexHtml = RewriteSpaIndex(prefixedIndexHtml, spaFolder, publicBasePath, string.Concat("/", spaFolder));
             await context.Response.WriteAsync(prefixedIndexHtml, context.RequestAborted);
             return;
         }
 
         string indexHtml = await File.ReadAllTextAsync(candidateFile, context.RequestAborted);
-        indexHtml = RewriteSpaIndex(indexHtml, spaFolder, ResolveRequestPublicBasePath(context), "/");
+        indexHtml = RewriteSpaIndex(indexHtml, spaFolder, publicBasePath, "/");
         await context.Response.WriteAsync(indexHtml, context.RequestAborted);
     }
 
@@ -189,22 +196,12 @@ public static class AdminUiHostingModule
     private static string RewriteSpaIndex(string indexHtml, string spaFolder, string publicBasePath, string routerBasePath)
     {
         string normalizedPublicBasePath = NormalizePublicBasePath(publicBasePath);
-        string assetPrefix = string.IsNullOrWhiteSpace(normalizedPublicBasePath)
-            ? $"/{spaFolder}/"
-            : $"{normalizedPublicBasePath}/{spaFolder}/";
-
-        if (string.IsNullOrWhiteSpace(spaFolder))
-            assetPrefix = string.IsNullOrWhiteSpace(normalizedPublicBasePath) ? "/" : $"{normalizedPublicBasePath}/";
-
-        string rewrittenHtml = string.IsNullOrWhiteSpace(spaFolder)
-            ? AdminUiHostingRewrite.RewriteRootSpaAssetReferences(indexHtml, assetPrefix)
-            : indexHtml
-                .Replace($"\"/{spaFolder}/", $"\"{assetPrefix}")
-                .Replace($"'/{spaFolder}/", $"'{assetPrefix}");
-
+        string assetPrefix = AdminUiHostingRewrite.ResolveAssetPrefix(spaFolder, normalizedPublicBasePath);
         string normalizedRouterBasePath = AdminUiHostingRewrite.ResolveRouterBasePath(routerBasePath, normalizedPublicBasePath);
-        string runtimeScript = $"<script>window.__MANOIR_ADMIN_UI_CONFIG__={{routerBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedRouterBasePath)},publicBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedPublicBasePath)}}};</script>";
-        return rewrittenHtml.Replace("<head>", $"<head>{runtimeScript}");
+
+        // A single <base href> lets the browser resolve every relative asset URL, replacing per-app literal src/href rewriting.
+        string runtimeHead = $"<base href=\"{System.Net.WebUtility.HtmlEncode(assetPrefix)}\"><script>window.__MANOIR_ADMIN_UI_CONFIG__={{routerBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedRouterBasePath)},publicBasePath:{System.Text.Json.JsonSerializer.Serialize(normalizedPublicBasePath)}}};</script>";
+        return indexHtml.Replace("<head>", $"<head>{runtimeHead}");
     }
 
     private static string ResolveRequestPublicBasePath(HttpContext context)

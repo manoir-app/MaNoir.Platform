@@ -12,17 +12,20 @@ internal static class AdminUiHostingRewrite
             : normalizedRouterBasePath;
     }
 
-    internal static string RewriteRootSpaAssetReferences(string indexHtml, string assetPrefix)
+    /// <summary>
+    /// Resolves the single asset prefix used to build the SPA's &lt;base href&gt; tag, for the given SPA folder and public base path.
+    /// </summary>
+    internal static string ResolveAssetPrefix(string spaFolder, string publicBasePath)
     {
-        return indexHtml
-            .Replace("src=\"/", $"src=\"{assetPrefix}")
-            .Replace("href=\"/", $"href=\"{assetPrefix}")
-            .Replace("src='/", $"src='{assetPrefix}")
-            .Replace("href='/", $"href='{assetPrefix}")
-            .Replace("src=\"./", $"src=\"{assetPrefix}")
-            .Replace("href=\"./", $"href=\"{assetPrefix}")
-            .Replace("src='./", $"src='{assetPrefix}")
-            .Replace("href='./", $"href='{assetPrefix}");
+        string normalizedPublicBasePath = NormalizePublicBasePath(publicBasePath);
+        string trimmedSpaFolder = string.IsNullOrWhiteSpace(spaFolder) ? null : spaFolder.Trim('/');
+
+        if (string.IsNullOrWhiteSpace(trimmedSpaFolder))
+            return string.IsNullOrWhiteSpace(normalizedPublicBasePath) ? "/" : $"{normalizedPublicBasePath}/";
+
+        return string.IsNullOrWhiteSpace(normalizedPublicBasePath)
+            ? $"/{trimmedSpaFolder}/"
+            : $"{normalizedPublicBasePath}/{trimmedSpaFolder}/";
     }
 
     private static string NormalizePublicBasePath(string publicBasePath)

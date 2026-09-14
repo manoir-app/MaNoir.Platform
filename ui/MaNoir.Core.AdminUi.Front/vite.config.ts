@@ -2,13 +2,14 @@ import { resolve } from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const proxyTarget = env.VITE_CORE_API_PROXY_TARGET?.trim() || 'http://localhost:5243';
   const frontNodeModules = resolve(__dirname, 'node_modules');
 
   return {
-    base: '/front/',
+    // Relative at build time so the server-injected <base href> drives the deployed prefix; root during dev.
+    base: command === 'build' ? './' : '/',
     plugins: [react()],
     resolve: {
       alias: {
