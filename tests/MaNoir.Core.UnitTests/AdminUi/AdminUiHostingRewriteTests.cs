@@ -11,15 +11,24 @@ public sealed class AdminUiHostingRewriteTests
     {
         string routerBasePath = AdminUiHostingRewrite.ResolveRouterBasePath("/", "/home-automation");
 
-        Assert.AreEqual("/home-automation/", routerBasePath);
+        // No trailing slash: React Router basename must equal window.location.pathname exactly.
+        Assert.AreEqual("/home-automation", routerBasePath);
     }
 
     [TestMethod]
-    public void ResolveRouterBasePath_ShouldPreserveExplicitSpaBasePath()
+    public void ResolveRouterBasePath_ShouldCombinePublicBasePathWithExplicitSpaBasePath()
     {
         string routerBasePath = AdminUiHostingRewrite.ResolveRouterBasePath("/front", "/platform");
 
-        Assert.AreEqual("/front/", routerBasePath);
+        Assert.AreEqual("/platform/front", routerBasePath);
+    }
+
+    [TestMethod]
+    public void ResolveRouterBasePath_ShouldKeepExplicitSpaBasePathWhenNoPublicBasePathExists()
+    {
+        string routerBasePath = AdminUiHostingRewrite.ResolveRouterBasePath("/front", publicBasePath: null);
+
+        Assert.AreEqual("/front", routerBasePath);
     }
 
     [TestMethod]
