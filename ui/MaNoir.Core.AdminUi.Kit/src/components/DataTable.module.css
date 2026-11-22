@@ -4,37 +4,45 @@
 }
 
 .table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   width: 100%;
 }
 
 .caption {
-  color: var(--mn-color-ink-soft);
-  font-size: 0.88rem;
-  margin-bottom: 0.75rem;
+  color: var(--mn-muted);
+  font-size: 0.875rem;
+  margin-bottom: var(--mn-s-3);
   text-align: left;
 }
 
 .head {
-  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
-  color: var(--mn-color-ink-muted);
-  font-family: var(--mn-font-mono);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  padding: 0.7rem 0;
-  text-transform: uppercase;
+  color: var(--mn-muted);
+  font-size: 0.8125rem;
+  font-weight: 450;
+  padding: var(--mn-s-3) var(--mn-s-4);
 }
 
 .cell {
-  border-bottom: var(--mn-hairline) solid var(--mn-color-line-soft);
-  font-size: 0.92rem;
-  padding: 0.95rem 0.5rem 0.95rem 0;
+  border-top: 1px solid var(--mn-line);
+  font-size: 0.9375rem;
+  padding: var(--mn-s-4);
   vertical-align: top;
 }
 
 .row:hover .cell {
-  background: color-mix(in oklch, var(--mn-color-paper-strong) 48%, transparent);
+  background: var(--mn-tonal);
+  border-top-color: transparent;
+}
+
+.row:hover .cell:first-child {
+  border-bottom-left-radius: var(--mn-r-md);
+  border-top-left-radius: var(--mn-r-md);
+}
+
+.row:hover .cell:last-child {
+  border-bottom-right-radius: var(--mn-r-md);
+  border-top-right-radius: var(--mn-r-md);
 }
 
 .left {
@@ -54,6 +62,6 @@
 }
 
 .empty {
-  color: var(--mn-color-ink-soft);
-  padding: 1rem 0;
+  color: var(--mn-muted);
+  padding: var(--mn-s-4);
 }

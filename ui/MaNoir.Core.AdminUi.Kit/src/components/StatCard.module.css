@@ -1,32 +1,36 @@
 .root {
-  background: rgba(255, 255, 255, 0.42);
-  border-left: 1px solid var(--mn-color-line);
+  background: var(--mn-tonal);
+  border-radius: var(--mn-r-xl);
   display: grid;
-  gap: var(--mn-space-1);
+  gap: var(--mn-s-1);
   min-height: 8rem;
-  padding: var(--mn-space-4) var(--mn-space-5);
+  padding: var(--mn-s-5) var(--mn-s-6);
 }
 
 .value {
   font-family: var(--mn-font-display);
-  font-size: clamp(2.25rem, 6vw, 4rem);
-  letter-spacing: -0.06em;
-  line-height: 0.92;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
 .label {
   font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-weight: 500;
 }
 
 .detail {
-  color: var(--mn-color-ink-soft);
-  font-size: 0.92rem;
+  color: var(--mn-muted);
+  font-size: 0.875rem;
   line-height: 1.4;
+}
+
+.attention {
+  background: var(--mn-yellow-soft);
 }
 
 .attention .value,
 .attention .label {
-  color: var(--mn-color-accent-strong);
+  color: var(--mn-late);
 }

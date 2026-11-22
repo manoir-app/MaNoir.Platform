@@ -1,5 +1,6 @@
 .root {
-  background: var(--mn-color-ink);
+  background: var(--mn-ink);
+  border-radius: var(--mn-r-xl);
   overflow: hidden;
   position: relative;
 }
