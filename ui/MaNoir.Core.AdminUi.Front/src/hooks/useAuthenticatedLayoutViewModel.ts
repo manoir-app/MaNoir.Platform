@@ -87,6 +87,7 @@ export function useAuthenticatedLayoutViewModel() {
       const isExternal = /^https?:\/\//i.test(page.href);
       return {
         id: page.id,
+        iconKind: page.icon ?? page.name,
         label: page.label,
         active: isActivePath(location.pathname, page.href),
         href: isExternal ? page.href : undefined,

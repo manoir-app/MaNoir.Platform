@@ -329,3 +329,57 @@
     right: auto;
   }
 }
+
+/* Icon rail */
+.sidebarCollapsed {
+  --sidebar-inline-padding: var(--mn-s-3);
+}
+
+.sidebarCollapsed .brandBlock {
+  justify-items: center;
+}
+
+.sidebarCollapsed .accountButton {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.hiddenInRail {
+  display: none;
+}
+
+.sidebarToggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-muted);
+  cursor: pointer;
+  display: inline-flex;
+  height: var(--mn-touch-min);
+  justify-content: center;
+  justify-self: start;
+  margin-left: -0.5rem;
+  transition: background 160ms ease, color 160ms ease;
+  width: var(--mn-touch-min);
+}
+
+.sidebarCollapsed .sidebarToggle {
+  justify-self: center;
+  margin-left: 0;
+}
+
+.sidebarToggle:hover {
+  background: var(--mn-tonal);
+  color: var(--mn-ink);
+}
+
+.sidebarToggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--mn-ink);
+  outline: none;
+}
+
+.sidebarCollapsed .accountMenu {
+  left: 0;
+  right: auto;
+}

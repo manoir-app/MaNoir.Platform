@@ -22,6 +22,10 @@
   grid-template-columns: 200px 1px minmax(0, 1fr);
 }
 
+.rail .body {
+  grid-template-columns: var(--mn-rail-w) 1px minmax(0, 1fr);
+}
+
 .md .body {
   grid-template-columns: 220px 1px minmax(0, 1fr);
 }
@@ -36,6 +40,10 @@
 
 .bodyWithoutDivider {
   grid-template-columns: 220px minmax(0, 1fr);
+}
+
+.rail .bodyWithoutDivider {
+  grid-template-columns: var(--mn-rail-w) minmax(0, 1fr);
 }
 
 .sm .bodyWithoutDivider {
