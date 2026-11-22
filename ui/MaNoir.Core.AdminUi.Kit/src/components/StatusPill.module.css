@@ -32,7 +32,7 @@
 
 .warning {
   background: var(--mn-yellow-soft);
-  color: var(--mn-color-warning);
+  color: var(--mn-late);
 }
 
 .danger {

@@ -16,7 +16,7 @@ function OverviewCanvas() {
     <div
       className="mn-kit-theme"
       style={{
-        background: 'var(--mn-color-paper)',
+        background: 'var(--mn-bg)',
         minHeight: '100vh',
       }}
     >
@@ -28,7 +28,7 @@ function OverviewCanvas() {
         ]}
         title={
           <>
-            <span style={{ color: 'var(--mn-color-ink)', fontWeight: 600 }}>Intendance</span>
+            <span style={{ color: 'var(--mn-ink)', fontWeight: 600 }}>Intendance</span>
             <span> — maison</span>
           </>
         }
@@ -40,7 +40,7 @@ function OverviewCanvas() {
           caption="maison · 48 réf."
           searchSlot={
             <>
-              <div style={{ color: 'var(--mn-color-ink)', fontSize: '0.8125rem', fontWeight: 500 }}>Recherche</div>
+              <div style={{ color: 'var(--mn-ink)', fontSize: '0.8125rem', fontWeight: 500 }}>Recherche</div>
               <SearchInput id="overview-search" placeholder="Rechercher" shortcut="⌘K" />
             </>
           }
@@ -77,13 +77,13 @@ function OverviewCanvas() {
               <>
                 Bonjour Paul.
                 <br />
-                Rien de grave aujourd&apos;hui <span style={{ color: 'var(--mn-color-ink-faint)' }}>—</span> juste{' '}
-                <span style={{ color: 'var(--mn-color-accent)', fontStyle: 'italic' }}>quelques attentions.</span>
+                Rien de grave aujourd&apos;hui <span style={{ color: 'var(--mn-faint)' }}>—</span> juste{' '}
+                <span style={{ color: 'var(--mn-prune)', fontStyle: 'italic' }}>quelques attentions.</span>
               </>
             }
           />
 
-          <div style={{ borderTop: '1px solid var(--mn-color-line)', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}>
+          <div style={{ borderTop: '1px solid var(--mn-line)', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))' }}>
             <StatCard detail="2 193 € estimés" label="Possessions" value="20" />
             <StatCard detail="7 pièces · 11 meubles" label="Containers" value="12" />
             <StatCard detail="10 à surveiller" label="Produits" value="28" />

@@ -1,7 +1,7 @@
 .root {
   align-items: end;
   display: grid;
-  gap: var(--mn-space-4);
+  gap: var(--mn-s-4);
   width: 100%;
 }
 
@@ -13,7 +13,7 @@
 
 .content {
   display: grid;
-  gap: var(--mn-space-3);
+  gap: var(--mn-s-3);
   max-width: 100%;
   min-width: 0;
 }
@@ -65,7 +65,7 @@
   align-items: center;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--mn-space-2);
+  gap: var(--mn-s-2);
 }
 
 @media (max-width: 959px) {

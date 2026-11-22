@@ -8,7 +8,7 @@ const meta = {
     children: (
       <>
         <div style={{ fontFamily: 'var(--mn-font-display)', fontSize: '1.1rem', lineHeight: 1.05 }}>2 prêts en retard de retour.</div>
-        <div style={{ color: 'var(--mn-color-ink-soft)', fontSize: '0.9rem' }}>Ski Rossignol Experience 76, Scie sauteuse Makita</div>
+        <div style={{ color: 'var(--mn-muted)', fontSize: '0.9rem' }}>Ski Rossignol Experience 76, Scie sauteuse Makita</div>
       </>
     ),
   },

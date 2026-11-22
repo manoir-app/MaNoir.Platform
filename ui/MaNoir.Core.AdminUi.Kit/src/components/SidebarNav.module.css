@@ -14,7 +14,7 @@
 
 .brandBlock {
   display: grid;
-  gap: var(--mn-space-1);
+  gap: var(--mn-s-1);
   margin-bottom: 1rem;
 }
 
@@ -116,7 +116,7 @@
 
 .footer {
   border-top: 1px solid var(--mn-line);
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
   font-size: 0.9rem;
   margin-top: auto;
   padding-top: 1.25rem;

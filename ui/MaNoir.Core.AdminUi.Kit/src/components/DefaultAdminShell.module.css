@@ -57,7 +57,7 @@
 
 .copy,
 .navDescription {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
   line-height: 1.6;
 }
 
@@ -74,23 +74,23 @@
 }
 
 .serverStatusDotNeutral {
-  background: var(--mn-color-ink-faint);
+  background: var(--mn-faint);
 }
 
 .serverStatusDotSuccess {
-  background: var(--mn-color-success);
+  background: var(--mn-ok);
 }
 
 .serverStatusDotWarning {
-  background: var(--mn-color-warning);
+  background: var(--mn-late);
 }
 
 .serverStatusDotDanger {
-  background: var(--mn-color-danger);
+  background: var(--mn-late);
 }
 
 .serverStatusDotAccent {
-  background: var(--mn-color-accent-strong);
+  background: var(--mn-prune-hover);
 }
 
 .nav {
@@ -223,7 +223,7 @@
 }
 
 .serverFooterMeta {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
   font-size: 0.78rem;
 }
 
@@ -231,7 +231,7 @@
   align-items: center;
   background: transparent;
   border: 0;
-  color: var(--mn-color-ink);
+  color: var(--mn-ink);
   cursor: pointer;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -270,7 +270,7 @@
 }
 
 .accountGlyph {
-  color: var(--mn-color-ink-muted);
+  color: var(--mn-muted);
   font-size: 0.85rem;
 }
 
@@ -294,7 +294,7 @@
 .accountMenuAction {
   background: transparent;
   border: 0;
-  color: var(--mn-color-ink);
+  color: var(--mn-ink);
   border-radius: var(--mn-r-sm);
   cursor: pointer;
   display: block;

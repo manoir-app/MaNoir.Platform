@@ -1,7 +1,7 @@
 .root {
   align-items: end;
   display: grid;
-  gap: var(--mn-space-3);
+  gap: var(--mn-s-3);
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -13,7 +13,7 @@
 
 .content {
   display: grid;
-  gap: var(--mn-space-2);
+  gap: var(--mn-s-2);
 }
 
 .eyebrow {
@@ -40,5 +40,5 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--mn-space-2);
+  gap: var(--mn-s-2);
 }

@@ -56,7 +56,7 @@
 .meta,
 .navigation,
 .tools {
-  color: var(--mn-color-ink-muted);
+  color: var(--mn-muted);
 }
 
 .meta {

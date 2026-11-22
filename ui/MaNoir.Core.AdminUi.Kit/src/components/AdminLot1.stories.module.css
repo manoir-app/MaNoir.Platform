@@ -1,5 +1,5 @@
 .canvasRoot {
-  background: var(--mn-color-paper);
+  background: var(--mn-bg);
   min-height: 100vh;
 }
 
@@ -15,12 +15,12 @@
 }
 
 .sidebarRole {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
   font-size: 0.76rem;
 }
 
 .accentWord {
-  color: var(--mn-color-accent);
+  color: var(--mn-prune);
   font-style: italic;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .tableSecondary {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
   font-size: 0.8rem;
   margin-top: 0.15rem;
 }

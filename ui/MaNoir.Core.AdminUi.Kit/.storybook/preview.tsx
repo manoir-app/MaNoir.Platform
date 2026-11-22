@@ -9,7 +9,7 @@ const preview: Preview = {
       <div
         className="mn-kit-theme"
         style={{
-          background: 'var(--mn-color-paper)',
+          background: 'var(--mn-bg)',
           minHeight: '100vh',
           padding: '2rem',
         }}

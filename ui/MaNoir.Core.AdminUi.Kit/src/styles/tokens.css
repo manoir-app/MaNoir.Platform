@@ -2,8 +2,6 @@
  * MaNoir design system tokens (minimalist warm direction).
  * Names mirror the design system's tokens.json: keep them in sync.
  * Themes: light (default), dark (data-theme="dark"), mirror (data-theme="mirror").
- * The legacy --mn-color-* / --mn-radius-* names are kept as aliases of the new tokens so existing
- * components follow the new palette while they are migrated one by one.
  */
 :root,
 .mn-kit-theme {
@@ -144,43 +142,4 @@
   /* shadows: the only two of the system */
   --mn-shadow-popup: 0 18px 50px rgba(30, 26, 29, 0.25);
   --mn-shadow-fab: 0 10px 26px rgba(126, 42, 71, 0.35);
-
-  /* ---- legacy aliases (to remove once every component uses the tokens above) ---- */
-  --mn-color-paper: var(--mn-bg);
-  --mn-color-paper-strong: var(--mn-tonal);
-  --mn-color-surface: var(--mn-raised);
-  --mn-color-ink: var(--mn-ink);
-  --mn-color-ink-soft: color-mix(in srgb, var(--mn-ink) 72%, var(--mn-muted));
-  --mn-color-ink-muted: var(--mn-muted);
-  --mn-color-ink-faint: var(--mn-faint);
-  --mn-color-line: var(--mn-line);
-  --mn-color-line-soft: var(--mn-line);
-  --mn-color-accent: var(--mn-prune);
-  --mn-color-accent-strong: var(--mn-prune-hover);
-  --mn-color-accent-soft: var(--mn-yellow-soft);
-  --mn-color-danger: var(--mn-late);
-  --mn-color-danger-soft: var(--mn-late-tint);
-  --mn-color-warning: #8A6A00;
-  --mn-color-warning-soft: var(--mn-yellow-soft);
-  --mn-color-success: var(--mn-ok);
-  --mn-color-success-soft: var(--mn-ok-tint);
-  --mn-color-focus: color-mix(in srgb, var(--mn-prune) 28%, transparent);
-  --mn-radius-sm: var(--mn-r-sm);
-  --mn-radius-md: var(--mn-r-md);
-  --mn-radius-lg: var(--mn-r-lg);
-  --mn-space-1: 0.25rem;
-  --mn-space-2: 0.5rem;
-  --mn-space-3: 0.75rem;
-  --mn-space-4: 1rem;
-  --mn-space-5: 1.5rem;
-  --mn-space-6: 2rem;
-  --mn-space-7: 2.5rem;
-  --mn-space-8: 3.5rem;
-  --mn-hairline: 1px;
-  --mn-shadow-soft: none;
-}
-:root[data-theme="dark"],
-.mn-kit-theme[data-theme="dark"],
-[data-theme="dark"] .mn-kit-theme {
-  --mn-color-warning: #E8C766;
 }
