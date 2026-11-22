@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  font-family: "Instrument Sans", "Segoe UI", sans-serif;
+  font-family: var(--mn-font-sans);
   background: var(--mn-color-paper);
   color: var(--mn-color-ink);
 }
