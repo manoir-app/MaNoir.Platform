@@ -1,11 +1,11 @@
+/* Person avatar: a blob in the person's colour with the initial. Sources use a rounded square instead. */
 .root {
   align-items: center;
-  background: var(--mn-color-surface);
-  border: var(--mn-hairline) solid var(--mn-color-line);
-  border-radius: 999px;
-  color: var(--mn-color-ink-soft);
+  background: var(--mn-p-famille);
+  border-radius: var(--mn-blob);
+  color: var(--mn-bg);
   display: inline-flex;
-  font-family: var(--mn-font-mono);
+  flex: 0 0 auto;
   font-weight: 500;
   justify-content: center;
   overflow: hidden;
@@ -13,42 +13,51 @@
 }
 
 .sm {
-  font-size: 0.62rem;
-  height: 1.75rem;
-  width: 1.75rem;
+  font-size: 11px;
+  height: 24px;
+  width: 24px;
 }
 
 .md {
-  font-size: 0.72rem;
-  height: 2.25rem;
-  width: 2.25rem;
+  font-size: 13px;
+  height: 30px;
+  width: 30px;
 }
 
 .lg {
-  font-family: var(--mn-font-display);
-  font-size: 1.15rem;
-  height: 4rem;
-  width: 4rem;
+  font-size: 18px;
+  height: var(--mn-blob-md);
+  width: var(--mn-blob-md);
+}
+
+.default {
+  background: var(--mn-p-famille);
 }
 
 .muted {
-  color: var(--mn-color-ink-muted);
+  background: var(--mn-tonal);
+  color: var(--mn-muted);
 }
 
-.accent {
-  background: var(--mn-color-accent-soft);
-  border-color: transparent;
-  color: var(--mn-color-ink);
+.accent,
+.claire {
+  background: var(--mn-p-claire);
 }
 
-.success {
-  background: var(--mn-color-success-soft);
-  border-color: transparent;
-  color: var(--mn-color-ink);
+.success,
+.lea {
+  background: var(--mn-p-lea);
 }
 
-.warning {
-  background: var(--mn-color-warning-soft);
-  border-color: transparent;
-  color: var(--mn-color-ink);
+.warning,
+.paul {
+  background: var(--mn-p-paul);
+}
+
+.tom {
+  background: var(--mn-p-tom);
+}
+
+.famille {
+  background: var(--mn-p-famille);
 }

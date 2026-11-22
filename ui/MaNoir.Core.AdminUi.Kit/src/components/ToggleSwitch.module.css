@@ -1,59 +1,55 @@
+/* Switch: prune when on; the state also reads from the thumb position. */
 .root {
   align-items: center;
-  background: var(--mn-color-ink-faint);
+  background: var(--mn-line);
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--mn-r-pill);
   cursor: pointer;
   display: inline-flex;
-  padding: 2px;
-  transition: background-color 160ms ease;
+  padding: 3px;
+  transition: background-color 120ms ease;
 }
 
 .thumb {
-  background: var(--mn-color-paper);
-  border-radius: 999px;
+  background: var(--mn-raised);
+  border-radius: 50%;
   display: inline-flex;
-  transition: transform 160ms ease;
+  transition: transform 120ms ease;
 }
 
 .sm {
-  height: 1rem;
-  width: 1.85rem;
+  height: 22px;
+  width: 38px;
 }
 
 .sm .thumb {
-  height: 0.75rem;
-  width: 0.75rem;
+  height: 16px;
+  width: 16px;
 }
 
 .md {
-  height: 1.15rem;
-  width: 2rem;
+  height: 26px;
+  width: 44px;
 }
 
 .md .thumb {
-  height: 0.9rem;
-  width: 0.9rem;
+  height: 20px;
+  width: 20px;
 }
 
 .checked {
-  background: var(--mn-color-ink);
+  background: var(--mn-prune);
 }
 
 .checked.sm .thumb {
-  transform: translateX(0.85rem);
+  transform: translateX(16px);
 }
 
 .checked.md .thumb {
-  transform: translateX(0.85rem);
+  transform: translateX(18px);
 }
 
 .root:disabled {
   cursor: not-allowed;
   opacity: 0.5;
-}
-
-.root:focus-visible {
-  box-shadow: 0 0 0 5px var(--mn-color-focus);
-  outline: none;
 }
