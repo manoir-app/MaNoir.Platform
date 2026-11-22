@@ -24,7 +24,7 @@
 }
 
 .title {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
   flex: 1 1 auto;
   font-size: 1rem;
   line-height: 1.2;
@@ -36,10 +36,10 @@
 }
 
 .nav {
-  align-items: stretch;
+  align-items: center;
   display: flex;
   flex: 1 1 auto;
-  gap: 0;
+  gap: var(--mn-s-1);
   justify-content: flex-end;
   min-width: 0;
 }
@@ -56,13 +56,15 @@
 .menuAction {
   background: transparent;
   border: 0;
-  border-radius: 0;
-  color: var(--mn-color-ink-soft);
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-muted);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   font: inherit;
-  min-height: 3.4rem;
+  font-weight: 450;
+  min-height: 2.5rem;
+  transition: background 160ms ease, color 160ms ease;
   line-height: 1.2;
   padding: 0 1rem;
   text-decoration: none;
@@ -73,25 +75,28 @@
 .root[data-compact='true'] .menuAction,
 .measure[data-compact='true'] .action {
   font-size: 0.86rem;
-  min-height: 3rem;
+  min-height: 2.25rem;
   padding: 0 0.85rem;
 }
 
 .action:hover,
 .menuAction:hover {
-  background: var(--mn-color-paper-strong);
-  color: var(--mn-color-ink);
+  background: var(--mn-tonal);
+  color: var(--mn-ink);
 }
 
 .action:focus-visible,
 .menuAction:focus-visible {
-  box-shadow: 0 0 0 5px var(--mn-color-focus);
+  box-shadow: 0 0 0 2px var(--mn-ink);
   outline: none;
 }
 
-.active {
-  background: var(--mn-color-ink);
-  color: var(--mn-color-paper);
+.active,
+.active:hover {
+  background: var(--mn-yellow);
+  box-shadow: inset 0 0 0 1px var(--mn-yellow-edge);
+  color: var(--mn-on-yellow);
+  font-weight: 500;
 }
 
 .overflow {
@@ -100,10 +105,10 @@
 }
 
 .menu {
-  background: var(--mn-color-paper);
-  border: var(--mn-hairline) solid var(--mn-color-line);
-  border-radius: var(--mn-radius-sm);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  background: var(--mn-raised);
+  border: 1px solid var(--mn-line);
+  border-radius: var(--mn-r-md);
+  box-shadow: var(--mn-shadow-popup);
   display: grid;
   gap: 0.25rem;
   min-width: 12rem;
@@ -115,8 +120,8 @@
 }
 
 .menuAction {
-  border-radius: var(--mn-radius-sm);
-  color: var(--mn-color-ink-soft);
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-muted);
   display: block;
   height: auto;
   padding: 0.55rem 0.7rem;
@@ -125,8 +130,9 @@
 }
 
 .menuActionActive {
-  background: var(--mn-color-ink);
-  color: var(--mn-color-paper);
+  background: var(--mn-yellow);
+  box-shadow: inset 0 0 0 1px var(--mn-yellow-edge);
+  color: var(--mn-on-yellow);
 }
 
 .measure {

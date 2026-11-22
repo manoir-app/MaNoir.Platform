@@ -12,6 +12,8 @@
   --mn-raised: #FFFFFF;
   --mn-yellow: #F4DE96;
   --mn-yellow-soft: #FBF1CF;
+  --mn-on-yellow: #1E1A1D;
+  --mn-yellow-edge: transparent;
   --mn-ink: #1E1A1D;
   --mn-muted: #6F666A;
   --mn-faint: #7A7074;
@@ -43,6 +45,8 @@
   --mn-raised: #2A2531;
   --mn-yellow: #F4DE96;
   --mn-yellow-soft: #3A3520;
+  --mn-on-yellow: #1E1A1D;
+  --mn-yellow-edge: transparent;
   --mn-ink: #F3EEE6;
   --mn-muted: #A49BA3;
   --mn-faint: #8A8190;
@@ -74,6 +78,8 @@
   --mn-raised: #000000;
   --mn-yellow: #000000;
   --mn-yellow-soft: #000000;
+  --mn-on-yellow: #FFFFFF;
+  --mn-yellow-edge: #FFFFFF;
   --mn-ink: #FFFFFF;
   --mn-muted: #BDB5BA;
   --mn-faint: #8A8190;

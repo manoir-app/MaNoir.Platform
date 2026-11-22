@@ -26,31 +26,32 @@
 
 .eyebrow,
 .meta {
-  color: var(--mn-color-accent);
-  font-family: var(--mn-font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  color: var(--mn-muted);
+  font-family: var(--mn-font-sans);
+  font-size: 0.875rem;
+  font-weight: 450;
+  letter-spacing: 0;
 }
 
 .title {
   font-family: var(--mn-font-display);
-  font-size: clamp(3.1rem, 4.9vw, 4.35rem);
+  font-size: clamp(2.25rem, 3.6vw, 3rem);
   font-weight: 500;
-  letter-spacing: -0.05em;
-  line-height: 1.02;
-  max-width: 18ch;
-}
-
-.page .title {
-  font-size: clamp(2.35rem, 3.4vw, 3.2rem);
-  letter-spacing: -0.045em;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
   max-width: 20ch;
 }
 
+.page .title {
+  font-size: clamp(1.75rem, 2.6vw, 2.5rem);
+  letter-spacing: -0.03em;
+  max-width: 24ch;
+}
+
 .description {
-  color: var(--mn-color-ink-soft);
-  font-size: 1rem;
+  color: var(--mn-muted);
+  font-size: 1.0625rem;
+  font-weight: 300;
   line-height: 1.5;
   margin: 0;
   max-width: 52rem;

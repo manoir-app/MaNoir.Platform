@@ -1,7 +1,7 @@
 .root {
-  background: var(--mn-color-paper);
+  background: transparent;
   border-right: 0;
-  color: var(--mn-color-ink);
+  color: var(--mn-ink);
   display: flex;
   flex-direction: column;
   max-width: 100%;
@@ -20,19 +20,19 @@
 
 .brand {
   font-family: var(--mn-font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.05;
 }
 
 .caption,
 .sectionTitle {
-  color: var(--mn-color-ink-muted);
-  font-size: 0.66rem;
+  color: var(--mn-muted);
+  font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding-left: 0.75rem;
 }
 
 .search {
@@ -66,55 +66,56 @@
 }
 
 .link {
-  align-items: baseline;
+  align-items: center;
   background: transparent;
   border: 0;
-  border-left: 1px solid transparent;
   box-sizing: border-box;
-  border-radius: 0;
-  color: var(--mn-color-ink-soft);
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-muted);
   cursor: pointer;
   display: flex;
   font-family: var(--mn-font-sans);
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: 450;
   justify-content: space-between;
   margin-left: 0;
   max-width: 100%;
   min-height: auto;
   min-width: 0;
-  padding: 0.3rem 0;
-  padding-left: 0.45rem;
+  padding: 0.55rem 0.75rem;
   text-align: left;
   text-decoration: none;
-  transition: color 160ms ease, border-color 160ms ease;
+  transition: color 160ms ease, background 160ms ease;
   width: 100%;
 }
 
 .link:hover {
-  color: var(--mn-color-ink);
+  background: var(--mn-tonal);
+  color: var(--mn-ink);
 }
 
 .link:focus-visible {
-  box-shadow: 0 0 0 5px var(--mn-color-focus);
+  box-shadow: 0 0 0 2px var(--mn-ink);
   outline: none;
 }
 
-.active {
-  border-left-color: var(--mn-color-accent);
-  color: var(--mn-color-ink);
+.active,
+.active:hover {
+  background: var(--mn-yellow);
+  box-shadow: inset 0 0 0 1px var(--mn-yellow-edge);
+  color: var(--mn-on-yellow);
   font-weight: 500;
 }
 
 .meta {
-  color: var(--mn-color-ink-faint);
+  color: var(--mn-muted);
   font-family: var(--mn-font-mono);
-  font-size: 0.66rem;
+  font-size: 0.7rem;
   margin-left: auto;
 }
 
 .footer {
-  border-top: var(--mn-hairline) solid var(--mn-color-line);
+  border-top: 1px solid var(--mn-line);
   color: var(--mn-color-ink-soft);
   font-size: 0.9rem;
   margin-top: auto;
