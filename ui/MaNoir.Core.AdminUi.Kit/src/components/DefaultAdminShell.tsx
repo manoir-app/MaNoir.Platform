@@ -28,6 +28,11 @@ export interface DefaultAdminShellProps extends React.HTMLAttributes<HTMLDivElem
   serverMeta?: React.ReactNode;
   serverStatus?: React.ReactNode;
   serverStatusTone?: StatusPillTone;
+  /** Shrinks the sidebar to the 96px icon rail (pair with `collapsed` on the SidebarNav). */
+  sidebarCollapsed?: boolean;
+  /** When provided, a toggle button is shown at the top of the sidebar. */
+  onSidebarCollapsedChange?: (collapsed: boolean) => void;
+  sidebarToggleLabel?: string;
   navigationAriaLabel?: string;
   navigationItems: DefaultAdminShellNavItem[];
   topBarBrand: React.ReactNode;
@@ -78,10 +83,13 @@ export function DefaultAdminShell({
   serverName: _serverName,
   serverStatus,
   serverStatusTone = 'neutral',
+  onSidebarCollapsedChange,
   sidebarBrand,
+  sidebarCollapsed = false,
   sidebarDescription,
   sidebarEyebrow,
   sidebarNavigation,
+  sidebarToggleLabel,
   topBarActions,
   topBarBrand,
   topBarLogo,
@@ -126,11 +134,27 @@ export function DefaultAdminShell({
   }, [accountMenuOpen]);
 
   const sidebar = (
-    <div className={styles.sidebar}>
+    <div className={cx(styles.sidebar, sidebarCollapsed && styles.sidebarCollapsed)}>
       <div className={styles.brandBlock}>
-        {sidebarEyebrow ? <div className={styles.eyebrow}>{sidebarEyebrow}</div> : null}
-        <h1 className={styles.brand}>{sidebarBrand}</h1>
-        {sidebarDescription ? <p className={styles.copy}>{sidebarDescription}</p> : null}
+        {onSidebarCollapsedChange ? (
+          <button
+            aria-expanded={!sidebarCollapsed}
+            aria-label={sidebarToggleLabel}
+            className={styles.sidebarToggle}
+            onClick={() => {
+              onSidebarCollapsedChange(!sidebarCollapsed);
+            }}
+            title={sidebarToggleLabel}
+            type="button"
+          >
+            <svg aria-hidden="true" height="20" viewBox="0 0 20 20" width="20">
+              <path d="M3 5.5h14M3 10h14M3 14.5h14" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.6" />
+            </svg>
+          </button>
+        ) : null}
+        {!sidebarCollapsed && sidebarEyebrow ? <div className={styles.eyebrow}>{sidebarEyebrow}</div> : null}
+        {!sidebarCollapsed ? <h1 className={styles.brand}>{sidebarBrand}</h1> : null}
+        {!sidebarCollapsed && sidebarDescription ? <p className={styles.copy}>{sidebarDescription}</p> : null}
       </div>
 
       {sidebarNavigation ? sidebarNavigation : (
@@ -142,7 +166,7 @@ export function DefaultAdminShell({
       )}
 
       <div className={styles.accountFooter}>
-        {serverLabel || serverMeta || serverStatus ? (
+        {!sidebarCollapsed && (serverLabel || serverMeta || serverStatus) ? (
           <div className={styles.serverFooterInfo}>
             <span
               aria-label={typeof serverStatus === 'string' ? serverStatus : undefined}
@@ -169,11 +193,11 @@ export function DefaultAdminShell({
             name={typeof userValue === 'string' ? userValue : undefined}
             size="sm"
           />
-          <span className={styles.accountIdentity}>
+          <span className={cx(styles.accountIdentity, sidebarCollapsed && styles.hiddenInRail)}>
             {userLabel ? <span className={styles.userLabel}>{userLabel}</span> : null}
             <span className={styles.userValue}>{userValue}</span>
           </span>
-          <span aria-hidden="true" className={styles.accountGlyph}>⚙</span>
+          <span aria-hidden="true" className={cx(styles.accountGlyph, sidebarCollapsed && styles.hiddenInRail)}>⚙</span>
         </button>
 
         {accountMenuOpen ? (
@@ -215,7 +239,7 @@ export function DefaultAdminShell({
       contentPadding={contentPadding}
       showDivider={false}
       sidebar={sidebar}
-      sidebarSize="lg"
+      sidebarSize={sidebarCollapsed ? 'rail' : 'lg'}
       topBar={topBar}
       {...props}
     >

@@ -1,6 +1,6 @@
 .overlay {
   align-items: center;
-  background: oklch(20% 0.02 60 / 0.32);
+  background: color-mix(in srgb, var(--mn-ink) 38%, transparent);
   display: flex;
   inset: 0;
   justify-content: center;
@@ -10,9 +10,13 @@
 }
 
 .dialog {
-  background: var(--mn-color-paper);
-  border: 1px solid var(--mn-color-ink);
+  background: var(--mn-raised);
+  border: 1px solid var(--mn-line);
+  border-radius: var(--mn-r-xl);
+  box-shadow: var(--mn-shadow-popup);
+  color: var(--mn-ink);
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   max-height: min(88vh, 54rem);
   max-width: 100%;
@@ -33,11 +37,10 @@
 
 .header {
   align-items: start;
-  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
   display: flex;
   gap: 1rem;
   justify-content: space-between;
-  padding: 1.5rem 1.75rem 1.25rem;
+  padding: var(--mn-s-7) var(--mn-s-7) var(--mn-s-3);
 }
 
 .headerContent {
@@ -46,48 +49,52 @@
 }
 
 .eyebrow {
-  color: var(--mn-color-ink-muted);
-  font-family: var(--mn-font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  color: var(--mn-muted);
+  font-size: 0.875rem;
 }
 
 .title {
   font-family: var(--mn-font-display);
-  font-size: 1.65rem;
-  letter-spacing: -0.04em;
-  line-height: 0.98;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .description {
-  color: var(--mn-color-ink-soft);
-  font-size: 0.92rem;
+  color: var(--mn-muted);
+  font-size: 0.9375rem;
   line-height: 1.5;
   margin: 0;
 }
 
 .close {
-  background: transparent;
+  align-items: center;
+  background: var(--mn-tonal);
   border: 0;
-  color: var(--mn-color-ink-muted);
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-ink);
   cursor: pointer;
-  font-size: 1.5rem;
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: 1.25rem;
+  height: var(--mn-touch-min);
+  justify-content: center;
   line-height: 1;
   padding: 0;
+  width: var(--mn-touch-min);
 }
 
 .body {
   flex: 1;
   overflow: auto;
-  padding: 1.5rem 1.75rem;
+  padding: var(--mn-s-4) var(--mn-s-7) var(--mn-s-6);
 }
 
 .footer {
-  border-top: var(--mn-hairline) solid var(--mn-color-line);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--mn-space-2);
+  gap: var(--mn-s-2);
   justify-content: flex-end;
-  padding: 1rem 1.75rem;
+  padding: var(--mn-s-3) var(--mn-s-7) var(--mn-s-7);
 }

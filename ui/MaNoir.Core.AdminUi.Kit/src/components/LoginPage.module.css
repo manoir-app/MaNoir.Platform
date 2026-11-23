@@ -1,6 +1,6 @@
 .root {
-  background: var(--mn-color-paper);
-  color: var(--mn-color-ink);
+  background: var(--mn-bg);
+  color: var(--mn-ink);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -8,16 +8,13 @@
 
 .topBar {
   align-items: center;
-  border-bottom: 1px solid var(--mn-color-ink);
-  color: var(--mn-color-ink-soft);
+  border-bottom: 1px solid var(--mn-line);
+  color: var(--mn-muted);
   display: flex;
-  font-family: var(--mn-font-mono);
-  font-size: 0.68rem;
+  font-size: 0.875rem;
   gap: 1rem;
   justify-content: space-between;
-  letter-spacing: 0.16em;
-  padding: 0.9rem 3.5rem;
-  text-transform: uppercase;
+  padding: var(--mn-s-4) var(--mn-s-9);
 }
 
 .topBarIdentity {
@@ -28,13 +25,13 @@
 }
 
 .topBarBrand {
-  color: var(--mn-color-ink);
-  font-weight: 600;
+  color: var(--mn-ink);
+  font-weight: 500;
 }
 
 .topBarMeta,
 .topBarStatus {
-  color: var(--mn-color-ink-muted);
+  color: var(--mn-muted);
 }
 
 .body {
@@ -64,7 +61,7 @@
 }
 
 .divider {
-  background: var(--mn-color-line);
+  background: transparent;
 }
 
 .panel {
@@ -73,37 +70,35 @@
 
 .heroEyebrow,
 .panelEyebrow {
-  color: var(--mn-color-accent);
-  font-family: var(--mn-font-mono);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  color: var(--mn-muted);
+  font-size: 0.875rem;
+  font-weight: 450;
 }
 
 .heroTitle,
 .panelTitle {
   font-family: var(--mn-font-display);
   font-weight: 500;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
 }
 
 .heroTitle {
-  font-size: clamp(3rem, 5.8vw, 4.8rem);
-  line-height: 0.98;
+  font-size: clamp(2.5rem, 4.6vw, 3.5rem);
+  line-height: 1.08;
   margin-top: 1.4rem;
   max-width: 15ch;
 }
 
 .heroTitle em,
 .panelTitle em {
-  color: var(--mn-color-accent);
-  font-style: italic;
+  color: var(--mn-prune);
+  font-style: normal;
 }
 
 .heroDescription,
 .panelDescription {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
+  font-weight: 300;
   line-height: 1.55;
   margin: 0;
 }
@@ -115,7 +110,7 @@
 }
 
 .heroSupplementary {
-  border-top: 1px solid var(--mn-color-line);
+  border-top: 1px solid var(--mn-line);
   margin-top: 3rem;
   max-width: 34rem;
   padding-top: 1.5rem;
@@ -132,8 +127,8 @@
 }
 
 .panelTitle {
-  font-size: clamp(2.15rem, 3vw, 2.8rem);
-  line-height: 0.98;
+  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
+  line-height: 1.1;
   margin-top: 0.75rem;
 }
 

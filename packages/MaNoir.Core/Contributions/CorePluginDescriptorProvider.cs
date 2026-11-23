@@ -44,6 +44,7 @@ public static class CorePluginDescriptorProvider
                             {
                                 Category = "Mesh",
                                 Name = "Status",
+                                Icon = "gauge",
                                 Url = "/platform/mesh/status",
                                 Labels = new Dictionary<string, string>()
                                 {
@@ -55,6 +56,7 @@ public static class CorePluginDescriptorProvider
                             {
                                 Category = "Mesh",
                                 Name = "Places",
+                                Icon = "map-pin",
                                 Url = "/platform/mesh/places",
                                 Labels = new Dictionary<string, string>()
                                 {
@@ -66,6 +68,7 @@ public static class CorePluginDescriptorProvider
                             {
                                 Category = "Surveillance",
                                 Name = "Agents",
+                                Icon = "users",
                                 Url = "/platform/surveillance/agents",
                                 Labels = new Dictionary<string, string>()
                                 {
@@ -77,6 +80,7 @@ public static class CorePluginDescriptorProvider
                             {
                                 Category = "Surveillance",
                                 Name = "Services",
+                                Icon = "server",
                                 Url = "/platform/surveillance/services",
                                 Labels = new Dictionary<string, string>()
                                 {
@@ -88,6 +92,7 @@ public static class CorePluginDescriptorProvider
                             {
                                 Category = "Surveillance",
                                 Name = "Logs",
+                                Icon = "file-text",
                                 Url = "/platform/surveillance/logs",
                                 Labels = new Dictionary<string, string>()
                                 {
@@ -99,6 +104,7 @@ public static class CorePluginDescriptorProvider
                             {
                                 Category = "Extensions",
                                 Name = "Catalog",
+                                Icon = "puzzle",
                                 Url = "/platform/extensions/catalog",
                                 Labels = new Dictionary<string, string>()
                                 {
@@ -110,6 +116,7 @@ public static class CorePluginDescriptorProvider
                             {
                                 Category = "Extensions",
                                 Name = "Installed",
+                                Icon = "package",
                                 Url = "/platform/extensions/installed",
                                 Labels = new Dictionary<string, string>()
                                 {

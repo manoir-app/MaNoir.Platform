@@ -1,11 +1,12 @@
 .root {
-  background: var(--mn-color-ink);
+  background: var(--mn-ink);
+  border-radius: var(--mn-r-xl);
   overflow: hidden;
   position: relative;
 }
 
 .frame {
-  border: var(--mn-hairline) solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   inset: 1.9rem;
   position: absolute;
 }

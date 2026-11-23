@@ -123,6 +123,7 @@ export interface AdminNavigationPage {
   pluginId: string;
   category: string;
   name: string;
+  icon?: string | null;
   label: string;
   href: string;
 }

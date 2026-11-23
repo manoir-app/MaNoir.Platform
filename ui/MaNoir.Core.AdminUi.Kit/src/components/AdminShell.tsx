@@ -6,7 +6,7 @@ export interface AdminShellProps extends React.HTMLAttributes<HTMLDivElement> {
   topBar?: React.ReactNode;
   sidebar?: React.ReactNode;
   sidebarClassName?: string;
-  sidebarSize?: 'sm' | 'md' | 'lg';
+  sidebarSize?: 'rail' | 'sm' | 'md' | 'lg';
   showDivider?: boolean;
   contentClassName?: string;
   contentPadding?: 'none' | 'compact' | 'comfortable';

@@ -1,3 +1,4 @@
+import './styles/fonts.css';
 import './styles/tokens.css';
 import './styles/base.css';
 
@@ -9,6 +10,8 @@ export { AppBrandHeader } from './components/AppBrandHeader';
 export type { AppBrandHeaderProps } from './components/AppBrandHeader';
 export { Avatar } from './components/Avatar';
 export type { AvatarProps, AvatarSize, AvatarTone } from './components/Avatar';
+export { Spinner } from './components/Spinner';
+export type { SpinnerProps, SpinnerSize } from './components/Spinner';
 export { Card } from './components/Card';
 export type { CardProps } from './components/Card';
 export { DataTable } from './components/DataTable';

@@ -1,38 +1,145 @@
+/*
+ * MaNoir design system tokens (minimalist warm direction).
+ * Names mirror the design system's tokens.json: keep them in sync.
+ * Themes: light (default), dark (data-theme="dark"), mirror (data-theme="mirror").
+ */
 :root,
 .mn-kit-theme {
-  --mn-color-paper: oklch(97.8% 0.008 85);
-  --mn-color-paper-strong: oklch(96.2% 0.01 85);
-  --mn-color-surface: oklch(99.2% 0.004 85);
-  --mn-color-ink: oklch(20% 0.015 60);
-  --mn-color-ink-soft: oklch(38% 0.012 60);
-  --mn-color-ink-muted: oklch(58% 0.01 60);
-  --mn-color-ink-faint: oklch(74% 0.008 60);
-  --mn-color-line: oklch(86% 0.01 60);
-  --mn-color-line-soft: oklch(91% 0.008 60);
-  --mn-color-accent: oklch(42% 0.13 25);
-  --mn-color-accent-strong: oklch(36% 0.13 25);
-  --mn-color-accent-soft: oklch(94% 0.025 25);
-  --mn-color-danger: oklch(45% 0.14 25);
-  --mn-color-danger-soft: oklch(94% 0.03 25);
-  --mn-color-warning: oklch(52% 0.1 65);
-  --mn-color-warning-soft: oklch(95% 0.025 65);
-  --mn-color-success: oklch(44% 0.08 145);
-  --mn-color-success-soft: oklch(94% 0.02 145);
-  --mn-color-focus: color-mix(in oklch, var(--mn-color-accent) 24%, transparent);
-  --mn-radius-sm: 2px;
-  --mn-radius-md: 4px;
-  --mn-radius-lg: 14px;
-  --mn-space-1: 0.25rem;
-  --mn-space-2: 0.5rem;
-  --mn-space-3: 0.75rem;
-  --mn-space-4: 1rem;
-  --mn-space-5: 1.5rem;
-  --mn-space-6: 2rem;
-  --mn-space-7: 2.5rem;
-  --mn-space-8: 3.5rem;
-  --mn-font-display: "Instrument Sans", "Inter", "Segoe UI", sans-serif;
-  --mn-font-sans: "Inter", "Segoe UI", sans-serif;
-  --mn-font-mono: "JetBrains Mono", ui-monospace, monospace;
-  --mn-hairline: 0.5px;
-  --mn-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.03), 0 20px 50px rgba(0, 0, 0, 0.06);
+  --mn-bg: #FAF8F4;
+  --mn-tonal: #F3EFE8;
+  --mn-raised: #FFFFFF;
+  --mn-yellow: #F4DE96;
+  --mn-yellow-soft: #FBF1CF;
+  --mn-on-yellow: #1E1A1D;
+  --mn-yellow-edge: transparent;
+  --mn-ink: #1E1A1D;
+  --mn-muted: #6F666A;
+  --mn-faint: #7A7074;
+  --mn-line: #EAE4DA;
+  --mn-prune: #7E2A47;
+  --mn-prune-hover: #651F38;
+  --mn-late: #B4460F;
+  --mn-late-tint: #FFE9DE;
+  --mn-alert-dot: #D9532B;
+  --mn-ok: #2E7D4A;
+  --mn-ok-tint: #E3F0E4;
+  --mn-p-paul: #B8860B;
+  --mn-p-claire: #7E2A47;
+  --mn-p-lea: #5E8A5A;
+  --mn-p-tom: #3F7FA6;
+  --mn-p-famille: #6F666A;
+  --mn-src-manoir: #7E2A47;
+  --mn-src-todo: #3F7FA6;
+  --mn-src-devops: #4A5A9A;
+  --mn-src-planner: #5E8A5A;
+  --mn-src-ha: #2A7F86;
+}
+
+:root[data-theme="dark"],
+.mn-kit-theme[data-theme="dark"],
+[data-theme="dark"] .mn-kit-theme {
+  --mn-bg: #15121A;
+  --mn-tonal: #211D27;
+  --mn-raised: #2A2531;
+  --mn-yellow: #F4DE96;
+  --mn-yellow-soft: #3A3520;
+  --mn-on-yellow: #1E1A1D;
+  --mn-yellow-edge: transparent;
+  --mn-ink: #F3EEE6;
+  --mn-muted: #A49BA3;
+  --mn-faint: #8A8190;
+  --mn-line: #3A3440;
+  --mn-prune: #D9809E;
+  --mn-prune-hover: #E59AB3;
+  --mn-late: #E8A27E;
+  --mn-late-tint: #3A2318;
+  --mn-alert-dot: #E8704A;
+  --mn-ok: #7CC596;
+  --mn-ok-tint: #1F3326;
+  --mn-p-paul: #D9A93A;
+  --mn-p-claire: #D9809E;
+  --mn-p-lea: #86B882;
+  --mn-p-tom: #6FA9CF;
+  --mn-p-famille: #A49BA3;
+  --mn-src-manoir: #9A3A5B;
+  --mn-src-todo: #3F7FA6;
+  --mn-src-devops: #5A6BB0;
+  --mn-src-planner: #5E8A5A;
+  --mn-src-ha: #2A7F86;
+}
+
+:root[data-theme="mirror"],
+.mn-kit-theme[data-theme="mirror"],
+[data-theme="mirror"] .mn-kit-theme {
+  --mn-bg: #000000;
+  --mn-tonal: #000000;
+  --mn-raised: #000000;
+  --mn-yellow: #000000;
+  --mn-yellow-soft: #000000;
+  --mn-on-yellow: #FFFFFF;
+  --mn-yellow-edge: #FFFFFF;
+  --mn-ink: #FFFFFF;
+  --mn-muted: #BDB5BA;
+  --mn-faint: #8A8190;
+  --mn-line: #3A3440;
+  --mn-prune: #D9809E;
+  --mn-prune-hover: #E59AB3;
+  --mn-late: #E8A27E;
+  --mn-late-tint: #000000;
+  --mn-alert-dot: #E8704A;
+  --mn-ok: #7CC596;
+  --mn-ok-tint: #000000;
+  --mn-p-paul: #D9A93A;
+  --mn-p-claire: #D9809E;
+  --mn-p-lea: #86B882;
+  --mn-p-tom: #6FA9CF;
+  --mn-p-famille: #A49BA3;
+  --mn-src-manoir: #9A3A5B;
+  --mn-src-todo: #3F7FA6;
+  --mn-src-devops: #5A6BB0;
+  --mn-src-planner: #5E8A5A;
+  --mn-src-ha: #2A7F86;
+}
+
+:root,
+.mn-kit-theme {
+  /* typography */
+  --mn-font-sans: 'Outfit Variable', 'Outfit', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mn-font-mono: 'DM Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --mn-font-display: var(--mn-font-sans);
+
+  /* spacing (design system) */
+  --mn-s-1: 4px;
+  --mn-s-2: 8px;
+  --mn-s-3: 12px;
+  --mn-s-4: 16px;
+  --mn-s-5: 20px;
+  --mn-s-6: 24px;
+  --mn-s-7: 28px;
+  --mn-s-8: 36px;
+  --mn-s-9: 56px;
+
+  /* radii */
+  --mn-r-sm: 9px;
+  --mn-r-md: 16px;
+  --mn-r-lg: 20px;
+  --mn-r-xl: 28px;
+  --mn-r-2xl: 40px;
+  --mn-r-pill: 999px;
+  --mn-blob: 42% 58% 52% 48% / 48% 44% 56% 52%;
+
+  /* sizes */
+  --mn-touch-min: 44px;
+  --mn-touch-wall: 64px;
+  --mn-button-h: 46px;
+  --mn-field-h: 50px;
+  --mn-row-min: 66px;
+  --mn-rail-w: 96px;
+  --mn-rail-btn: 52px;
+  --mn-blob-md: 48px;
+  --mn-page-max: 1240px;
+
+  /* shadows: the only two of the system */
+  --mn-shadow-popup: 0 18px 50px rgba(30, 26, 29, 0.25);
+  --mn-shadow-fab: 0 10px 26px rgba(126, 42, 71, 0.35);
 }

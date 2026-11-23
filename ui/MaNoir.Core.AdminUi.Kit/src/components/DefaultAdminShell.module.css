@@ -16,15 +16,15 @@
 
 .sidebar {
   --sidebar-inline-padding: var(--mn-shell-sidebar-inline-padding);
-  background: var(--mn-color-paper);
-  border-right: var(--mn-hairline) solid var(--mn-color-line);
+  background: var(--mn-bg);
+  border-right: 0;
   display: grid;
-  gap: 1.85rem;
+  gap: 1.5rem;
   grid-template-rows: auto 1fr auto;
   height: 100%;
   min-height: 100%;
   box-sizing: border-box;
-  padding: 2.35rem var(--sidebar-inline-padding) 1.2rem;
+  padding: var(--mn-s-8) var(--sidebar-inline-padding) var(--mn-s-5);
 }
 
 .brandBlock {
@@ -38,18 +38,16 @@
 .userLabel,
 .status,
 .navLabel {
-  color: var(--mn-color-ink-muted);
-  font-family: var(--mn-font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  color: var(--mn-muted);
+  font-family: var(--mn-font-sans);
+  font-size: 0.8125rem;
 }
 
 .brand {
   font-family: var(--mn-font-display);
-  font-size: 2.35rem;
+  font-size: 1.75rem;
   font-weight: 500;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   margin: 0;
   min-width: 0;
   overflow: hidden;
@@ -59,7 +57,7 @@
 
 .copy,
 .navDescription {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
   line-height: 1.6;
 }
 
@@ -76,23 +74,23 @@
 }
 
 .serverStatusDotNeutral {
-  background: var(--mn-color-ink-faint);
+  background: var(--mn-faint);
 }
 
 .serverStatusDotSuccess {
-  background: var(--mn-color-success);
+  background: var(--mn-ok);
 }
 
 .serverStatusDotWarning {
-  background: var(--mn-color-warning);
+  background: var(--mn-late);
 }
 
 .serverStatusDotDanger {
-  background: var(--mn-color-danger);
+  background: var(--mn-late);
 }
 
 .serverStatusDotAccent {
-  background: var(--mn-color-accent-strong);
+  background: var(--mn-prune-hover);
 }
 
 .nav {
@@ -104,31 +102,33 @@
 .navItem {
   background: transparent;
   border: 0;
-  border-left: 1px solid transparent;
+  border-radius: var(--mn-r-md);
   color: inherit;
   cursor: pointer;
   display: grid;
   gap: 0.18rem;
-  margin-left: -0.95rem;
-  padding: 0.5rem 0;
-  padding-left: 0.95rem;
+  padding: 0.65rem 0.9rem;
   text-align: left;
   text-decoration: none;
-  transition: border-color 160ms ease, color 160ms ease;
-  width: calc(100% + 0.95rem);
+  transition: background 160ms ease;
+  width: 100%;
 }
 
-.navItem:hover,
-.navItemActive {
-  background: transparent;
-  border-left-color: var(--mn-color-accent);
+.navItem:hover {
+  background: var(--mn-tonal);
+}
+
+.navItemActive,
+.navItemActive:hover {
+  background: var(--mn-yellow);
+  box-shadow: inset 0 0 0 1px var(--mn-yellow-edge);
 }
 
 .navTitle {
   font-family: var(--mn-font-display);
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 500;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
 }
 
 .navItem:not(.navItemActive) .navTitle {
@@ -136,8 +136,9 @@
   font-weight: 450;
 }
 
-.navItemActive .navTitle {
-  color: var(--mn-color-ink);
+.navItemActive .navTitle,
+.navItemActive .navDescription {
+  color: var(--mn-on-yellow);
 }
 
 .navDescription {
@@ -146,11 +147,11 @@
 }
 
 .header {
-  border-bottom-color: var(--mn-color-line);
+  border-bottom-color: var(--mn-line);
 }
 
 .headerShell {
-  background: var(--mn-color-paper);
+  background: var(--mn-bg);
 }
 
 .headerNavigation {
@@ -180,7 +181,7 @@
 }
 
 .accountFooter {
-  border-top: 1px solid var(--mn-color-line);
+  border-top: 1px solid var(--mn-line);
   margin-top: auto;
   position: relative;
   margin-inline: calc(-1 * var(--sidebar-inline-padding));
@@ -190,8 +191,8 @@
 
 .serverFooterInfo {
   align-items: center;
-  border-bottom: 1px solid var(--mn-color-line);
-  color: var(--mn-color-ink-muted);
+  border-bottom: 1px solid var(--mn-line);
+  color: var(--mn-muted);
   display: flex;
   gap: 0.45rem;
   margin-bottom: 0.55rem;
@@ -216,15 +217,13 @@
 }
 
 .serverFooterLabel {
-  color: var(--mn-color-ink-muted);
-  font-family: var(--mn-font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  color: var(--mn-muted);
+  font-family: var(--mn-font-sans);
+  font-size: 0.75rem;
 }
 
 .serverFooterMeta {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
   font-size: 0.78rem;
 }
 
@@ -232,7 +231,7 @@
   align-items: center;
   background: transparent;
   border: 0;
-  color: var(--mn-color-ink);
+  color: var(--mn-ink);
   cursor: pointer;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
@@ -271,7 +270,7 @@
 }
 
 .accountGlyph {
-  color: var(--mn-color-ink-muted);
+  color: var(--mn-muted);
   font-size: 0.85rem;
 }
 
@@ -280,10 +279,11 @@
 }
 
 .accountMenu {
-  background: var(--mn-color-paper);
-  border: 1px solid var(--mn-color-line);
+  background: var(--mn-raised);
+  border: 1px solid var(--mn-line);
+  border-radius: var(--mn-r-md);
   bottom: calc(100% + 0.5rem);
-  box-shadow: 0 12px 24px rgba(24, 19, 14, 0.08);
+  box-shadow: var(--mn-shadow-popup);
   min-width: 12rem;
   padding: 0.4rem;
   position: absolute;
@@ -294,7 +294,8 @@
 .accountMenuAction {
   background: transparent;
   border: 0;
-  color: var(--mn-color-ink);
+  color: var(--mn-ink);
+  border-radius: var(--mn-r-sm);
   cursor: pointer;
   display: block;
   font: inherit;
@@ -304,7 +305,7 @@
 }
 
 .accountMenuAction:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--mn-tonal);
 }
 
 .accountMenuAction:disabled {
@@ -327,4 +328,58 @@
     left: 0;
     right: auto;
   }
+}
+
+/* Icon rail */
+.sidebarCollapsed {
+  --sidebar-inline-padding: var(--mn-s-3);
+}
+
+.sidebarCollapsed .brandBlock {
+  justify-items: center;
+}
+
+.sidebarCollapsed .accountButton {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.hiddenInRail {
+  display: none;
+}
+
+.sidebarToggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-muted);
+  cursor: pointer;
+  display: inline-flex;
+  height: var(--mn-touch-min);
+  justify-content: center;
+  justify-self: start;
+  margin-left: -0.5rem;
+  transition: background 160ms ease, color 160ms ease;
+  width: var(--mn-touch-min);
+}
+
+.sidebarCollapsed .sidebarToggle {
+  justify-self: center;
+  margin-left: 0;
+}
+
+.sidebarToggle:hover {
+  background: var(--mn-tonal);
+  color: var(--mn-ink);
+}
+
+.sidebarToggle:focus-visible {
+  box-shadow: 0 0 0 2px var(--mn-ink);
+  outline: none;
+}
+
+.sidebarCollapsed .accountMenu {
+  left: 0;
+  right: auto;
 }

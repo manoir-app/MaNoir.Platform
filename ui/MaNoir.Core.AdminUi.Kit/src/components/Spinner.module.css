@@ -1,0 +1,72 @@
+/* Waiting indicator: a soft yellow blob that morphs, with a prune dot turning inside. */
+.root {
+  --sp: 48px;
+  display: inline-block;
+  flex: 0 0 var(--sp);
+  height: var(--sp);
+  position: relative;
+  vertical-align: middle;
+  width: var(--sp);
+}
+
+.root::before {
+  animation: morph 2.6s ease-in-out infinite, turn 8s linear infinite;
+  background: var(--mn-yellow);
+  border-radius: var(--mn-blob);
+  content: '';
+  inset: 0;
+  position: absolute;
+}
+
+.root::after {
+  animation: turn 1.6s linear infinite;
+  background: radial-gradient(circle at 50% 24%, var(--mn-prune) 0 9%, transparent 10%);
+  content: '';
+  inset: 0;
+  position: absolute;
+}
+
+.sm {
+  --sp: 20px;
+}
+
+.sm::after {
+  display: none;
+}
+
+.lg {
+  --sp: 96px;
+}
+
+.wait {
+  align-items: center;
+  color: var(--mn-muted);
+  display: inline-flex;
+  gap: 14px;
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes morph {
+  0%,
+  100% {
+    border-radius: 42% 58% 52% 48% / 48% 44% 56% 52%;
+  }
+  33% {
+    border-radius: 58% 42% 46% 54% / 54% 56% 44% 46%;
+  }
+  66% {
+    border-radius: 48% 52% 58% 42% / 42% 50% 50% 58%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root::before,
+  .root::after {
+    animation: none;
+  }
+}

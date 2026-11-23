@@ -63,6 +63,7 @@ export const resources = {
       },
       navigation: {
         main: 'Main navigation',
+        toggleSidebar: 'Collapse or expand the menu',
         console: {
           label: 'Console',
           description: 'Operations cockpit and operator overview',
@@ -526,6 +527,7 @@ export const resources = {
       },
       navigation: {
         main: 'Navigation principale',
+        toggleSidebar: 'Réduire ou développer le menu',
         console: {
           label: 'Console',
           description: 'Centre de pilotage et apercu operateur',

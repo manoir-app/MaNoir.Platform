@@ -220,6 +220,7 @@ public sealed class AdminNavigationLogic
                 PluginId = plugin.Id,
                 Category = category,
                 Name = page.Name,
+                Icon = page.Icon,
                 Label = ResolvePageLabel(page),
                 Href = href
             });
