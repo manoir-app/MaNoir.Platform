@@ -1,4 +1,5 @@
 import type { Preview } from '@storybook/react-vite';
+import '../src/styles/fonts.css';
 import '../src/styles/tokens.css';
 import '../src/styles/base.css';
 
@@ -8,7 +9,7 @@ const preview: Preview = {
       <div
         className="mn-kit-theme"
         style={{
-          background: 'var(--mn-color-paper)',
+          background: 'var(--mn-bg)',
           minHeight: '100vh',
           padding: '2rem',
         }}

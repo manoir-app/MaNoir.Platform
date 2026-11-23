@@ -1,9 +1,9 @@
 :where(.mn-kit-theme) {
-  background: var(--mn-color-paper);
-  color: var(--mn-color-ink);
+  background: var(--mn-bg);
+  color: var(--mn-ink);
   font-family: var(--mn-font-sans);
-  font-feature-settings: 'ss01', 'cv11';
-  line-height: 1.55;
+  font-size: 16px;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -13,13 +13,14 @@
 }
 
 :where(.mn-kit-theme ::selection) {
-  background: color-mix(in oklch, var(--mn-color-accent) 18%, white);
+  background: var(--mn-yellow);
+  color: #1E1A1D;
 }
 
 :where(.mn-kit-theme h1, .mn-kit-theme h2, .mn-kit-theme h3) {
   font-family: var(--mn-font-display);
   font-weight: 500;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 :where(.mn-kit-theme button, .mn-kit-theme input, .mn-kit-theme textarea, .mn-kit-theme select) {
@@ -30,8 +31,18 @@
   color: inherit;
 }
 
-:where(.mn-kit-theme kbd) {
-  border: var(--mn-hairline) solid var(--mn-color-line);
-  border-radius: var(--mn-radius-sm);
+:where(.mn-kit-theme :focus-visible) {
+  outline: 3px solid var(--mn-prune);
+  outline-offset: 2px;
+}
+
+/* DM Mono is reserved for references, identifiers, paths and commands. */
+:where(.mn-kit-theme code, .mn-kit-theme kbd, .mn-kit-theme samp) {
   font-family: var(--mn-font-mono);
+}
+
+:where(.mn-kit-theme kbd) {
+  border-radius: var(--mn-r-sm);
+  background: var(--mn-tonal);
+  padding: 0.1em 0.45em;
 }

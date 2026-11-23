@@ -1,35 +1,41 @@
+/* State pill with a dot, always with a word (design system "Badges / État"). */
 .root {
   align-items: center;
-  color: var(--mn-color-ink-muted);
+  background: var(--mn-tonal);
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-muted);
   display: inline-flex;
-  font-size: 0.66rem;
+  font-size: 13px;
   font-weight: 500;
-  gap: 0.45rem;
-  letter-spacing: 0.14em;
-  min-height: auto;
-  padding: 0;
-  text-transform: uppercase;
+  gap: 8px;
+  height: 28px;
+  padding: 0 12px;
+  white-space: nowrap;
 }
 
 .dot {
   background: currentColor;
-  border-radius: 999px;
-  height: 0.32rem;
-  width: 0.32rem;
+  border-radius: 50%;
+  height: 8px;
+  width: 8px;
 }
 
 .accent {
-  color: var(--mn-color-accent-strong);
+  background: var(--mn-yellow-soft);
+  color: var(--mn-prune);
 }
 
 .success {
-  color: var(--mn-color-success);
+  background: var(--mn-ok-tint);
+  color: var(--mn-ok);
 }
 
 .warning {
-  color: var(--mn-color-warning);
+  background: var(--mn-yellow-soft);
+  color: var(--mn-late);
 }
 
 .danger {
-  color: var(--mn-color-danger);
+  background: var(--mn-late-tint);
+  color: var(--mn-late);
 }

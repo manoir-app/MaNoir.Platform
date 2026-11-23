@@ -51,6 +51,8 @@ public sealed class AdminNavigationPage
 
     public string Name { get; set; }
 
+    public string Icon { get; set; }
+
     public string Label { get; set; }
 
     public string Href { get; set; }

@@ -14,7 +14,7 @@ function MobileOverviewCanvas() {
       className="mn-kit-theme"
       style={{
         alignItems: 'flex-start',
-        background: 'var(--mn-color-paper)',
+        background: 'var(--mn-bg)',
         display: 'flex',
         gap: '2.5rem',
         justifyContent: 'center',
@@ -24,9 +24,9 @@ function MobileOverviewCanvas() {
     >
       <div
         style={{
-          background: 'var(--mn-color-paper)',
-          borderLeft: '1px solid var(--mn-color-line)',
-          borderRight: '1px solid var(--mn-color-line)',
+          background: 'var(--mn-bg)',
+          borderLeft: '1px solid var(--mn-line)',
+          borderRight: '1px solid var(--mn-line)',
           minHeight: '100vh',
           width: '390px',
         }}
@@ -44,7 +44,7 @@ function MobileOverviewCanvas() {
 
         <div style={{ display: 'grid', gap: '1.75rem', padding: '0.65rem 1.5rem 2rem' }}>
           <div>
-            <div style={{ color: 'var(--mn-color-ink-muted)', fontFamily: 'var(--mn-font-mono)', fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+            <div style={{ color: 'var(--mn-muted)', fontFamily: 'var(--mn-font-mono)', fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
               Lundi 20 avril
             </div>
             <div style={{ fontFamily: 'var(--mn-font-display)', fontSize: '2rem', fontWeight: 500, letterSpacing: '-0.04em', lineHeight: 1, marginTop: '0.35rem' }}>
@@ -54,7 +54,7 @@ function MobileOverviewCanvas() {
 
           <EditorialBand>
             <div style={{ fontFamily: 'var(--mn-font-display)', fontSize: '1.15rem', lineHeight: 1.05 }}>Scanner un QR container.</div>
-            <div style={{ color: 'var(--mn-color-ink-soft)', fontSize: '0.86rem' }}>Un scan suffit pour ouvrir le bon bac, sans recherche intermédiaire.</div>
+            <div style={{ color: 'var(--mn-muted)', fontSize: '0.86rem' }}>Un scan suffit pour ouvrir le bon bac, sans recherche intermédiaire.</div>
           </EditorialBand>
 
           <div style={{ display: 'grid', gap: '0.75rem' }}>
@@ -80,7 +80,7 @@ function MobileOverviewCanvas() {
           </div>
 
           <div style={{ display: 'grid', gap: '0.65rem' }}>
-            <div style={{ color: 'var(--mn-color-ink-muted)', fontSize: '0.7rem', fontFamily: 'var(--mn-font-mono)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+            <div style={{ color: 'var(--mn-muted)', fontSize: '0.7rem', fontFamily: 'var(--mn-font-mono)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
               Prêts en cours
             </div>
             <ListRow
@@ -101,9 +101,9 @@ function MobileOverviewCanvas() {
 
       <div
         style={{
-          background: 'var(--mn-color-paper)',
-          borderLeft: '1px solid var(--mn-color-line)',
-          borderRight: '1px solid var(--mn-color-line)',
+          background: 'var(--mn-bg)',
+          borderLeft: '1px solid var(--mn-line)',
+          borderRight: '1px solid var(--mn-line)',
           minHeight: '100vh',
           width: '390px',
         }}
@@ -120,14 +120,14 @@ function MobileOverviewCanvas() {
         />
 
         <div style={{ display: 'grid', gap: '1.25rem', padding: '0.9rem 1.5rem 2rem' }}>
-          <div style={{ color: 'var(--mn-color-ink-muted)', fontFamily: 'var(--mn-font-mono)', fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+          <div style={{ color: 'var(--mn-muted)', fontFamily: 'var(--mn-font-mono)', fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
             Scanner
           </div>
           <div style={{ fontFamily: 'var(--mn-font-display)', fontSize: '2rem', fontWeight: 500, letterSpacing: '-0.04em', lineHeight: 1 }}>Cadrer le QR.</div>
           <ScanPanel />
           <SearchInput id="mobile-search" label="Recherche rapide" placeholder="Container, objet, contact..." shortcut={null} />
           <div style={{ display: 'grid', gap: '0.25rem' }}>
-            <div style={{ color: 'var(--mn-color-ink-muted)', fontFamily: 'var(--mn-font-mono)', fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+            <div style={{ color: 'var(--mn-muted)', fontFamily: 'var(--mn-font-mono)', fontSize: '0.7rem', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
               Récemment scannés
             </div>
             <ListRow clickable subtitle="Salon / Bibliothèque Kallax" title="INV-C001 — Archives Photos" />

@@ -1,45 +1,43 @@
 .root {
   align-items: center;
-  color: var(--mn-color-ink-muted);
+  color: var(--mn-muted);
   display: inline-flex;
-  gap: 0.4rem;
+  gap: 8px;
 }
 
 .dot {
   background: currentColor;
-  border-radius: 999px;
+  border-radius: 50%;
   display: inline-flex;
-  height: 0.42rem;
-  width: 0.42rem;
+  height: 8px;
+  width: 8px;
 }
 
 .label {
-  font-family: var(--mn-font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .neutral {
-  color: var(--mn-color-ink-soft);
+  color: var(--mn-muted);
 }
 
 .accent {
-  color: var(--mn-color-accent);
+  color: var(--mn-prune);
 }
 
 .success {
-  color: var(--mn-color-success);
+  color: var(--mn-ok);
 }
 
 .warning {
-  color: var(--mn-color-warning);
+  color: var(--mn-late);
 }
 
 .danger {
-  color: var(--mn-color-danger);
+  color: var(--mn-late);
 }
 
 .muted {
-  color: var(--mn-color-ink-faint);
+  color: var(--mn-faint);
 }

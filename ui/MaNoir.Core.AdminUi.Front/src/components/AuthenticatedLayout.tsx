@@ -6,12 +6,23 @@ import { ShellHeader } from '@manoir-app/core-admin-ui-kit/shell-header';
 import { SidebarNav } from '@manoir-app/core-admin-ui-kit/sidebar-nav';
 import manoirLogo from '../assets/logo.svg';
 import { DomainIcon } from './DomainIcon';
+import { hasPageIcon, PageIcon } from './PageIcon';
 import i18n, { resolveSupportedLanguage } from '../i18n';
 import { getLocalMeshSettings } from '../lib/api';
 import { useAuthSessionViewModel } from '../hooks/useAuthSessionViewModel';
 import { useAuthenticatedLayoutViewModel } from '../hooks/useAuthenticatedLayoutViewModel';
 import { useAdminNavigationStore } from '../stores/adminNavigationStore';
 import { LoginPage } from '../pages/LoginPage';
+
+const sidebarCollapsedKey = 'manoir.admin.sidebarCollapsed';
+
+function readSidebarCollapsed() {
+  try {
+    return window.localStorage.getItem(sidebarCollapsedKey) === '1';
+  } catch {
+    return false;
+  }
+}
 
 export function AuthenticatedLayout() {
   const { t } = useTranslation();
@@ -30,6 +41,15 @@ export function AuthenticatedLayout() {
     serverStatusTone,
     serverVersion,
   } = useAuthenticatedLayoutViewModel();
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(readSidebarCollapsed);
+
+  React.useEffect(() => {
+    try {
+      window.localStorage.setItem(sidebarCollapsedKey, sidebarCollapsed ? '1' : '0');
+    } catch {
+      // The preference is a convenience; ignore storage failures.
+    }
+  }, [sidebarCollapsed]);
 
   React.useEffect(() => {
     if (!hasRestoredSession) {
@@ -100,6 +120,14 @@ export function AuthenticatedLayout() {
     ),
   }));
 
+  const sidebarSections = navigationSections.map((section) => ({
+    ...section,
+    items: section.items.map(({ iconKind, ...item }) => ({
+      ...item,
+      icon: hasPageIcon(iconKind) ? <PageIcon kind={iconKind} /> : undefined,
+    })),
+  }));
+
   return (
     <DefaultAdminShell
       contentPadding="compact"
@@ -107,6 +135,9 @@ export function AuthenticatedLayout() {
       logoutLabel={isSubmitting ? t('common.actions.loggingOut') : t('common.actions.logout')}
       navigationAriaLabel={t('navigation.main')}
       navigationItems={[]}
+      onSidebarCollapsedChange={setSidebarCollapsed}
+      sidebarCollapsed={sidebarCollapsed}
+      sidebarToggleLabel={t('navigation.toggleSidebar')}
       onLogout={() => {
         void handleLogout();
       }}
@@ -121,7 +152,8 @@ export function AuthenticatedLayout() {
         <SidebarNav
           aria-label={t('navigation.main')}
           className="front-auth-sidebar-nav"
-          sections={navigationSections}
+          collapsed={sidebarCollapsed}
+          sections={sidebarSections}
         />
       )}
       topBarBrand={t('common.appName')}

@@ -1,18 +1,16 @@
 .root {
-  background: var(--mn-color-accent-soft);
-  border-left: 2px solid var(--mn-color-accent);
-  border-radius: 0 var(--mn-radius-sm) var(--mn-radius-sm) 0;
+  background: var(--mn-yellow-soft);
+  border-radius: var(--mn-r-xl);
+  color: var(--mn-ink);
   display: grid;
-  gap: var(--mn-space-2);
-  padding: var(--mn-space-4) var(--mn-space-5);
+  gap: var(--mn-s-2);
+  padding: var(--mn-s-5) var(--mn-s-6);
 }
 
 .warning {
-  background: var(--mn-color-warning-soft);
-  border-left-color: var(--mn-color-warning);
+  background: var(--mn-yellow-soft);
 }
 
 .danger {
-  background: var(--mn-color-danger-soft);
-  border-left-color: var(--mn-color-danger);
+  background: var(--mn-late-tint);
 }

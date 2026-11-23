@@ -1,13 +1,13 @@
+/* Tonal slab with a large radius, never a border ("few cards, never a border"). */
 .root {
-  background: rgba(255, 255, 255, 0.64);
-  border: 1px solid var(--mn-color-line);
-  border-radius: var(--mn-radius-lg);
-  box-shadow: var(--mn-shadow-soft);
-  color: var(--mn-color-ink);
-  padding: var(--mn-space-5);
+  --mn-field-bg: var(--mn-bg);
+  background: var(--mn-tonal);
+  border-radius: var(--mn-r-xl);
+  color: var(--mn-ink);
+  padding: var(--mn-s-7);
 }
 
+/* Soft attention: urgencies, next appointment, information banner. */
 .attention {
-  background: var(--mn-color-danger-soft);
-  border-color: rgba(178, 58, 49, 0.18);
+  background: var(--mn-yellow-soft);
 }

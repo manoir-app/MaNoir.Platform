@@ -5,41 +5,34 @@
 }
 
 .line {
-  border-bottom: var(--mn-hairline) solid var(--mn-color-line);
-  gap: 0;
+  gap: var(--mn-s-1);
 }
 
 .pill {
-  gap: 0.5rem;
+  gap: var(--mn-s-2);
 }
 
 .tab {
   align-items: center;
   background: transparent;
   border: 0;
-  color: var(--mn-color-ink-muted);
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-muted);
   cursor: pointer;
   display: inline-flex;
+  font: inherit;
+  font-weight: 450;
   gap: 0.4rem;
-  padding: 0.55rem 0.1rem;
+  min-height: 2.5rem;
+  padding: 0 var(--mn-s-4);
   text-decoration: none;
+  transition: background 160ms ease, color 160ms ease;
 }
 
-.line .tab {
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  margin-right: 1.15rem;
-  padding-right: 0.1rem;
-}
-
-.pill .tab {
-  border: var(--mn-hairline) solid var(--mn-color-line);
-  border-radius: var(--mn-radius-sm);
-  padding: 0.35rem 0.75rem;
-}
 
 .tab:hover:not(:disabled) {
-  color: var(--mn-color-ink);
+  background: var(--mn-tonal);
+  color: var(--mn-ink);
 }
 
 .tab:disabled {
@@ -53,26 +46,20 @@
   pointer-events: auto;
 }
 
-.active {
-  color: var(--mn-color-ink);
-}
-
-.line .active {
-  border-bottom-color: var(--mn-color-ink);
-}
-
-.pill .active {
-  background: var(--mn-color-ink);
-  border-color: var(--mn-color-ink);
-  color: var(--mn-color-paper);
+.active,
+.active:hover:not(:disabled) {
+  background: var(--mn-yellow);
+  box-shadow: inset 0 0 0 1px var(--mn-yellow-edge);
+  color: var(--mn-on-yellow);
+  font-weight: 500;
 }
 
 .badge {
-  color: var(--mn-color-ink-faint);
+  color: var(--mn-muted);
   font-family: var(--mn-font-mono);
-  font-size: 0.68rem;
+  font-size: 0.75rem;
 }
 
-.pill .active .badge {
-  color: color-mix(in oklch, var(--mn-color-paper) 72%, transparent);
+.active .badge {
+  color: var(--mn-on-yellow);
 }

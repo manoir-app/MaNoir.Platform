@@ -1,85 +1,95 @@
+/* Pill buttons: no border, no transform on press, the colour simply darkens (design system "Buttons"). */
 .root {
   align-items: center;
-  background: transparent;
-  border: var(--mn-hairline) solid var(--mn-color-line);
-  border-radius: var(--mn-radius-sm);
+  background: var(--mn-tonal);
+  border: 0;
+  border-radius: var(--mn-r-pill);
+  color: var(--mn-ink);
   cursor: pointer;
   display: inline-flex;
   font-family: var(--mn-font-sans);
   font-weight: 500;
-  gap: var(--mn-space-2);
+  gap: var(--mn-s-2);
   justify-content: center;
-  letter-spacing: -0.01em;
-  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease;
+  white-space: nowrap;
 }
 
-.root:focus-visible {
-  box-shadow: 0 0 0 5px var(--mn-color-focus);
-  outline: none;
-}
-
-.root:disabled {
+.root:disabled,
+.root[aria-disabled='true'] {
   cursor: not-allowed;
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
 .sm {
-  font-size: 0.72rem;
-  min-height: 1.5rem;
-  padding: 0 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 14px;
+  min-height: 36px;
+  padding: 0 18px;
 }
 
 .md {
-  font-size: 0.8rem;
-  min-height: 1.75rem;
-  padding: 0 0.65rem;
+  font-size: 16px;
+  min-height: var(--mn-button-h);
+  padding: 0 28px;
 }
 
 .lg {
-  font-size: 0.92rem;
-  min-height: 2.25rem;
-  padding: 0 0.95rem;
+  font-size: 18px;
+  min-height: 60px;
+  padding: 0 32px;
 }
 
+/* One primary action per visible zone. */
 .primary {
-  background: var(--mn-color-ink);
-  border-color: var(--mn-color-ink);
-  color: var(--mn-color-paper);
+  background: var(--mn-prune);
+  color: var(--mn-bg);
 }
 
 .primary:hover:not(:disabled) {
-  background: var(--mn-color-ink-soft);
-  border-color: var(--mn-color-ink-soft);
+  background: var(--mn-prune-hover);
 }
 
+/* Secondary action: tonal, turns yellow on hover. */
 .secondary {
-  background: transparent;
-  color: var(--mn-color-ink);
+  background: var(--mn-tonal);
+  color: var(--mn-ink);
 }
 
 .secondary:hover:not(:disabled) {
-  background: var(--mn-color-paper-strong);
-  border-color: var(--mn-color-ink-muted);
+  background: var(--mn-yellow);
+  color: #1E1A1D;
 }
 
+/* Tertiary action: prune text, tonal on hover. */
 .quiet {
-  border-color: color-mix(in oklch, var(--mn-color-accent) 40%, transparent);
-  color: var(--mn-color-accent-strong);
+  background: transparent;
+  color: var(--mn-prune);
+}
+
+.sm.quiet {
+  padding: 0 12px;
+}
+
+.md.quiet,
+.lg.quiet {
+  padding: 0 16px;
 }
 
 .quiet:hover:not(:disabled) {
-  background: var(--mn-color-accent-soft);
-  border-color: var(--mn-color-accent);
+  background: var(--mn-tonal);
 }
 
 .danger {
-  background: var(--mn-color-danger-soft);
-  border-color: color-mix(in oklch, var(--mn-color-danger) 30%, transparent);
-  color: var(--mn-color-danger);
+  background: var(--mn-late-tint);
+  color: var(--mn-late);
 }
 
 .danger:hover:not(:disabled) {
-  background: color-mix(in oklch, var(--mn-color-danger-soft) 75%, white);
+  background: var(--mn-late);
+  color: var(--mn-bg);
+}
+
+.loading {
+  cursor: progress;
 }

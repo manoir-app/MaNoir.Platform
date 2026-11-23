@@ -238,6 +238,12 @@ public sealed class AdminUiPageDefinition
     public string Name { get; set; }
 
     /// <summary>
+    /// Gets or sets the optional navigation icon name (for example "gauge", "map-pin", "server").
+    /// Unknown or empty names fall back to the page's initial in the Admin UI.
+    /// </summary>
+    public string Icon { get; set; }
+
+    /// <summary>
     /// Gets or sets the page route relative to the Admin UI host.
     /// </summary>
     public string RelativePath { get; set; }

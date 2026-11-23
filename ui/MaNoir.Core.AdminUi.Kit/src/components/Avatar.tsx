@@ -3,7 +3,17 @@ import { cx } from '../lib/cx';
 import styles from './Avatar.module.css';
 
 export type AvatarSize = 'sm' | 'md' | 'lg';
-export type AvatarTone = 'default' | 'muted' | 'accent' | 'success' | 'warning';
+export type AvatarTone =
+  | 'default'
+  | 'muted'
+  | 'accent'
+  | 'success'
+  | 'warning'
+  | 'paul'
+  | 'claire'
+  | 'lea'
+  | 'tom'
+  | 'famille';
 
 export interface AvatarProps extends React.HTMLAttributes<HTMLSpanElement> {
   initials?: React.ReactNode;

@@ -30,12 +30,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Desktop: Story = {
   render: (args) => (
-    <div className="mn-kit-theme" style={{ background: 'var(--mn-color-paper)', minHeight: '10rem' }}>
+    <div className="mn-kit-theme" style={{ background: 'var(--mn-bg)', minHeight: '10rem' }}>
       <ShellHeader
         {...args}
         title={
           <>
-            <span style={{ color: 'var(--mn-color-ink)', fontWeight: 600 }}>Intendance</span>
+            <span style={{ color: 'var(--mn-ink)', fontWeight: 600 }}>Intendance</span>
             <span> — maison</span>
           </>
         }
@@ -49,7 +49,7 @@ export const Compact: Story = {
     items: compactItems,
   },
   render: (args) => (
-    <div className="mn-kit-theme" style={{ background: 'var(--mn-color-paper)', width: '390px' }}>
+    <div className="mn-kit-theme" style={{ background: 'var(--mn-bg)', width: '390px' }}>
       <ShellHeader {...args} />
     </div>
   ),

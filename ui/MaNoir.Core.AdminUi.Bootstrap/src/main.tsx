@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import '../../MaNoir.Core.AdminUi.Kit/src/styles/fonts.css';
 import '../../MaNoir.Core.AdminUi.Kit/src/styles/tokens.css';
 import '../../MaNoir.Core.AdminUi.Kit/src/styles/base.css';
 import { App } from './App';
