@@ -36,7 +36,7 @@ function renderContent(item: SidebarNavItem, collapsed: boolean) {
     return (
       <>
         <span aria-hidden="true" className={styles.icon}>{item.icon ?? fallback}</span>
-        <span className={styles.railCaption}>{item.label}</span>
+        <span className={styles.srOnly}>{item.label}</span>
       </>
     );
   }

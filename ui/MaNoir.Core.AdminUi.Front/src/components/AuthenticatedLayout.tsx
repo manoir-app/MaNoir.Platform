@@ -68,9 +68,10 @@ const sidebarCollapsedKey = 'manoir.admin.sidebarCollapsed';
 
 function readSidebarCollapsed() {
   try {
-    return window.localStorage.getItem(sidebarCollapsedKey) === '1';
+    // Icon rail by default; the user's explicit choice wins.
+    return window.localStorage.getItem(sidebarCollapsedKey) !== '0';
   } catch {
-    return false;
+    return true;
   }
 }
 
@@ -231,18 +232,20 @@ export function AuthenticatedLayout() {
               <PlugIcon />
             </button>
           ) : null}
-          <button
-            aria-label={t('navigation.switchTheme')}
-            className="front-top-action"
-            onClick={() => {
-              setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
-            }}
-            title={t('navigation.switchTheme')}
-            type="button"
-          >
-            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-          </button>
         </>
+      )}
+      sidebarFooterActions={(
+        <button
+          aria-label={t('navigation.switchTheme')}
+          className="front-top-action"
+          onClick={() => {
+            setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+          }}
+          title={t('navigation.switchTheme')}
+          type="button"
+        >
+          {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+        </button>
       )}
       topBarLogo={<img alt="" src={manoirLogo} />}
       topBarMeta={headerMeta}

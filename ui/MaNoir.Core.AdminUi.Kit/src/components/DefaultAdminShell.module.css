@@ -450,3 +450,24 @@
     display: none;
   }
 }
+
+.footerActions {
+  display: flex;
+  gap: var(--mn-s-2);
+  margin-bottom: var(--mn-s-2);
+}
+
+.sidebarCollapsed .footerActions {
+  justify-content: center;
+}
+
+.sidebarCollapsed .accountFooter {
+  border-top: 0;
+}
+
+.sidebarCollapsed .accountAvatar {
+  background: var(--mn-tonal);
+  color: var(--mn-ink);
+  height: var(--mn-touch-min);
+  width: var(--mn-touch-min);
+}

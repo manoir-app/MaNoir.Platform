@@ -32,6 +32,8 @@ export interface DefaultAdminShellProps extends React.HTMLAttributes<HTMLDivElem
   /** When provided, a toggle button is shown at the top of the sidebar. */
   onSidebarCollapsedChange?: (collapsed: boolean) => void;
   sidebarToggleLabel?: string;
+  /** Small icon actions shown above the account button (for example a theme toggle). */
+  sidebarFooterActions?: React.ReactNode;
   navigationAriaLabel?: string;
   navigationItems: DefaultAdminShellNavItem[];
   topBarBrand: React.ReactNode;
@@ -89,6 +91,7 @@ export function DefaultAdminShell({
   sidebarCollapsed = false,
   sidebarDescription,
   sidebarEyebrow,
+  sidebarFooterActions,
   sidebarNavigation,
   sidebarToggleLabel,
   topBarActions,
@@ -168,6 +171,7 @@ export function DefaultAdminShell({
       )}
 
       <div className={styles.accountFooter}>
+        {sidebarFooterActions ? <div className={styles.footerActions}>{sidebarFooterActions}</div> : null}
         {!sidebarCollapsed && (serverLabel || serverMeta || serverStatus) ? (
           <div className={styles.serverFooterInfo}>
             <span
