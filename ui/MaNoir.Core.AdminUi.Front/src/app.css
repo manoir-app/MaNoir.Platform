@@ -71,9 +71,14 @@ body {
   width: 1.375rem;
 }
 
+.front-section-tabs {
+  margin-bottom: var(--mn-s-6);
+}
+
 .front-auth-sidebar-nav {
   background: transparent;
   border-right: 0;
+  height: 100%;
   min-height: auto;
   max-width: 100%;
   overflow-x: hidden;

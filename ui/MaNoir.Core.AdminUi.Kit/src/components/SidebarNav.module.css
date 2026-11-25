@@ -42,8 +42,14 @@
 }
 
 .sections {
-  display: grid;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   gap: 1.35rem;
+}
+
+.sectionEnd {
+  margin-top: auto;
 }
 
 .section {
@@ -188,7 +194,7 @@
   width: 1px;
 }
 
-.collapsed .section + .section {
+.collapsed .section + .section:not(.sectionEnd) {
   border-top: 1px solid var(--mn-line);
   margin-top: var(--mn-s-2);
   padding-top: var(--mn-s-4);

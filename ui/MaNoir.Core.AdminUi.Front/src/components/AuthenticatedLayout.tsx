@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { DefaultAdminShell } from '@manoir-app/core-admin-ui-kit/default-admin-shell';
 import { ShellHeader } from '@manoir-app/core-admin-ui-kit/shell-header';
 import { SidebarNav } from '@manoir-app/core-admin-ui-kit/sidebar-nav';
+import { InlineTabs } from '@manoir-app/core-admin-ui-kit/inline-tabs';
 import manoirLogo from '../assets/logo.svg';
 import { DomainIcon } from './DomainIcon';
 import { hasPageIcon, PageIcon } from './PageIcon';
@@ -39,10 +40,11 @@ const iconProps = {
   viewBox: '0 0 20 20',
 };
 
-function PlugIcon() {
+function GearIcon() {
   return (
-    <svg {...iconProps}>
-      <path d="M7 2.5v4M13 2.5v4M5 6.5h10v3a5 5 0 0 1-10 0v-3ZM10 14.5v3" />
+    <svg {...iconProps} viewBox="0 0 24 24">
+      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+      <circle cx="12" cy="12" r="3" />
     </svg>
   );
 }
@@ -181,13 +183,38 @@ export function AuthenticatedLayout() {
       icon: <DomainIcon kind={'icon' in item ? item.icon : null} />,
     }));
 
-  const sidebarSections = navigationSections.map((section) => ({
-    ...section,
-    items: section.items.map(({ iconKind, ...item }) => ({
-      ...item,
-      icon: hasPageIcon(iconKind) ? <PageIcon kind={iconKind} /> : undefined,
-    })),
-  }));
+  // One sidebar entry per section; the pages of a section become tabs above the content.
+  const sectionIconKinds: Record<string, string> = {
+    overview: 'grid',
+    house: 'map-pin',
+    people: 'users',
+    monitoring: 'pulse',
+    extensions: 'plug',
+    system: 'server',
+  };
+  const endSectionIds = new Set(['system']);
+  const sectionEntries = navigationSections
+    .filter((section) => section.items.length > 0)
+    .map((section) => {
+      const [firstPage] = section.items;
+      const iconKind = sectionIconKinds[section.id] ?? section.items.find((item) => hasPageIcon(item.iconKind))?.iconKind;
+      const sectionTitle = typeof section.title === 'string' ? section.title : '';
+
+      return {
+        id: section.id,
+        label: i18n.exists(`navigation.sections.${section.id}`) ? t(`navigation.sections.${section.id}` as never) : sectionTitle,
+        icon: hasPageIcon(iconKind) ? <PageIcon kind={iconKind} /> : undefined,
+        active: section.items.some((item) => item.active),
+        href: firstPage.href,
+        onClick: firstPage.onClick,
+      };
+    });
+  const sidebarSections = [
+    { id: 'sections', items: sectionEntries.filter((entry) => !endSectionIds.has(entry.id)) },
+    { id: 'sections-end', align: 'end' as const, items: sectionEntries.filter((entry) => endSectionIds.has(entry.id)) },
+  ].filter((section) => section.items.length > 0);
+  const activeSection = navigationSections.find((section) => section.items.some((item) => item.active));
+  const activeSectionTabs = activeSection && activeSection.items.length > 1 ? activeSection.items : [];
 
   return (
     <DefaultAdminShell
@@ -229,7 +256,7 @@ export function AuthenticatedLayout() {
               title={t('navigation.platformSettings')}
               type="button"
             >
-              <PlugIcon />
+              <GearIcon />
             </button>
           ) : null}
         </>
@@ -261,6 +288,22 @@ export function AuthenticatedLayout() {
       userLabel={t('authLayout.userLabel')}
       userValue={currentUserLabel}
     >
+      {activeSectionTabs.length > 0 ? (
+        <div className="front-section-tabs">
+          <InlineTabs
+            aria-label={activeSection ? String(activeSection.title ?? '') : undefined}
+            items={activeSectionTabs.map((item) => ({
+              id: item.id,
+              label: item.label,
+              onSelect: item.onClick,
+              href: item.href,
+            }))}
+            onValueChange={() => {}}
+            value={activeSectionTabs.find((item) => item.active)?.id ?? ''}
+            variant="pill"
+          />
+        </div>
+      ) : null}
       <Outlet />
     </DefaultAdminShell>
   );

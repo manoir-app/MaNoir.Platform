@@ -30,6 +30,10 @@ export default defineConfig(({ mode, command }) => {
     },
     server: {
       port: 5175,
+      fs: {
+        // The Kit sources and its bundled fonts live next to this app.
+        allow: [resolve(__dirname, '..')],
+      },
       proxy: {
         '/api/core': {
           target: proxyTarget,

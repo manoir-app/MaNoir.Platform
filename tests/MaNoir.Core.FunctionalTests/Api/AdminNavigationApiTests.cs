@@ -74,9 +74,10 @@ public sealed class AdminNavigationApiTests
         Assert.AreEqual(HttpStatusCode.OK, domainResponse.StatusCode);
         Assert.IsNotNull(domain);
         Assert.AreEqual("platform", domain.Domain.Id);
-        CollectionAssert.AreEqual(new[] { "Mesh", "Surveillance", "Extensions" }, domain.Sections.Select(section => section.Label).ToList());
-        CollectionAssert.AreEqual(new[] { "Statut general", "Lieux et pieces" }, domain.Sections[0].Pages.Select(page => page.Label).ToList());
-        Assert.AreEqual("/platform/surveillance/agents", domain.Sections[1].Pages[0].Href);
+        CollectionAssert.AreEqual(new[] { "Overview", "House", "People", "Monitoring", "Extensions", "System" }, domain.Sections.Select(section => section.Label).ToList());
+        CollectionAssert.AreEqual(new[] { "Statut general" }, domain.Sections[0].Pages.Select(page => page.Label).ToList());
+        CollectionAssert.AreEqual(new[] { "Lieux et pieces", "Ecrans associes", "Reglages locaux" }, domain.Sections[1].Pages.Select(page => page.Label).ToList());
+        Assert.AreEqual("/platform/surveillance/agents", domain.Sections[3].Pages[0].Href);
     }
 
     [TestMethod]

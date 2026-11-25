@@ -5,6 +5,7 @@ import { AgentRegistryPage } from './pages/AgentRegistryPage';
 import { ConsoleHomePage } from './pages/ConsoleHomePage';
 import { NavigationPlaceholderPage } from './pages/NavigationPlaceholderPage';
 import { PlatformHealthPage } from './pages/PlatformHealthPage';
+import { PlatformLogsPage } from './pages/PlatformLogsPage';
 import { InstalledPluginsPage } from './pages/InstalledPluginsPage';
 import { PluginCatalogPage } from './pages/PluginCatalogPage';
 
@@ -42,13 +43,27 @@ const routes = [
             },
             {
               path: 'platform/mesh/places',
-              element: (
-                <NavigationPlaceholderPage
-                  descriptionKey="placeholders.meshPlaces.description"
-                  eyebrowKey="placeholders.meshPlaces.eyebrow"
-                  titleKey="placeholders.meshPlaces.title"
-                />
-              ),
+              element: <NavigationPlaceholderPage kind="meshPlaces" />,
+            },
+            {
+              path: 'platform/house/screens',
+              element: <NavigationPlaceholderPage kind="houseScreens" />,
+            },
+            {
+              path: 'platform/house/local',
+              element: <NavigationPlaceholderPage kind="houseLocal" />,
+            },
+            {
+              path: 'platform/people/users',
+              element: <NavigationPlaceholderPage kind="peopleUsers" />,
+            },
+            {
+              path: 'platform/surveillance/logs',
+              Component: PlatformLogsPage,
+            },
+            {
+              path: 'platform/system/about',
+              element: <NavigationPlaceholderPage kind="systemAbout" />,
             },
             {
               path: 'platform/surveillance/agents',

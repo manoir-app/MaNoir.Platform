@@ -64,7 +64,15 @@ export const resources = {
       navigation: {
         main: 'Main navigation',
         toggleSidebar: 'Collapse or expand the menu',
-        platformSettings: 'Platform and settings',
+        platformSettings: 'Settings',
+        sections: {
+          overview: 'Overview',
+          house: 'House',
+          people: 'People',
+          monitoring: 'Monitoring',
+          extensions: 'Extensions',
+          system: 'System',
+        },
         switchTheme: 'Switch between light and dark theme',
         console: {
           label: 'Console',
@@ -100,6 +108,26 @@ export const resources = {
           eyebrow: 'Mesh · topology',
           title: 'Places and rooms will connect here.',
           description: 'This area is ready to host the topology tree, room configuration and the first local mesh placement tools.',
+        },
+        houseScreens: {
+          eyebrow: 'House · screens',
+          title: 'Linked screens will appear here.',
+          description: 'Tablets, bedside screens and the mirror that show your tasks and your home.',
+        },
+        houseLocal: {
+          eyebrow: 'House · local settings',
+          title: 'Local settings will appear here.',
+          description: 'Language and internet connection monitoring for this house.',
+        },
+        peopleUsers: {
+          eyebrow: 'People · users',
+          title: 'Accounts, guests and access will appear here.',
+          description: 'Who lives in the house, who is a guest and what each person can reach.',
+        },
+        systemAbout: {
+          eyebrow: 'System',
+          title: 'Files, secrets and version will appear here.',
+          description: 'Stored files, shared secrets and updates of this installation.',
         },
         extensionsCatalog: {
           eyebrow: 'Extensions · catalog',
@@ -530,7 +558,15 @@ export const resources = {
       navigation: {
         main: 'Navigation principale',
         toggleSidebar: 'Réduire ou développer le menu',
-        platformSettings: 'Plateforme et réglages',
+        platformSettings: 'Réglages',
+        sections: {
+          overview: 'Accueil',
+          house: 'Maison',
+          people: 'Personnes',
+          monitoring: 'Surveillance',
+          extensions: 'Extensions',
+          system: 'Système',
+        },
         switchTheme: 'Passer du thème clair au thème sombre',
         console: {
           label: 'Console',
@@ -566,6 +602,26 @@ export const resources = {
           eyebrow: 'Mesh · topologie',
           title: 'Les lieux et les pieces viendront se brancher ici.',
           description: 'Cette zone est prete a accueillir l arbre de topologie, la configuration des pieces et les premiers outils de placement de la mesh locale.',
+        },
+        houseScreens: {
+          eyebrow: 'Maison · écrans',
+          title: 'Les écrans associés apparaîtront ici.',
+          description: 'Tablettes, écrans de chevet et miroir qui affichent vos tâches et votre maison.',
+        },
+        houseLocal: {
+          eyebrow: 'Maison · réglages locaux',
+          title: 'Les réglages locaux apparaîtront ici.',
+          description: 'Langue et surveillance de la connexion internet de cette maison.',
+        },
+        peopleUsers: {
+          eyebrow: 'Personnes · utilisateurs',
+          title: 'Les comptes, invités et droits apparaîtront ici.',
+          description: 'Qui habite la maison, qui est invité et ce que chacun peut consulter.',
+        },
+        systemAbout: {
+          eyebrow: 'Système',
+          title: 'Les fichiers, secrets et la version apparaîtront ici.',
+          description: 'Fichiers conservés, secrets partagés et mises à jour de cette installation.',
         },
         extensionsCatalog: {
           eyebrow: 'Extensions · catalogue',
