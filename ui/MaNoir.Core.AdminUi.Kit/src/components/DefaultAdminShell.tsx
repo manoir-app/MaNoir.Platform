@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { AdminShell } from './AdminShell';
-import { AppBrandHeader } from './AppBrandHeader';
 import { Avatar } from './Avatar';
 import type { StatusPillTone } from './StatusPill';
 import { cx } from '../lib/cx';
@@ -33,12 +32,16 @@ export interface DefaultAdminShellProps extends React.HTMLAttributes<HTMLDivElem
   /** When provided, a toggle button is shown at the top of the sidebar. */
   onSidebarCollapsedChange?: (collapsed: boolean) => void;
   sidebarToggleLabel?: string;
+  /** Small icon actions shown above the account button (for example a theme toggle). */
+  sidebarFooterActions?: React.ReactNode;
   navigationAriaLabel?: string;
   navigationItems: DefaultAdminShellNavItem[];
   topBarBrand: React.ReactNode;
   topBarLogo?: React.ReactNode;
   topBarMeta?: React.ReactNode;
   topBarNavigation?: React.ReactNode;
+  /** Search field shown between the domain tabs and the actions. */
+  topBarSearch?: React.ReactNode;
   topBarStatus?: React.ReactNode;
   topBarActions?: React.ReactNode;
   userLabel?: React.ReactNode;
@@ -88,6 +91,7 @@ export function DefaultAdminShell({
   sidebarCollapsed = false,
   sidebarDescription,
   sidebarEyebrow,
+  sidebarFooterActions,
   sidebarNavigation,
   sidebarToggleLabel,
   topBarActions,
@@ -95,6 +99,7 @@ export function DefaultAdminShell({
   topBarLogo,
   topBarMeta,
   topBarNavigation,
+  topBarSearch,
   userLabel,
   userValue,
   ...props
@@ -166,6 +171,7 @@ export function DefaultAdminShell({
       )}
 
       <div className={styles.accountFooter}>
+        {sidebarFooterActions ? <div className={styles.footerActions}>{sidebarFooterActions}</div> : null}
         {!sidebarCollapsed && (serverLabel || serverMeta || serverStatus) ? (
           <div className={styles.serverFooterInfo}>
             <span
@@ -178,6 +184,7 @@ export function DefaultAdminShell({
             {serverMeta ? <span className={styles.serverFooterMeta}>{serverMeta}</span> : null}
           </div>
         ) : null}
+        {!sidebarCollapsed && topBarMeta ? <div className={styles.footerMeta}>{topBarMeta}</div> : null}
 
         <button
           aria-expanded={accountMenuOpen}
@@ -220,16 +227,18 @@ export function DefaultAdminShell({
   );
 
   const topBar = (
-    <div className={styles.headerShell}>
-      <AppBrandHeader
-        actions={topBarActions ? <div className={styles.headerActions}>{topBarActions}</div> : undefined}
-        brand={topBarBrand}
-        className={styles.header}
-        logo={topBarLogo}
-        meta={topBarMeta}
-        navigation={topBarNavigation ? <div className={styles.headerInlineNavigation}>{topBarNavigation}</div> : undefined}
-      />
-    </div>
+    <header className={styles.topBar}>
+      {topBarLogo ? (
+        <span aria-label={typeof topBarBrand === 'string' ? topBarBrand : undefined} className={styles.topLogo} role="img">
+          {topBarLogo}
+        </span>
+      ) : (
+        <span className={styles.topBrand}>{topBarBrand}</span>
+      )}
+      {topBarNavigation ? <div className={styles.headerInlineNavigation}>{topBarNavigation}</div> : <div className={styles.topSpacer} />}
+      {topBarSearch ? <div className={styles.topSearch}>{topBarSearch}</div> : null}
+      {topBarActions ? <div className={styles.headerActions}>{topBarActions}</div> : null}
+    </header>
   );
 
   return (

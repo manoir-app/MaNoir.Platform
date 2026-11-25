@@ -16,6 +16,8 @@ export interface SidebarNavItem {
 export interface SidebarNavSection {
   id: string;
   title?: React.ReactNode;
+  /** `end` pushes the section to the bottom of the sidebar (for example Settings or System). */
+  align?: 'start' | 'end';
   items: SidebarNavItem[];
 }
 
@@ -36,7 +38,7 @@ function renderContent(item: SidebarNavItem, collapsed: boolean) {
     return (
       <>
         <span aria-hidden="true" className={styles.icon}>{item.icon ?? fallback}</span>
-        <span className={styles.railCaption}>{item.label}</span>
+        <span className={styles.srOnly}>{item.label}</span>
       </>
     );
   }
@@ -73,7 +75,7 @@ export function SidebarNav({
 
       <div className={styles.sections}>
         {sections.map((section) => (
-          <section className={styles.section} key={section.id}>
+          <section className={cx(styles.section, section.align === 'end' && styles.sectionEnd)} key={section.id}>
             {!collapsed && section.title ? <div className={styles.sectionTitle}>{section.title}</div> : null}
             <ul className={styles.list}>
               {section.items.map((item) => (

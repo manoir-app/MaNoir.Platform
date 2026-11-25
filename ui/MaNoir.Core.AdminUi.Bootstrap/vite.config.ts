@@ -22,6 +22,9 @@ export default defineConfig(({ mode, command }) => {
     },
     server: {
       port: 5174,
+      fs: {
+        allow: [fileURLToPath(new URL('..', import.meta.url))],
+      },
       proxy: {
         '/api/core': {
           target: proxyTarget,

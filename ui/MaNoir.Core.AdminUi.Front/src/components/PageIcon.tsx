@@ -9,6 +9,11 @@ const stroke = {
 };
 
 const paths: Record<string, React.ReactNode> = {
+  grid: <><rect height="5.5" rx="1.6" width="5.5" x="3" y="3" /><rect height="5.5" rx="1.6" width="5.5" x="11.5" y="3" /><rect height="5.5" rx="1.6" width="5.5" x="3" y="11.5" /><rect height="5.5" rx="1.6" width="5.5" x="11.5" y="11.5" /></>,
+  pulse: <path d="M2 10h3l2.5-6.5 4 13L14 10h4" />,
+  plug: <path d="M7 2.5v4M13 2.5v4M5 6.5h10v3a5 5 0 0 1-10 0v-3ZM10 14.5v3" />,
+  monitor: <><rect height="10" rx="1.8" width="14" x="3" y="3.5" /><path d="M7.5 16.5h5M10 13.5v3" /></>,
+  sliders: <path d="M3 6h8M15 6h2M3 14h2M9 14h8M11 4v4M7 12v4" />,
   gauge: <><path d="M3 14a7 7 0 1 1 14 0" /><path d="m10 14 3-4" /></>,
   'map-pin': <><path d="M10 17s5-4.4 5-8.2A5 5 0 0 0 5 8.8C5 12.6 10 17 10 17Z" /><circle cx="10" cy="8.8" r="1.8" /></>,
   users: <><circle cx="7.5" cy="7" r="2.6" /><path d="M2.5 16c.4-2.8 2.4-4.2 5-4.2s4.6 1.4 5 4.2" /><path d="M13 4.6a2.4 2.4 0 0 1 0 4.8M14.5 12c1.7.3 2.7 1.6 3 4" /></>,
