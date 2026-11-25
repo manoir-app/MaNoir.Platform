@@ -2031,3 +2031,145 @@ body {
     white-space: normal;
   }
 }
+
+/* Settings home */
+.front-home {
+  display: grid;
+  gap: var(--mn-s-6);
+  max-width: var(--mn-page-max);
+}
+
+.front-home-grid {
+  display: grid;
+  gap: var(--mn-s-5);
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+}
+
+.front-home-card {
+  display: grid;
+  align-content: start;
+  gap: var(--mn-s-3);
+  padding: var(--mn-s-6);
+}
+
+.front-home-card-title {
+  font-size: 1.375rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.front-home-facts {
+  display: grid;
+  margin: 0;
+}
+
+.front-home-fact {
+  align-items: center;
+  border-top: 1px solid var(--mn-line);
+  display: flex;
+  gap: var(--mn-s-4);
+  justify-content: space-between;
+  min-height: 3.5rem;
+}
+
+.front-home-fact dt {
+  color: var(--mn-muted);
+  font-weight: 300;
+}
+
+.front-home-fact dd {
+  font-weight: 500;
+  margin: 0;
+  text-align: right;
+}
+
+.front-home-allgood {
+  display: grid;
+  gap: var(--mn-s-3);
+  justify-items: start;
+}
+
+.front-home-allgood p {
+  color: var(--mn-muted);
+  font-weight: 300;
+  margin: 0;
+}
+
+.front-home-attention {
+  display: grid;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.front-home-attention-item {
+  align-items: center;
+  border-top: 1px solid color-mix(in srgb, var(--mn-ink) 12%, transparent);
+  display: flex;
+  gap: var(--mn-s-4);
+  justify-content: space-between;
+  min-height: 4.25rem;
+  padding: var(--mn-s-2) 0;
+}
+
+.front-home-attention-text {
+  display: grid;
+  min-width: 0;
+}
+
+.front-home-attention-text span {
+  color: var(--mn-muted);
+  font-size: 0.875rem;
+  font-weight: 300;
+}
+
+.front-home-tiles {
+  display: grid;
+  gap: var(--mn-s-3);
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+}
+
+.front-home-tile {
+  align-items: center;
+  background: var(--mn-tonal);
+  border-radius: var(--mn-r-xl);
+  color: inherit;
+  display: flex;
+  gap: var(--mn-s-4);
+  min-height: 5.5rem;
+  padding: var(--mn-s-4) var(--mn-s-5);
+  text-decoration: none;
+  transition: background 160ms ease;
+}
+
+.front-home-tile:hover {
+  background: var(--mn-yellow-soft);
+}
+
+.front-home-tile:focus-visible {
+  box-shadow: 0 0 0 2px var(--mn-ink);
+  outline: none;
+}
+
+.front-home-tile-icon {
+  align-items: center;
+  background: var(--mn-bg);
+  border-radius: var(--mn-blob);
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 3rem;
+  justify-content: center;
+  width: 3rem;
+}
+
+.front-home-tile-text {
+  display: grid;
+  min-width: 0;
+}
+
+.front-home-tile-text span {
+  color: var(--mn-muted);
+  font-size: 0.875rem;
+  font-weight: 300;
+}
