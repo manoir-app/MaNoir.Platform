@@ -2253,3 +2253,115 @@ body {
   font-size: 0.75rem;
   padding: 0.15rem 0.6rem;
 }
+
+/* Logs explorer, new design language */
+.front-log-explorer-page {
+  display: grid;
+  gap: var(--mn-s-5, 1.5rem);
+}
+
+.front-log-toolbar .front-dialog-input {
+  background: var(--mn-tonal);
+  border: 1px solid transparent;
+  border-radius: var(--mn-r-pill, 999px);
+  min-height: var(--mn-button-h, 46px);
+  padding: 0 1.1rem;
+}
+
+.front-log-toolbar .front-dialog-input:focus {
+  background: var(--mn-raised, var(--mn-bg));
+  border-color: var(--mn-ink);
+}
+
+.front-log-toolbar .front-console-stat-label {
+  color: var(--mn-muted);
+  font-size: 0.8125rem;
+  padding-left: 0.4rem;
+}
+
+.front-log-sidebar,
+.front-log-results-panel,
+.front-log-detail-panel {
+  background: var(--mn-tonal);
+  border: 0;
+  border-radius: var(--mn-r-xl, 28px);
+  padding: 1.25rem;
+}
+
+.front-log-facet-button {
+  border-radius: var(--mn-r-pill, 999px);
+  padding: 0.6rem 1rem;
+}
+
+.front-log-facet-button:hover {
+  background: var(--mn-raised, var(--mn-bg));
+  border-color: transparent;
+}
+
+.front-log-facet-button-active,
+.front-log-facet-button-active:hover {
+  background: var(--mn-yellow);
+  border-color: transparent;
+  color: var(--mn-on-yellow);
+}
+
+.front-log-facet-button-active .front-log-facet-count {
+  color: inherit;
+}
+
+.front-log-grid {
+  background: var(--mn-bg);
+  border: 0;
+  border-radius: var(--mn-r-lg);
+}
+
+.front-log-grid-header {
+  background: transparent;
+}
+
+.front-log-grid-row-active,
+.front-log-grid-row-button:hover {
+  background: var(--mn-tonal);
+}
+
+.front-log-query-banner,
+.front-log-label-item,
+.front-log-entry-message {
+  background: var(--mn-bg);
+}
+
+.front-log-toolbar {
+  grid-template-columns: minmax(0, 1fr) 9rem 9rem auto;
+}
+
+.front-log-toolbar-input {
+  width: 100%;
+}
+
+.front-log-toolbar select.front-dialog-input {
+  padding-right: 0.6rem;
+}
+
+.front-log-workbench {
+  grid-template-columns: minmax(12rem, 14rem) minmax(0, 1fr);
+}
+
+.front-log-detail-panel {
+  grid-column: 1 / -1;
+}
+
+.front-log-grid-row {
+  grid-template-columns: 9.5rem 8rem 7rem minmax(0, 1fr);
+}
+
+.front-log-results-header {
+  align-items: center;
+}
+
+.front-log-toolbar .front-dialog-input {
+  box-sizing: border-box;
+}
+
+.front-log-grid-row {
+  grid-template-columns: 11rem 8rem 7rem minmax(0, 1fr);
+}

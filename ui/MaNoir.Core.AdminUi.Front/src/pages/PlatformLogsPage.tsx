@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@manoir-app/core-admin-ui-kit/button';
+import { PageHeader } from '@manoir-app/core-admin-ui-kit/page-header';
 import { getLogEntries, getLogServices, type PlatformLogEntryModel, type PlatformLogQueryResponseModel } from '../lib/api';
 
 const lookbackOptions = [1, 6, 24, 72];
@@ -182,30 +184,27 @@ export function PlatformLogsPage() {
 
   return (
     <div className="front-observability-page front-log-explorer-page">
-      <section className="front-observability-hero front-log-explorer-hero">
-        <div className="front-login-page-eyebrow">{t('logsBrowser.eyebrow')}</div>
-        <div className="front-observability-hero-row">
-          <div>
-            <h1 className="front-observability-title">{t('logsBrowser.title')}</h1>
-            <p className="front-observability-copy">{t('logsBrowser.description')}</p>
-          </div>
-          <button
-            className="front-button front-button-secondary front-button-large"
+      <PageHeader
+        actions={(
+          <Button
             disabled={isRefreshing}
+            loading={isRefreshing}
             onClick={() => {
               void loadLogs({ manualRefresh: true });
             }}
-            type="button"
+            variant="secondary"
           >
             {isRefreshing ? t('common.actions.refreshing') : t('common.actions.refresh')}
-          </button>
-        </div>
-        <div className="front-observability-meta-row front-log-explorer-meta-row">
-          <span>{t('logsBrowser.snapshot.updated', { date: formatDateTime(lastUpdatedAt, locale) })}</span>
-          <span>{t('logsBrowser.results.count', { count: entries.length })}</span>
-          <span>{selectedServiceName || t('logsBrowser.sidebar.allServices')}</span>
-        </div>
-      </section>
+          </Button>
+        )}
+        description={t('logsBrowser.description')}
+        meta={[
+          t('logsBrowser.snapshot.updated', { date: formatDateTime(lastUpdatedAt, locale) }),
+          t('logsBrowser.results.count', { count: entries.length }),
+        ].join(' · ')}
+        title={t('logsBrowser.title')}
+        variant="page"
+      />
 
       <form
         className="front-log-toolbar"
@@ -258,9 +257,9 @@ export function PlatformLogsPage() {
         </label>
 
         <div className="front-log-toolbar-actions">
-          <button className="front-button front-button-primary" disabled={isRefreshing} type="submit">
+          <Button disabled={isRefreshing} type="submit" variant="primary">
             {t('logsBrowser.toolbar.run')}
-          </button>
+          </Button>
         </div>
       </form>
 
