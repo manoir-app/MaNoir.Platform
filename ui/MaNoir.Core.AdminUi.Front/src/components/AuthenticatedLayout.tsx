@@ -14,6 +14,56 @@ import { useAuthenticatedLayoutViewModel } from '../hooks/useAuthenticatedLayout
 import { useAdminNavigationStore } from '../stores/adminNavigationStore';
 import { LoginPage } from '../pages/LoginPage';
 
+const themeKey = 'manoir.admin.theme';
+
+function readTheme(): 'light' | 'dark' {
+  try {
+    const stored = window.localStorage.getItem(themeKey);
+    if (stored === 'light' || stored === 'dark') {
+      return stored;
+    }
+  } catch {
+    // Ignore storage failures.
+  }
+
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
+const iconProps = {
+  'aria-hidden': true,
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+  strokeWidth: 1.6,
+  viewBox: '0 0 20 20',
+};
+
+function PlugIcon() {
+  return (
+    <svg {...iconProps}>
+      <path d="M7 2.5v4M13 2.5v4M5 6.5h10v3a5 5 0 0 1-10 0v-3ZM10 14.5v3" />
+    </svg>
+  );
+}
+
+function SunIcon() {
+  return (
+    <svg {...iconProps}>
+      <circle cx="10" cy="10" r="3.2" />
+      <path d="M10 2.5v1.8M10 15.7v1.8M2.5 10h1.8M15.7 10h1.8M4.7 4.7l1.3 1.3M14 14l1.3 1.3M4.7 15.3 6 14M14 6l1.3-1.3" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg {...iconProps}>
+      <path d="M16.5 11.5A6.5 6.5 0 0 1 8.5 3.5a6.5 6.5 0 1 0 8 8Z" />
+    </svg>
+  );
+}
+
 const sidebarCollapsedKey = 'manoir.admin.sidebarCollapsed';
 
 function readSidebarCollapsed() {
@@ -42,6 +92,18 @@ export function AuthenticatedLayout() {
     serverVersion,
   } = useAuthenticatedLayoutViewModel();
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(readSidebarCollapsed);
+  const [theme, setTheme] = React.useState(readTheme);
+
+  React.useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+
+    try {
+      window.localStorage.setItem(themeKey, theme);
+    } catch {
+      // Ignore storage failures.
+    }
+  }, [theme]);
 
   React.useEffect(() => {
     try {
@@ -110,15 +172,13 @@ export function AuthenticatedLayout() {
     return <LoginPage />;
   }
 
-  const shellDomainItems = domainTabItems.map((item) => ({
-    ...item,
-    label: (
-      <span className="front-domain-tab-label">
-        <DomainIcon kind={'icon' in item ? item.icon : null} />
-        <span>{item.label}</span>
-      </span>
-    ),
-  }));
+  const platformItem = domainTabItems.find((item) => item.id === 'platform');
+  const shellDomainItems = domainTabItems
+    .filter((item) => item.id !== 'platform')
+    .map((item) => ({
+      ...item,
+      icon: <DomainIcon kind={'icon' in item ? item.icon : null} />,
+    }));
 
   const sidebarSections = navigationSections.map((section) => ({
     ...section,
@@ -157,7 +217,34 @@ export function AuthenticatedLayout() {
         />
       )}
       topBarBrand={t('common.appName')}
-      topBarLogo={<img alt="Logo MaNoir" src={manoirLogo} />}
+      topBarActions={(
+        <>
+          {platformItem ? (
+            <button
+              aria-current={platformItem.active ? 'page' : undefined}
+              aria-label={t('navigation.platformSettings')}
+              className="front-top-action"
+              onClick={platformItem.onSelect}
+              title={t('navigation.platformSettings')}
+              type="button"
+            >
+              <PlugIcon />
+            </button>
+          ) : null}
+          <button
+            aria-label={t('navigation.switchTheme')}
+            className="front-top-action"
+            onClick={() => {
+              setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+            }}
+            title={t('navigation.switchTheme')}
+            type="button"
+          >
+            {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
+          </button>
+        </>
+      )}
+      topBarLogo={<img alt="" src={manoirLogo} />}
       topBarMeta={headerMeta}
       topBarNavigation={(
         <ShellHeader

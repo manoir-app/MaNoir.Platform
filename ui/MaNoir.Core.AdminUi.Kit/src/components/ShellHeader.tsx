@@ -5,6 +5,10 @@ import styles from './ShellHeader.module.css';
 export interface ShellHeaderItem {
   id: string;
   label: React.ReactNode;
+  /** Glyph shown before the label. */
+  icon?: React.ReactNode;
+  /** Small prune badge after the label (for example pending items). Hidden when empty or 0. */
+  count?: number | string;
   active?: boolean;
   disabled?: boolean;
   href?: string;
@@ -16,6 +20,22 @@ export interface ShellHeaderProps extends Omit<React.HTMLAttributes<HTMLElement>
   items: ShellHeaderItem[];
   overflowLabel?: React.ReactNode;
   compactBreakpoint?: number;
+}
+
+function renderLabel(item: ShellHeaderItem) {
+  const hasCount = item.count !== undefined && item.count !== null && item.count !== '' && item.count !== 0;
+
+  if (!item.icon && !hasCount) {
+    return item.label;
+  }
+
+  return (
+    <>
+      {item.icon ? <span aria-hidden="true" className={styles.itemIcon}>{item.icon}</span> : null}
+      <span>{item.label}</span>
+      {hasCount ? <span className={styles.count}>{item.count}</span> : null}
+    </>
+  );
 }
 
 function renderAction(
@@ -31,14 +51,14 @@ function renderAction(
   if (item.href) {
     return (
       <a {...sharedProps} href={item.href} onClick={onSelect}>
-        {item.label}
+        {renderLabel(item)}
       </a>
     );
   }
 
   return (
     <button {...sharedProps} disabled={item.disabled} onClick={onSelect ?? item.onSelect} type="button">
-      {item.label}
+      {renderLabel(item)}
     </button>
   );
 }

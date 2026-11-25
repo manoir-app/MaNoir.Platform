@@ -64,6 +64,8 @@ export const resources = {
       navigation: {
         main: 'Main navigation',
         toggleSidebar: 'Collapse or expand the menu',
+        platformSettings: 'Platform and settings',
+        switchTheme: 'Switch between light and dark theme',
         console: {
           label: 'Console',
           description: 'Operations cockpit and operator overview',
@@ -528,6 +530,8 @@ export const resources = {
       navigation: {
         main: 'Navigation principale',
         toggleSidebar: 'Réduire ou développer le menu',
+        platformSettings: 'Plateforme et réglages',
+        switchTheme: 'Passer du thème clair au thème sombre',
         console: {
           label: 'Console',
           description: 'Centre de pilotage et apercu operateur',
