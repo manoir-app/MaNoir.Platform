@@ -2442,3 +2442,38 @@ body {
   border-bottom: 0;
   padding-bottom: 0;
 }
+
+/* Places, new design language */
+.front-places-page {
+  gap: var(--mn-s-5, 1.5rem);
+}
+
+.front-places-summary-grid {
+  border: 0;
+  gap: var(--mn-s-3, 0.75rem);
+}
+
+.front-places-summary-card {
+  background: var(--mn-tonal);
+  border: 0;
+  border-radius: var(--mn-r-xl, 28px);
+  padding: 1.25rem 1.5rem;
+}
+
+.front-places-panel {
+  background: var(--mn-tonal);
+  border: 0;
+  border-radius: var(--mn-r-xl, 28px);
+  padding: 1.5rem;
+}
+
+.front-places-sidebar {
+  border-right: 0;
+  padding-right: 0;
+}
+
+.front-places-room-canvas {
+  background-color: var(--mn-bg);
+  border: 0;
+  border-radius: var(--mn-r-lg);
+}

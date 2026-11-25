@@ -7,6 +7,7 @@ import { PlatformHealthPage } from './pages/PlatformHealthPage';
 import { PlatformLogsPage } from './pages/PlatformLogsPage';
 import { InstalledPluginsPage } from './pages/InstalledPluginsPage';
 import { PluginCatalogPage } from './pages/PluginCatalogPage';
+import { MeshPlacesPage } from './pages/MeshPlacesPage';
 
 const routes = [
     {
@@ -42,7 +43,7 @@ const routes = [
             },
             {
               path: 'platform/mesh/places',
-              element: <NavigationPlaceholderPage kind="meshPlaces" />,
+              Component: MeshPlacesPage,
             },
             {
               path: 'platform/house/screens',
