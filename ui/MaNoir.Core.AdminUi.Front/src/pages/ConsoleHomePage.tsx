@@ -50,7 +50,7 @@ export function ConsoleHomePage() {
       id: 'degraded',
       title: t('console.home.attention.degraded', { count: summary.degradedCount }),
       detail: t('console.home.attention.degradedDetail'),
-      to: '/platform/surveillance/agents',
+      to: '/platform/surveillance/services',
     });
   }
 
@@ -59,7 +59,7 @@ export function ConsoleHomePage() {
       id: 'stale',
       title: t('console.home.attention.stale', { count: summary.staleCount }),
       detail: t('console.home.attention.staleDetail'),
-      to: '/platform/surveillance/agents',
+      to: '/platform/surveillance/services',
     });
   }
 

@@ -103,25 +103,13 @@ public static class CorePluginDescriptorProvider
                             new AdminUiPageDefinition()
                             {
                                 Category = "Monitoring",
-                                Name = "Agents",
-                                Icon = "users",
-                                Url = "/platform/surveillance/agents",
-                                Labels = new Dictionary<string, string>()
-                                {
-                                    ["en"] = "Agents",
-                                    ["fr-FR"] = "Agents"
-                                }
-                            },
-                            new AdminUiPageDefinition()
-                            {
-                                Category = "Monitoring",
                                 Name = "Services",
                                 Icon = "server",
                                 Url = "/platform/surveillance/services",
                                 Labels = new Dictionary<string, string>()
                                 {
-                                    ["en"] = "Services",
-                                    ["fr-FR"] = "Services"
+                                    ["en"] = "Services and agents",
+                                    ["fr-FR"] = "Services et agents"
                                 }
                             },
                             new AdminUiPageDefinition()

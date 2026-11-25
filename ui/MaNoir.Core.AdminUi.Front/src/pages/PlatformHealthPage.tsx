@@ -1,4 +1,8 @@
 import { useTranslation } from 'react-i18next';
+import { Button } from '@manoir-app/core-admin-ui-kit/button';
+import { Card } from '@manoir-app/core-admin-ui-kit/card';
+import { PageHeader } from '@manoir-app/core-admin-ui-kit/page-header';
+import { StatusPill } from '@manoir-app/core-admin-ui-kit/status-pill';
 import { useAuthSessionViewModel } from '../hooks/useAuthSessionViewModel';
 import { isAgentStale, useRegisteredAgentsData } from '../hooks/useRegisteredAgentsData';
 
@@ -18,151 +22,118 @@ function formatDateTime(date: Date | string | null, locale: string) {
   }).format(resolvedDate);
 }
 
-function getAgentStateTone(state: string, stale: boolean) {
+function getAgentTone(state: string, stale: boolean) {
   if (stale || state === 'degraded') {
-    return 'danger';
+    return 'danger' as const;
   }
 
   if (state === 'starting' || state === 'stopping') {
-    return 'warning';
+    return 'warning' as const;
   }
 
-  return 'neutral';
+  if (state === 'ready') {
+    return 'success' as const;
+  }
+
+  return 'neutral' as const;
 }
 
 export function PlatformHealthPage() {
   const { t, i18n } = useTranslation();
   const locale = (i18n.resolvedLanguage ?? i18n.language).startsWith('en') ? 'en-GB' : 'fr-FR';
-  const { serverInfo, serverInfoState, serverLabel, serverUptime, serverVersion } = useAuthSessionViewModel();
+  const { serverInfoState, serverLabel, serverUptime, serverVersion } = useAuthSessionViewModel();
   const { agents, errorMessage, isLoading, isRefreshing, lastUpdatedAt, refreshAgents, summary } = useRegisteredAgentsData();
+  const isOnline = serverInfoState === 'ready';
 
-  const agentsNeedingAttention = agents.filter((agent) => agent.state === 'degraded' || isAgentStale(agent)).slice(0, 6);
+  const platformRows = [
+    {
+      label: t('monitoring.platformServer'),
+      value: (
+        <StatusPill tone={isOnline ? 'success' : 'danger'}>
+          {isOnline ? t('common.status.online') : t('common.status.offline')}
+        </StatusPill>
+      ),
+    },
+    { label: t('health.runtime.mesh'), value: serverLabel },
+    { label: t('health.runtime.version'), value: serverVersion || t('common.versionUnavailable') },
+    { label: t('health.runtime.uptime'), value: serverUptime || '—' },
+    { label: t('monitoring.agentsReady'), value: `${summary.readyCount} / ${summary.totalCount}` },
+  ];
 
   return (
-    <div className="front-observability-page">
-      <section className="front-observability-hero">
-        <div className="front-login-page-eyebrow">{t('health.eyebrow')}</div>
-        <div className="front-observability-hero-row">
-          <div>
-            <h1 className="front-observability-title">{t('health.title')}</h1>
-            <p className="front-observability-copy">{t('health.description')}</p>
-          </div>
-          <button
-            className="front-button front-button-secondary front-button-large"
+    <div className="front-monitor">
+      <PageHeader
+        actions={(
+          <Button
             disabled={isRefreshing}
+            loading={isRefreshing}
             onClick={() => {
               void refreshAgents();
             }}
-            type="button"
+            variant="secondary"
           >
             {isRefreshing ? t('common.actions.refreshing') : t('common.actions.refresh')}
-          </button>
-        </div>
-        <div className="front-observability-meta-row">
-          <span>{t('health.snapshot.server', { server: serverLabel })}</span>
-          <span>{t('health.snapshot.updated', { date: formatDateTime(lastUpdatedAt, locale) })}</span>
-        </div>
-      </section>
+          </Button>
+        )}
+        description={t('monitoring.description')}
+        meta={lastUpdatedAt ? t('monitoring.updated', { date: formatDateTime(lastUpdatedAt, locale) }) : undefined}
+        title={t('monitoring.title')}
+        variant="page"
+      />
 
-      <section className="front-observability-summary-grid" aria-label={t('health.summary.ariaLabel')}>
-        <article className="front-observability-summary-card">
-          <div className="front-console-stat-label">{t('health.summary.serverStatus')}</div>
-          <div className="front-console-stat-value">{serverInfoState === 'ready' ? t('common.status.online') : t('common.status.offline')}</div>
-          <div className="front-console-stat-detail">{serverInfo?.domainName || serverLabel}</div>
-        </article>
-        <article className="front-observability-summary-card">
-          <div className="front-console-stat-label">{t('health.summary.totalAgents')}</div>
-          <div className="front-console-stat-value">{summary.totalCount}</div>
-          <div className="front-console-stat-detail">{t('health.summary.readyAgents', { count: summary.readyCount })}</div>
-        </article>
-        <article className="front-observability-summary-card">
-          <div className="front-console-stat-label">{t('health.summary.degradedAgents')}</div>
-          <div className="front-console-stat-value">{summary.degradedCount}</div>
-          <div className="front-console-stat-detail">{t('health.summary.needingAttention')}</div>
-        </article>
-        <article className="front-observability-summary-card">
-          <div className="front-console-stat-label">{t('health.summary.staleAgents')}</div>
-          <div className="front-console-stat-value">{summary.staleCount}</div>
-          <div className="front-console-stat-detail">{t('health.summary.staleHint')}</div>
-        </article>
-      </section>
+      <div className="front-monitor-grid">
+        <Card className="front-monitor-card">
+          <h2 className="front-monitor-card-title">{t('monitoring.platform')}</h2>
+          <dl className="front-home-facts">
+            {platformRows.map((row) => (
+              <div className="front-home-fact" key={row.label}>
+                <dt>{row.label}</dt>
+                <dd>{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </Card>
 
-      <section className="front-observability-panel">
-        <div className="front-observability-panel-header">
-          <div>
-            <div className="front-login-page-eyebrow">{t('health.runtime.eyebrow')}</div>
-            <h2 className="front-observability-section-title">{t('health.runtime.title')}</h2>
-          </div>
-        </div>
-        <div className="front-observability-detail-grid">
-          <article className="front-observability-detail-card">
-            <div className="front-console-stat-label">{t('health.runtime.mesh')}</div>
-            <div className="front-console-stat-value">{serverInfo?.meshName || serverLabel}</div>
-          </article>
-          <article className="front-observability-detail-card">
-            <div className="front-console-stat-label">{t('health.runtime.domain')}</div>
-            <div className="front-console-stat-value">{serverInfo?.domainName || '—'}</div>
-          </article>
-          <article className="front-observability-detail-card">
-            <div className="front-console-stat-label">{t('health.runtime.version')}</div>
-            <div className="front-console-stat-value">{serverVersion || t('common.versionUnavailable')}</div>
-          </article>
-          <article className="front-observability-detail-card">
-            <div className="front-console-stat-label">{t('health.runtime.uptime')}</div>
-            <div className="front-console-stat-value">{serverUptime || '—'}</div>
-          </article>
-        </div>
-      </section>
+        <Card className="front-monitor-card">
+          <h2 className="front-monitor-card-title">{t('monitoring.agentsTitle')}</h2>
 
-      <section className="front-observability-panel">
-        <div className="front-observability-panel-header">
-          <div>
-            <div className="front-login-page-eyebrow">{t('health.watchlist.eyebrow')}</div>
-            <h2 className="front-observability-section-title">{t('health.watchlist.title')}</h2>
-          </div>
-        </div>
+          {errorMessage ? <p className="front-monitor-feedback front-monitor-feedback-error">{errorMessage}</p> : null}
+          {isLoading ? <p className="front-monitor-feedback">{t('agentRegistry.list.loading')}</p> : null}
+          {!isLoading && !errorMessage && agents.length === 0 ? (
+            <p className="front-monitor-feedback">{t('agentRegistry.list.empty')}</p>
+          ) : null}
 
-        {errorMessage ? <div className="front-observability-feedback front-observability-feedback-error">{errorMessage}</div> : null}
-        {isLoading ? <div className="front-observability-feedback">{t('health.watchlist.loading')}</div> : null}
-        {!isLoading && !errorMessage && agentsNeedingAttention.length === 0 ? (
-          <div className="front-observability-feedback front-observability-feedback-success">{t('health.watchlist.empty')}</div>
-        ) : null}
+          <ul className="front-monitor-agents">
+            {agents.map((agent) => {
+              const stale = isAgentStale(agent);
 
-        <div className="front-observability-agent-grid">
-          {agentsNeedingAttention.map((agent) => {
-            const stale = isAgentStale(agent);
-            const stateTone = getAgentStateTone(agent.state, stale);
-
-            return (
-              <article className="front-agent-card" key={agent.id}>
-                <div className="front-agent-card-header">
-                  <div>
-                    <h3 className="front-agent-card-title">{agent.displayName || agent.agentId}</h3>
-                    <p className="front-agent-card-subtitle">{agent.agentId} · {agent.meshId}</p>
+              return (
+                <li className="front-monitor-agent" key={agent.id}>
+                  <div className="front-monitor-agent-main">
+                    <strong>{agent.displayName || agent.agentId}</strong>
+                    <span>
+                      {[agent.agentId, agent.version, t('monitoring.lastSignal', { date: formatDateTime(agent.lastHeartbeatUtc, locale) })]
+                        .filter(Boolean)
+                        .join(' · ')}
+                    </span>
+                    {agent.statusMessage ? <span>{agent.statusMessage}</span> : null}
+                    {agent.capabilities.length > 0 ? (
+                      <span className="front-monitor-chips">
+                        {agent.capabilities.map((capability) => (
+                          <span className="front-monitor-chip" key={capability}>{capability}</span>
+                        ))}
+                      </span>
+                    ) : null}
                   </div>
-                  <span className={`front-agent-badge front-agent-badge-${stateTone}`}>
-                    {stale ? t('health.watchlist.stale') : t(`agentState.${agent.state}`)}
-                  </span>
-                </div>
-                <dl className="front-agent-card-metadata">
-                  <div>
-                    <dt>{t('agentRegistry.fields.version')}</dt>
-                    <dd>{agent.version || '—'}</dd>
-                  </div>
-                  <div>
-                    <dt>{t('agentRegistry.fields.lastHeartbeat')}</dt>
-                    <dd>{formatDateTime(agent.lastHeartbeatUtc, locale)}</dd>
-                  </div>
-                  <div>
-                    <dt>{t('agentRegistry.fields.statusMessage')}</dt>
-                    <dd>{agent.statusMessage || '—'}</dd>
-                  </div>
-                </dl>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+                  <StatusPill tone={getAgentTone(agent.state, stale)}>
+                    {stale ? t('agentRegistry.states.stale') : t(`agentState.${agent.state}`)}
+                  </StatusPill>
+                </li>
+              );
+            })}
+          </ul>
+        </Card>
+      </div>
     </div>
   );
 }

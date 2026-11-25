@@ -32,6 +32,7 @@
       "@manoir-app/core-admin-ui-kit/search-input": ["../MaNoir.Core.AdminUi.Kit/src/components/SearchInput.tsx"],
       "@manoir-app/core-admin-ui-kit/section-title": ["../MaNoir.Core.AdminUi.Kit/src/components/SectionTitle.tsx"],
       "@manoir-app/core-admin-ui-kit/toggle-switch": ["../MaNoir.Core.AdminUi.Kit/src/components/ToggleSwitch.tsx"],
+      "@manoir-app/core-admin-ui-kit/dialog": ["../MaNoir.Core.AdminUi.Kit/src/components/Dialog.tsx"],
       "@manoir-app/core-admin-ui-kit/login-page": ["../MaNoir.Core.AdminUi.Kit/src/components/LoginPage.tsx"]
     },
     "resolveJsonModule": true,

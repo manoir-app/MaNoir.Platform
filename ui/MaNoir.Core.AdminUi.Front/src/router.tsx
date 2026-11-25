@@ -1,7 +1,6 @@
 import { Navigate, createBrowserRouter } from 'react-router';
 import { App } from './App';
 import { AuthenticatedLayout } from './components/AuthenticatedLayout';
-import { AgentRegistryPage } from './pages/AgentRegistryPage';
 import { ConsoleHomePage } from './pages/ConsoleHomePage';
 import { NavigationPlaceholderPage } from './pages/NavigationPlaceholderPage';
 import { PlatformHealthPage } from './pages/PlatformHealthPage';
@@ -31,7 +30,7 @@ const routes = [
             },
             {
               path: 'system/agents',
-              element: <Navigate replace to="/platform/surveillance/agents" />,
+              element: <Navigate replace to="/platform/surveillance/services" />,
             },
             {
               path: 'platform',
@@ -67,7 +66,7 @@ const routes = [
             },
             {
               path: 'platform/surveillance/agents',
-              Component: AgentRegistryPage,
+              element: <Navigate replace to="/platform/surveillance/services" />,
             },
             {
               path: 'platform/surveillance/services',
