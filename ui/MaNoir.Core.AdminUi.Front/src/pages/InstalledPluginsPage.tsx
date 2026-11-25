@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getInstalledPlugins, type InstalledPluginModel } from '../lib/api';
+import { Button } from '@manoir-app/core-admin-ui-kit/button';
+import { PageHeader } from '@manoir-app/core-admin-ui-kit/page-header';
 
 export function InstalledPluginsPage() {
   const { t } = useTranslation();
@@ -30,11 +32,7 @@ export function InstalledPluginsPage() {
 
   return (
     <div className="front-extensions-page">
-      <section className="front-extensions-hero">
-        <div className="front-login-page-eyebrow">{t('extensions.installed.eyebrow')}</div>
-        <h1 className="front-extensions-title">{t('extensions.installed.title')}</h1>
-        <p className="front-extensions-copy">{t('extensions.installed.description')}</p>
-      </section>
+      <PageHeader description={t('extensions.installed.description')} title={t('extensions.installed.title')} variant="page" />
       <section className="front-extensions-stats" aria-label={t('extensions.installed.summaryLabel')}>
         <div><strong>{plugins.length}</strong><span>{t('extensions.installed.pluginCount')}</span></div>
         <div><strong>{contributionCount}</strong><span>{t('extensions.installed.contributionCount')}</span></div>

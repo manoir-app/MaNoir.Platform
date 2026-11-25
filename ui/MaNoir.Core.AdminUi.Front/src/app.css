@@ -2365,3 +2365,80 @@ body {
 .front-log-grid-row {
   grid-template-columns: 11rem 8rem 7rem minmax(0, 1fr);
 }
+
+/* Extensions, new design language */
+.front-extensions-page {
+  display: grid;
+  gap: var(--mn-s-5, 1.5rem);
+}
+
+.front-extensions-search input {
+  background: var(--mn-tonal);
+  border: 1px solid transparent;
+  border-radius: var(--mn-r-pill, 999px);
+  box-sizing: border-box;
+  min-height: var(--mn-button-h, 46px);
+  padding: 0 1.2rem;
+}
+
+.front-extensions-search input:focus {
+  background: var(--mn-raised, var(--mn-bg));
+  border-color: var(--mn-ink);
+}
+
+.front-extensions-tab {
+  background: transparent;
+  border: 0;
+  border-radius: var(--mn-r-pill, 999px);
+  min-height: 40px;
+  padding: 0 1rem;
+}
+
+.front-extensions-tab-active {
+  background: var(--mn-yellow);
+  color: var(--mn-on-yellow);
+}
+
+.front-plugin-list {
+  display: grid;
+  gap: var(--mn-s-3, 0.75rem);
+}
+
+.front-plugin-row {
+  background: var(--mn-tonal);
+  border: 0;
+  border-radius: var(--mn-r-xl, 28px);
+  padding: 1.25rem 1.5rem;
+}
+
+.front-plugin-mark {
+  background: var(--mn-bg);
+  border: 0;
+  border-radius: 50%;
+}
+
+.front-plugin-badge,
+.front-plugin-meta span {
+  background: var(--mn-bg);
+  border: 0;
+  border-radius: var(--mn-r-pill, 999px);
+  padding: 0.2rem 0.7rem;
+}
+
+.front-extensions-stats div {
+  background: var(--mn-tonal);
+  border: 0;
+  border-radius: var(--mn-r-xl, 28px);
+  padding: 1.1rem 1.4rem;
+}
+.front-plugin-list { border-top: 0; }
+
+.front-extensions-stats {
+  border: 0;
+  gap: var(--mn-s-3, 0.75rem);
+}
+
+.front-extensions-toolbar {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
