@@ -1,4 +1,6 @@
 import { Dialog } from '@manoir-app/core-admin-ui-kit/dialog';
+import { Button } from '@manoir-app/core-admin-ui-kit/button';
+import { PageHeader } from '@manoir-app/core-admin-ui-kit/page-header';
 import { useEffect, useState, type FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocationsData } from '../hooks/useLocationsData';
@@ -503,26 +505,24 @@ export function MeshPlacesPage() {
 
   return (
     <div className="front-places-page">
-      <section className="front-places-hero">
-        <div className="front-places-panel-header">
-          <div>
-            <div className="front-login-page-eyebrow">{t('placesPage.eyebrow')}</div>
-            <h1 className="front-places-title">{t('placesPage.title')}</h1>
-            <p className="front-places-copy">{t('placesPage.description')}</p>
-          </div>
-          <button
-            className="front-button front-button-secondary front-button-large"
+      <PageHeader
+        actions={(
+          <Button
             disabled={isRefreshing || isSaving}
+            loading={isRefreshing}
             onClick={() => {
               void refreshLocations();
             }}
-            type="button"
+            variant="secondary"
           >
             {isRefreshing ? t('common.actions.refreshing') : t('common.actions.refresh')}
-          </button>
-        </div>
-        {errorMessage ? <div className="front-observability-feedback front-observability-feedback-error">{errorMessage}</div> : null}
-      </section>
+          </Button>
+        )}
+        description={t('placesPage.description')}
+        title={t('placesPage.title')}
+        variant="page"
+      />
+      {errorMessage ? <div className="front-observability-feedback front-observability-feedback-error">{errorMessage}</div> : null}
 
       <section className="front-places-summary-grid" aria-label={t('placesPage.summary.ariaLabel')}>
         <article className="front-places-summary-card">
@@ -550,9 +550,9 @@ export function MeshPlacesPage() {
             <div className="front-login-page-eyebrow">{t('placesPage.buildings.eyebrow')}</div>
             <h2 className="front-places-section-title">{t('placesPage.buildings.title')}</h2>
           </div>
-          <button className="front-button front-button-secondary front-button-large" onClick={openBuildingCreateDialog} type="button">
+          <Button variant="secondary" onClick={openBuildingCreateDialog} type="button">
             {t('placesPage.buildings.add')}
-          </button>
+          </Button>
         </div>
 
         <div className="front-places-table-wrap">
@@ -606,9 +606,9 @@ export function MeshPlacesPage() {
                     <td>{building.levels.length}</td>
                     <td>{roomCount}</td>
                     <td className="front-places-table-actions">
-                      <button className="front-button front-button-secondary front-button-small" onClick={() => openBuildingEditDialog(building)} type="button">
+                      <Button variant="secondary" size="sm" onClick={() => openBuildingEditDialog(building)} type="button">
                         {t('placesPage.actions.edit')}
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 );
@@ -626,22 +626,22 @@ export function MeshPlacesPage() {
             <p className="front-places-panel-copy">{t('placesPage.levels.description')}</p>
           </div>
           <div className="front-places-header-actions">
-            <button
-              className="front-button front-button-secondary front-button-large"
+            <Button
+              variant="secondary"
               disabled={!selectedBuilding}
               onClick={openLevelCreateDialog}
               type="button"
             >
               {t('placesPage.levels.addLevel')}
-            </button>
-            <button
-              className="front-button front-button-primary front-button-large"
+            </Button>
+            <Button
+              variant="primary"
               disabled={!selectedLevel}
               onClick={openRoomCreateDialog}
               type="button"
             >
               {t('placesPage.levels.addRoom')}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -724,9 +724,9 @@ export function MeshPlacesPage() {
                     <span>{t(`placesPage.roomCategories.${room.category}`)}</span>
                     <span>{room.areaM2} m2</span>
                     <span>{t('placesPage.levels.devices', { count: room.deviceCount })}</span>
-                    <button className="front-button front-button-secondary front-button-small" onClick={() => openRoomEditDialog(room)} type="button">
+                    <Button variant="secondary" size="sm" onClick={() => openRoomEditDialog(room)} type="button">
                       {t('placesPage.actions.edit')}
-                    </button>
+                    </Button>
                   </div>
                 </article>
               ))}
@@ -744,12 +744,12 @@ export function MeshPlacesPage() {
         )}
         footer={
           <>
-            <button className="front-button front-button-secondary front-button-large" onClick={closeDialog} type="button">
+            <Button variant="secondary" onClick={closeDialog} type="button">
               {t('placesPage.dialogs.cancel')}
-            </button>
-            <button className="front-button front-button-primary front-button-large" disabled={isSaving} form="places-building-form" type="submit">
+            </Button>
+            <Button variant="primary" disabled={isSaving} form="places-building-form" type="submit">
               {t(activeDialog?.kind === 'building' && activeDialog.mode === 'edit' ? 'placesPage.dialogs.save' : 'placesPage.dialogs.create')}
-            </button>
+            </Button>
           </>
         }
         onOpenChange={(open) => {
@@ -802,12 +802,12 @@ export function MeshPlacesPage() {
         description={t(activeDialog?.kind === 'level' && activeDialog.mode === 'edit' ? 'placesPage.dialogs.level.editDescription' : 'placesPage.dialogs.level.createDescription')}
         footer={
           <>
-            <button className="front-button front-button-secondary front-button-large" onClick={closeDialog} type="button">
+            <Button variant="secondary" onClick={closeDialog} type="button">
               {t('placesPage.dialogs.cancel')}
-            </button>
-            <button className="front-button front-button-primary front-button-large" disabled={isSaving} form="places-level-form" type="submit">
+            </Button>
+            <Button variant="primary" disabled={isSaving} form="places-level-form" type="submit">
               {t(activeDialog?.kind === 'level' && activeDialog.mode === 'edit' ? 'placesPage.dialogs.save' : 'placesPage.dialogs.create')}
-            </button>
+            </Button>
           </>
         }
         onOpenChange={(open) => {
@@ -848,12 +848,12 @@ export function MeshPlacesPage() {
         description={t(activeDialog?.kind === 'room' && activeDialog.mode === 'edit' ? 'placesPage.dialogs.room.editDescription' : 'placesPage.dialogs.room.createDescription')}
         footer={
           <>
-            <button className="front-button front-button-secondary front-button-large" onClick={closeDialog} type="button">
+            <Button variant="secondary" onClick={closeDialog} type="button">
               {t('placesPage.dialogs.cancel')}
-            </button>
-            <button className="front-button front-button-primary front-button-large" disabled={isSaving} form="places-room-form" type="submit">
+            </Button>
+            <Button variant="primary" disabled={isSaving} form="places-room-form" type="submit">
               {t(activeDialog?.kind === 'room' && activeDialog.mode === 'edit' ? 'placesPage.dialogs.save' : 'placesPage.dialogs.create')}
-            </button>
+            </Button>
           </>
         }
         onOpenChange={(open) => {

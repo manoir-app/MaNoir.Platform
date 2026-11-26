@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { catalogDomains, pluginCatalog, type CatalogPlugin } from '../data/pluginCatalog';
 import { getInstalledPlugins, getPluginInstallationStatus, installPlugin, validatePluginRepository, type PluginRepositoryValidationModel } from '../lib/api';
+import { Button } from '@manoir-app/core-admin-ui-kit/button';
+import { PageHeader } from '@manoir-app/core-admin-ui-kit/page-header';
 
 export function PluginCatalogPage() {
   const { t } = useTranslation();
@@ -119,11 +121,7 @@ export function PluginCatalogPage() {
 
   return (
     <div className="front-extensions-page">
-      <section className="front-extensions-hero">
-        <div className="front-login-page-eyebrow">{t('extensions.catalog.eyebrow')}</div>
-        <h1 className="front-extensions-title">{t('extensions.catalog.title')}</h1>
-        <p className="front-extensions-copy">{t('extensions.catalog.description')}</p>
-      </section>
+      <PageHeader description={t('extensions.catalog.description')} title={t('extensions.catalog.title')} variant="page" />
 
       <section className="front-extensions-toolbar" aria-label={t('extensions.catalog.filtersLabel')}>
         <label className="front-extensions-search">
@@ -177,9 +175,9 @@ export function PluginCatalogPage() {
               {isInstalled ? (
                 <span className="front-plugin-action-note">{t('extensions.catalog.installed')}</span>
               ) : hasRepositoryUrl ? (
-                <button className="front-button front-button-small front-button-primary" type="button" onClick={() => setSelectedPlugin(plugin)}>
+                <Button size="sm" onClick={() => setSelectedPlugin(plugin)}>
                   {t('extensions.catalog.install')}
-                </button>
+                </Button>
               ) : (
                 <span className="front-plugin-action-note">{t('extensions.catalog.noRepositoryUrl')}</span>
               )}
@@ -218,8 +216,8 @@ export function PluginCatalogPage() {
               <div><dt>{t('extensions.catalog.installDialog.repository')}</dt><dd>{selectedPlugin.repositoryUrl ? <a href={selectedPlugin.repositoryUrl} target="_blank" rel="noreferrer">{selectedPlugin.repositoryUrl}</a> : t('extensions.catalog.noRepositoryUrl')}</dd></div>
             </dl>
             <div className="front-plugin-dialog-actions">
-              <button className="front-button front-button-large front-button-secondary" type="button" onClick={() => setSelectedPlugin(null)}>{t('placesPage.dialogs.close')}</button>
-              <button className="front-button front-button-large front-button-primary" type="button" disabled={!repositoryValidation?.canInstall || isInstallingPlugin} onClick={() => void handleInstallPlugin()}>{isInstallingPlugin ? t('extensions.catalog.installDialog.installing') : t('extensions.catalog.installDialog.install')}</button>
+              <Button variant="secondary" onClick={() => setSelectedPlugin(null)}>{t('placesPage.dialogs.close')}</Button>
+              <Button disabled={!repositoryValidation?.canInstall} loading={isInstallingPlugin} onClick={() => void handleInstallPlugin()}>{isInstallingPlugin ? t('extensions.catalog.installDialog.installing') : t('extensions.catalog.installDialog.install')}</Button>
             </div>
           </section>
         </div>

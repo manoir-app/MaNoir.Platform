@@ -159,11 +159,11 @@
 }
 
 .headerInlineNavigation {
+  align-items: center;
   align-self: stretch;
   display: flex;
-  height: 100%;
+  flex: 1 1 auto;
   min-width: 0;
-  overflow: hidden;
 }
 
 .headerActions {
@@ -382,4 +382,85 @@
 .sidebarCollapsed .accountMenu {
   left: 0;
   right: auto;
+}
+
+
+/* Top bar: logo, domains, search, actions */
+.topBar {
+  align-items: center;
+  background: var(--mn-bg);
+  border-bottom: 1px solid var(--mn-line);
+  display: flex;
+  box-sizing: border-box;
+  gap: var(--mn-s-4);
+  min-height: 4rem;
+  padding: var(--mn-s-2) var(--mn-s-6);
+}
+
+.topLogo {
+  align-items: center;
+  background: var(--mn-prune);
+  border-radius: var(--mn-blob);
+  color: var(--mn-bg);
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-family: var(--mn-font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  height: 2.5rem;
+  justify-content: center;
+  line-height: 1;
+  width: 2.5rem;
+}
+
+.topBrand {
+  font-family: var(--mn-font-display);
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.topSpacer {
+  flex: 1 1 auto;
+}
+
+.topSearch {
+  flex: 0 1 22rem;
+  min-width: 0;
+}
+
+.footerMeta {
+  color: var(--mn-muted);
+  font-size: 0.8125rem;
+  margin-bottom: 0.55rem;
+}
+
+@media (max-width: 720px) {
+  .topBar {
+    padding: var(--mn-s-3) var(--mn-s-4);
+  }
+
+  .topSearch {
+    display: none;
+  }
+}
+
+.footerActions {
+  display: flex;
+  gap: var(--mn-s-2);
+  margin-bottom: var(--mn-s-2);
+}
+
+.sidebarCollapsed .footerActions {
+  justify-content: center;
+}
+
+.sidebarCollapsed .accountFooter {
+  border-top: 0;
+}
+
+.sidebarCollapsed .accountAvatar {
+  background: var(--mn-tonal);
+  color: var(--mn-ink);
+  height: var(--mn-touch-min);
+  width: var(--mn-touch-min);
 }

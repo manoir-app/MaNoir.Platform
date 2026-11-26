@@ -42,7 +42,7 @@ public static class CorePluginDescriptorProvider
                         [
                             new AdminUiPageDefinition()
                             {
-                                Category = "Mesh",
+                                Category = "Overview",
                                 Name = "Status",
                                 Icon = "gauge",
                                 Url = "/platform/mesh/status",
@@ -54,7 +54,7 @@ public static class CorePluginDescriptorProvider
                             },
                             new AdminUiPageDefinition()
                             {
-                                Category = "Mesh",
+                                Category = "House",
                                 Name = "Places",
                                 Icon = "map-pin",
                                 Url = "/platform/mesh/places",
@@ -66,31 +66,55 @@ public static class CorePluginDescriptorProvider
                             },
                             new AdminUiPageDefinition()
                             {
-                                Category = "Surveillance",
-                                Name = "Agents",
-                                Icon = "users",
-                                Url = "/platform/surveillance/agents",
+                                Category = "House",
+                                Name = "Screens",
+                                Icon = "monitor",
+                                Url = "/platform/house/screens",
                                 Labels = new Dictionary<string, string>()
                                 {
-                                    ["en"] = "Agents",
-                                    ["fr-FR"] = "Agents"
+                                    ["en"] = "Linked screens",
+                                    ["fr-FR"] = "Ecrans associes"
                                 }
                             },
                             new AdminUiPageDefinition()
                             {
-                                Category = "Surveillance",
+                                Category = "House",
+                                Name = "Local",
+                                Icon = "sliders",
+                                Url = "/platform/house/local",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Local settings",
+                                    ["fr-FR"] = "Reglages locaux"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
+                                Category = "People",
+                                Name = "Users",
+                                Icon = "users",
+                                Url = "/platform/people/users",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Users and access",
+                                    ["fr-FR"] = "Utilisateurs et droits"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
+                                Category = "Monitoring",
                                 Name = "Services",
                                 Icon = "server",
                                 Url = "/platform/surveillance/services",
                                 Labels = new Dictionary<string, string>()
                                 {
-                                    ["en"] = "Services",
-                                    ["fr-FR"] = "Services"
+                                    ["en"] = "Services and agents",
+                                    ["fr-FR"] = "Services et agents"
                                 }
                             },
                             new AdminUiPageDefinition()
                             {
-                                Category = "Surveillance",
+                                Category = "Monitoring",
                                 Name = "Logs",
                                 Icon = "file-text",
                                 Url = "/platform/surveillance/logs",
@@ -122,6 +146,18 @@ public static class CorePluginDescriptorProvider
                                 {
                                     ["en"] = "Installed plugins",
                                     ["fr-FR"] = "Plugins installes"
+                                }
+                            },
+                            new AdminUiPageDefinition()
+                            {
+                                Category = "System",
+                                Name = "About",
+                                Icon = "server",
+                                Url = "/platform/system/about",
+                                Labels = new Dictionary<string, string>()
+                                {
+                                    ["en"] = "Files, secrets and version",
+                                    ["fr-FR"] = "Fichiers, secrets et version"
                                 }
                             }
                         ]

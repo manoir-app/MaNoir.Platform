@@ -1,27 +1,25 @@
 import { useTranslation } from 'react-i18next';
 
-type PlaceholderTranslationKey =
-  | 'placeholders.meshPlaces.eyebrow'
-  | 'placeholders.meshPlaces.title'
-  | 'placeholders.meshPlaces.description'
-  | 'placeholders.extensionsCatalog.eyebrow'
-  | 'placeholders.extensionsCatalog.title'
-  | 'placeholders.extensionsCatalog.description';
+export type PlaceholderKind =
+  | 'meshPlaces'
+  | 'houseScreens'
+  | 'houseLocal'
+  | 'peopleUsers'
+  | 'systemAbout'
+  | 'extensionsCatalog';
 
 interface NavigationPlaceholderPageProps {
-  eyebrowKey: PlaceholderTranslationKey;
-  titleKey: PlaceholderTranslationKey;
-  descriptionKey: PlaceholderTranslationKey;
+  kind: PlaceholderKind;
 }
 
-export function NavigationPlaceholderPage({ descriptionKey, eyebrowKey, titleKey }: NavigationPlaceholderPageProps) {
+export function NavigationPlaceholderPage({ kind }: NavigationPlaceholderPageProps) {
   const { t } = useTranslation();
 
   return (
     <section className="front-placeholder-surface">
-      <div className="front-login-page-eyebrow">{t(eyebrowKey)}</div>
-      <h1 className="front-placeholder-surface-title">{t(titleKey)}</h1>
-      <p className="front-placeholder-surface-copy">{t(descriptionKey)}</p>
+      <div className="front-login-page-eyebrow">{t(`placeholders.${kind}.eyebrow`)}</div>
+      <h1 className="front-placeholder-surface-title">{t(`placeholders.${kind}.title`)}</h1>
+      <p className="front-placeholder-surface-copy">{t(`placeholders.${kind}.description`)}</p>
     </section>
   );
 }

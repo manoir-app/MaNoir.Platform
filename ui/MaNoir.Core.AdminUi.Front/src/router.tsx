@@ -1,12 +1,13 @@
 import { Navigate, createBrowserRouter } from 'react-router';
 import { App } from './App';
 import { AuthenticatedLayout } from './components/AuthenticatedLayout';
-import { AgentRegistryPage } from './pages/AgentRegistryPage';
 import { ConsoleHomePage } from './pages/ConsoleHomePage';
 import { NavigationPlaceholderPage } from './pages/NavigationPlaceholderPage';
 import { PlatformHealthPage } from './pages/PlatformHealthPage';
+import { PlatformLogsPage } from './pages/PlatformLogsPage';
 import { InstalledPluginsPage } from './pages/InstalledPluginsPage';
 import { PluginCatalogPage } from './pages/PluginCatalogPage';
+import { MeshPlacesPage } from './pages/MeshPlacesPage';
 
 const routes = [
     {
@@ -30,7 +31,7 @@ const routes = [
             },
             {
               path: 'system/agents',
-              element: <Navigate replace to="/platform/surveillance/agents" />,
+              element: <Navigate replace to="/platform/surveillance/services" />,
             },
             {
               path: 'platform',
@@ -42,17 +43,31 @@ const routes = [
             },
             {
               path: 'platform/mesh/places',
-              element: (
-                <NavigationPlaceholderPage
-                  descriptionKey="placeholders.meshPlaces.description"
-                  eyebrowKey="placeholders.meshPlaces.eyebrow"
-                  titleKey="placeholders.meshPlaces.title"
-                />
-              ),
+              Component: MeshPlacesPage,
+            },
+            {
+              path: 'platform/house/screens',
+              element: <NavigationPlaceholderPage kind="houseScreens" />,
+            },
+            {
+              path: 'platform/house/local',
+              element: <NavigationPlaceholderPage kind="houseLocal" />,
+            },
+            {
+              path: 'platform/people/users',
+              element: <NavigationPlaceholderPage kind="peopleUsers" />,
+            },
+            {
+              path: 'platform/surveillance/logs',
+              Component: PlatformLogsPage,
+            },
+            {
+              path: 'platform/system/about',
+              element: <NavigationPlaceholderPage kind="systemAbout" />,
             },
             {
               path: 'platform/surveillance/agents',
-              Component: AgentRegistryPage,
+              element: <Navigate replace to="/platform/surveillance/services" />,
             },
             {
               path: 'platform/surveillance/services',
