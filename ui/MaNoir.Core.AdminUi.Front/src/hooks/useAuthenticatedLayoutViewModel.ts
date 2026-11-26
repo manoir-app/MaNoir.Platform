@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
+import type { AdminDomainNavigationResponse, AdminNavigationDomainSummary } from '../lib/api';
 import { useAdminNavigationStore } from '../stores/adminNavigationStore';
 import { useAuthSessionViewModel } from './useAuthSessionViewModel';
 
@@ -14,19 +16,23 @@ export function useAuthenticatedLayoutViewModel() {
   const domainMenus = useAdminNavigationStore((state) => state.domainMenus);
   const loadDomains = useAdminNavigationStore((state) => state.loadDomains);
   const loadDomain = useAdminNavigationStore((state) => state.loadDomain);
+  const selectedDomainId = useAdminNavigationStore((state) => state.selectedDomainId);
+  const selectDomain = useAdminNavigationStore((state) => state.selectDomain);
 
   const activeDomain = React.useMemo(() => {
-    const matchingDomain = domains.find((domain) => domain.href && isActivePath(location.pathname, domain.href));
+    // A contribution may target several domains, so one path can belong to more than one of them.
+    const matchingDomains = domains.filter((domain) => containsPath(domain, domainMenus[domain.id], location.pathname));
+    const matchingDomain = matchingDomains.find((domain) => domain.id === selectedDomainId) ?? matchingDomains[0];
     if (matchingDomain) {
       return matchingDomain.id;
     }
 
     if (location.pathname.startsWith('/platform') || location.pathname === '/') {
-      return 'platform';
+      return 'settings';
     }
 
-    return domains[0]?.id ?? 'platform';
-  }, [domains, location.pathname]);
+    return domains[0]?.id ?? 'settings';
+  }, [domainMenus, domains, location.pathname, selectedDomainId]);
 
   React.useEffect(() => {
     if (!currentUser) {
@@ -50,9 +56,9 @@ export function useAuthenticatedLayoutViewModel() {
 
   const fallbackDomains = [
     {
-      id: 'platform',
-      label: t('domains.platform.label'),
-      icon: 'platform',
+      id: 'settings',
+      label: t('domains.settings.label'),
+      icon: 'settings',
       href: '/platform',
     },
   ];
@@ -73,8 +79,10 @@ export function useAuthenticatedLayoutViewModel() {
       active: item.id === activeDomain,
       href: isExternal ? href : undefined,
       icon: item.icon,
-      label: item.label,
+      // Declared domains are translated here; any other keeps the label sent by the API.
+      label: i18n.exists(`domains.${item.id}.label`) ? t(`domains.${item.id}.label` as never) : item.label,
       onSelect: !href || isExternal ? undefined : () => {
+        selectDomain(item.id);
         void navigate(href);
       },
     };
@@ -115,6 +123,11 @@ export function useAuthenticatedLayoutViewModel() {
     serverStatusTone,
     serverVersion,
   };
+}
+
+function containsPath(domain: AdminNavigationDomainSummary, menu: AdminDomainNavigationResponse | undefined, path: string) {
+  return isActivePath(path, domain.href)
+    || Boolean(menu?.sections.some((section) => section.pages.some((page) => isActivePath(path, page.href))));
 }
 
 function isActivePath(currentPath: string, href?: string | null) {

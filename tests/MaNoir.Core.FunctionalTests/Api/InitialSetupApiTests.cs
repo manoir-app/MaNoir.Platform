@@ -97,7 +97,7 @@ public sealed class InitialSetupApiTests
         Assert.IsNotNull(coreAdminContribution.AdminUi);
         Assert.AreEqual(CoreAccessZones.CoreAdminUi, coreAdminContribution.AdminUi.AccessZoneId);
         Assert.AreEqual(AccessLevel.Read, coreAdminContribution.AdminUi.RequiredAccessLevel);
-        Assert.AreEqual("Platform", coreAdminContribution.AdminUi.Domain);
+        CollectionAssert.AreEqual(new[] { "settings" }, coreAdminContribution.AdminUi.Domains);
         Assert.AreEqual(7, coreAdminContribution.AdminUi.Pages.Count);
         CollectionAssert.AreEquivalent(
         new[]

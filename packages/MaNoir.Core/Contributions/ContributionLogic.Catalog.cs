@@ -220,9 +220,10 @@ public sealed partial class ContributionLogic
 
             definition.Id = normalizedContributionId;
             definition.PluginId = normalizedPluginId;
-            definition.Tags = definition.Tags == null
-                ? []
-                : [.. definition.Tags.Where(tag => !string.IsNullOrWhiteSpace(tag)).Select(tag => tag.Trim()).Distinct(StringComparer.OrdinalIgnoreCase)];
+            definition.Tags = NormalizeValues(definition.Tags);
+            definition.Requires = [.. NormalizeValues(definition.Requires)
+                .Select(NormalizePluginId)
+                .Distinct(StringComparer.Ordinal)];
             definition.PublishedAtUtc = existingDefinitionsById.TryGetValue(normalizedContributionId, out ContributionDefinition existingDefinition) && existingDefinition.PublishedAtUtc != default
                 ? existingDefinition.PublishedAtUtc
                 : (definition.PublishedAtUtc == default ? now : definition.PublishedAtUtc);
@@ -230,6 +231,7 @@ public sealed partial class ContributionLogic
 
             if (definition.Integration != null)
             {
+                definition.Integration.Domains = NormalizeValues(definition.Integration.Domains);
                 definition.Integration.PublishedEntityKinds ??= [];
                 foreach (IntegrationPublishedEntityKindDefinition entityKind in definition.Integration.PublishedEntityKinds)
                 {
@@ -242,6 +244,7 @@ public sealed partial class ContributionLogic
 
             if (definition.AdminUi != null)
             {
+                definition.AdminUi.Domains = NormalizeValues(definition.AdminUi.Domains);
                 definition.AdminUi.AccessZoneId = string.IsNullOrWhiteSpace(definition.AdminUi.AccessZoneId)
                     ? null
                     : definition.AdminUi.AccessZoneId.Trim().ToLowerInvariant();
@@ -259,6 +262,19 @@ public sealed partial class ContributionLogic
         }
 
         return [.. preparedDefinitionsById.Values.OrderBy(definition => definition.Id, StringComparer.OrdinalIgnoreCase)];
+    }
+
+    private static List<string> NormalizeValues(IEnumerable<string> values)
+    {
+        return [.. (values ?? [])
+            .Where(value => !string.IsNullOrWhiteSpace(value))
+            .Select(value => value.Trim())
+            .Distinct(StringComparer.OrdinalIgnoreCase)];
+    }
+
+    private static string[] SortForFingerprint(IEnumerable<string> values)
+    {
+        return [.. (values ?? []).OrderBy(value => value, StringComparer.OrdinalIgnoreCase)];
     }
 
     private static string ComputeCatalogFingerprint(InstalledPlugin plugin, IReadOnlyCollection<ContributionDefinition> definitions)
@@ -300,11 +316,12 @@ public sealed partial class ContributionLogic
                         Tags = definition.Tags == null
                             ? []
                             : definition.Tags.OrderBy(tag => tag, StringComparer.OrdinalIgnoreCase).ToArray(),
+                        Requires = SortForFingerprint(definition.Requires),
                         Integration = definition.Integration == null
                             ? null
                             : new
                             {
-                                Domain = definition.Integration.Domain ?? string.Empty,
+                                Domains = SortForFingerprint(definition.Integration.Domains),
                                 Category = definition.Integration.Category ?? string.Empty,
                                 ServiceDependencyKind = definition.Integration.ServiceDependencyKind,
                                 RequiresExternalSubscription = definition.Integration.RequiresExternalSubscription,
@@ -330,7 +347,7 @@ public sealed partial class ContributionLogic
                             ? null
                             : new
                             {
-                                Domain = definition.AdminUi.Domain ?? string.Empty,
+                                Domains = SortForFingerprint(definition.AdminUi.Domains),
                                 AccessZoneId = definition.AdminUi.AccessZoneId ?? string.Empty,
                                 RequiredAccessLevel = definition.AdminUi.RequiredAccessLevel,
                                 Pages = definition.AdminUi.Pages == null

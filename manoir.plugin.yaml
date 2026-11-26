@@ -47,7 +47,8 @@ catalog:
         en: Core administration pages.
       canCreateInstances: false
       adminUi:
-        domain: Platform
+        domains:
+          - settings
         accessZoneId: core.admin-ui
         requiredAccessLevel: Read
         pages:

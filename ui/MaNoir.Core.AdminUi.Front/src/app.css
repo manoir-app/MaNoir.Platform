@@ -890,6 +890,15 @@ body {
   color: var(--mn-prune);
 }
 
+.front-plugin-requirements {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+}
+
 .front-plugin-action-note {
   color: var(--mn-muted);
   font-family: var(--mn-font-sans);

@@ -1,3 +1,4 @@
+using MaNoir.Core.AdminNavigation;
 using MaNoir.Core.Authorization;
 using MaNoir.Core.Contracts.Models.Authorization;
 using MaNoir.Core.Contracts.Models.Contributions;
@@ -35,7 +36,7 @@ public static class CorePluginDescriptorProvider
                     CanCreateInstances = false,
                     AdminUi = new AdminUiContributionDefinitionData()
                     {
-                        Domain = "Platform",
+                        Domains = [ApplicationDomains.Settings.Id],
                         AccessZoneId = CoreAccessZones.CoreAdminUi,
                         RequiredAccessLevel = AccessLevel.Read,
                         Pages =

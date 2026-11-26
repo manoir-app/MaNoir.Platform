@@ -252,7 +252,7 @@ public sealed class AuthorizationCatalogPersistenceTests
                         Description = "Weather administration pages.",
                         AdminUi = new AdminUiContributionDefinitionData()
                         {
-                            Domain = "Weather",
+                            Domains = ["Weather"],
                             AccessZoneId = "weather.forecast",
                             RequiredAccessLevel = AccessLevel.Read,
                             Pages =
@@ -341,7 +341,7 @@ public sealed class AuthorizationCatalogPersistenceTests
                         Label = "Weather grandchild admin",
                         AdminUi = new AdminUiContributionDefinitionData()
                         {
-                            Domain = "Weather",
+                            Domains = ["Weather"],
                             AccessZoneId = "weather.ancestor-zone"
                         }
                     }
@@ -397,7 +397,7 @@ public sealed class AuthorizationCatalogPersistenceTests
                         Label = "Weather cycle admin",
                         AdminUi = new AdminUiContributionDefinitionData()
                         {
-                            Domain = "Weather",
+                            Domains = ["Weather"],
                             AccessZoneId = "weather.cycle-b-zone"
                         }
                     }
@@ -422,7 +422,7 @@ public sealed class AuthorizationCatalogPersistenceTests
                         Label = "Weather child admin",
                         AdminUi = new AdminUiContributionDefinitionData()
                         {
-                            Domain = "Weather",
+                            Domains = ["Weather"],
                             AccessZoneId = "weather.parent-zone"
                         }
                     }
@@ -446,7 +446,7 @@ public sealed class AuthorizationCatalogPersistenceTests
                         Label = "Weather invalid child admin",
                         AdminUi = new AdminUiContributionDefinitionData()
                         {
-                            Domain = "Weather",
+                            Domains = ["Weather"],
                             AccessZoneId = "weather.parent-zone"
                         }
                     }

@@ -5,9 +5,12 @@ export interface CatalogPlugin {
   publisher: string;
   version: string;
   repositoryUrl?: string;
-  domain: 'Core' | 'HomeAutomation';
+  /** Publication group of the plugin catalog. It says nothing about the application domains where the plugin is used. */
+  catalogGroup: 'Core' | 'HomeAutomation';
   category: 'MainServices' | 'Core';
   tags: string[];
+  /** Ids of the plugins this one relies on, when the catalog announces them. */
+  requires?: string[];
 }
 
 export const pluginCatalog: CatalogPlugin[] = [
@@ -18,7 +21,7 @@ export const pluginCatalog: CatalogPlugin[] = [
     publisher: 'MaNoir',
     version: '0.0.0-dev',
     repositoryUrl: 'https://github.com/manoir-app/MaNoir.Platform',
-    domain: 'Core',
+    catalogGroup: 'Core',
     category: 'MainServices',
     tags: ['core', 'platform', 'administration'],
   },
@@ -29,10 +32,10 @@ export const pluginCatalog: CatalogPlugin[] = [
     publisher: 'MaNoir',
     version: '0.0.0-dev',
     repositoryUrl: 'https://github.com/manoir-app/Manoir.HomeAutomation.Core',
-    domain: 'HomeAutomation',
+    catalogGroup: 'HomeAutomation',
     category: 'Core',
     tags: ['home-automation', 'scenes', 'devices'],
   },
 ];
 
-export const catalogDomains = ['all', ...new Set(pluginCatalog.map((plugin) => plugin.domain))];
+export const catalogGroups = ['all', ...new Set(pluginCatalog.map((plugin) => plugin.catalogGroup))];
