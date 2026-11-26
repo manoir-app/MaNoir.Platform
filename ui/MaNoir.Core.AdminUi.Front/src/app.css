@@ -2036,7 +2036,6 @@ body {
 .front-home {
   display: grid;
   gap: var(--mn-s-6);
-  max-width: var(--mn-page-max);
 }
 
 .front-home-grid {
@@ -2179,7 +2178,6 @@ body {
 .front-monitor {
   display: grid;
   gap: var(--mn-s-6);
-  max-width: var(--mn-page-max);
 }
 
 .front-monitor-grid {

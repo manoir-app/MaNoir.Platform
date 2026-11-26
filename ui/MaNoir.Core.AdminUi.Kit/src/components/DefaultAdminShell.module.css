@@ -391,33 +391,26 @@
   background: var(--mn-bg);
   border-bottom: 1px solid var(--mn-line);
   display: flex;
+  box-sizing: border-box;
   gap: var(--mn-s-4);
-  min-height: 4.5rem;
-  padding: var(--mn-s-3) var(--mn-s-6);
+  min-height: 4rem;
+  padding: var(--mn-s-2) var(--mn-s-6);
 }
 
 .topLogo {
   align-items: center;
   background: var(--mn-prune);
-  border-radius: 50%;
+  border-radius: var(--mn-blob);
+  color: var(--mn-bg);
   display: inline-flex;
   flex: 0 0 auto;
-  height: 3rem;
+  font-family: var(--mn-font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  height: 2.5rem;
   justify-content: center;
-  width: 3rem;
-}
-
-.topLogo :global(img),
-.topLogo :global(svg) {
-  display: block;
-  filter: brightness(0) invert(1);
-  height: 1.5rem;
-  width: 1.5rem;
-}
-
-:global([data-theme="dark"]) .topLogo :global(img),
-:global([data-theme="mirror"]) .topLogo :global(img) {
-  filter: none;
+  line-height: 1;
+  width: 2.5rem;
 }
 
 .topBrand {
