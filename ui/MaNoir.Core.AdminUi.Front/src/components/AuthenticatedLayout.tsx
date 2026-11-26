@@ -174,9 +174,10 @@ export function AuthenticatedLayout() {
     return <LoginPage />;
   }
 
-  const platformItem = domainTabItems.find((item) => item.id === 'platform');
+  // The settings domain is reached through the gear action, not through the domain switcher.
+  const settingsItem = domainTabItems.find((item) => item.id === 'settings');
   const shellDomainItems = domainTabItems
-    .filter((item) => item.id !== 'platform')
+    .filter((item) => item.id !== 'settings')
     .map((item) => ({
       ...item,
       icon: <DomainIcon kind={'icon' in item ? item.icon : null} />,
@@ -246,12 +247,12 @@ export function AuthenticatedLayout() {
       topBarBrand={t('common.appName')}
       topBarActions={(
         <>
-          {platformItem ? (
+          {settingsItem ? (
             <button
-              aria-current={platformItem.active ? 'page' : undefined}
+              aria-current={settingsItem.active ? 'page' : undefined}
               aria-label={t('navigation.platformSettings')}
               className="front-top-action"
-              onClick={platformItem.onSelect}
+              onClick={settingsItem.onSelect}
               title={t('navigation.platformSettings')}
               type="button"
             >

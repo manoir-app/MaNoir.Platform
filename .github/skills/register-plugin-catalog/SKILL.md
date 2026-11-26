@@ -141,9 +141,10 @@ PluginDescriptor descriptor = new PluginDescriptor()
 			Id = "weather.admin.pages",
 			Kind = ContributionKind.AdminUiPage,
 			Label = "Weather admin",
+			Requires = ["home-automation"],
 			AdminUi = new AdminUiContributionDefinitionData()
 			{
-				Domain = "Weather",
+				Domains = ["today", "home"],
 				AccessZoneId = "weather.forecast",
 				RequiredAccessLevel = AccessLevel.Read
 			}
@@ -151,6 +152,10 @@ PluginDescriptor descriptor = new PluginDescriptor()
 	]
 };
 ```
+
+`Domains` lists application domains (`today`, `kitchen`, `home`, `projects`, `settings`), meaning where the pages are used. It is unrelated to the plugin catalog groups, which only organize publication.
+
+`Requires` lists the ids of other installed plugins: the contribution is exposed only while each of them is installed, enabled, and healthy. Omit it when the contribution stands on its own.
 
 ### Startup Registration Example
 

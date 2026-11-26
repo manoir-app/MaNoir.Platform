@@ -32,6 +32,7 @@ public sealed class ContributionDefinition
     public ContributionDefinition()
     {
         Tags = [];
+        Requires = [];
     }
 
     /// <summary>
@@ -87,6 +88,12 @@ public sealed class ContributionDefinition
     public List<string> Tags { get; set; }
 
     /// <summary>
+    /// Gets or sets the identifiers of the plugins this contribution depends on.
+    /// The contribution is exposed only while every one of them is installed, enabled, and healthy.
+    /// </summary>
+    public List<string> Requires { get; set; }
+
+    /// <summary>
     /// Gets or sets the publication timestamp.
     /// </summary>
     public DateTimeOffset PublishedAtUtc { get; set; }
@@ -120,20 +127,22 @@ public enum IntegrationServiceDependencyKind
 /// <summary>
 /// Represents Integration specific contribution data.
 /// </summary>
+[BsonIgnoreExtraElements]
 public sealed class IntegrationContributionDefinitionData
 {
     public IntegrationContributionDefinitionData()
     {
+        Domains = [];
         PublishedEntityKinds = [];
     }
 
     /// <summary>
-    /// Gets or sets the domain where the integration is active.
+    /// Gets or sets the application domains where the integration is active.
     /// </summary>
-    public string Domain { get; set; }
+    public List<string> Domains { get; set; }
 
     /// <summary>
-    /// Gets or sets the functional category within the domain.
+    /// Gets or sets the functional category within the domains.
     /// </summary>
     public string Category { get; set; }
 
@@ -188,17 +197,19 @@ public sealed class IntegrationPublishedEntityKindDefinition
 /// <summary>
 /// Represents Admin UI specific contribution data.
 /// </summary>
+[BsonIgnoreExtraElements]
 public sealed class AdminUiContributionDefinitionData
 {
     public AdminUiContributionDefinitionData()
     {
+        Domains = [];
         Pages = [];
     }
 
     /// <summary>
-    /// Gets or sets the target domain.
+    /// Gets or sets the target application domains. The pages appear in each of them.
     /// </summary>
-    public string Domain { get; set; }
+    public List<string> Domains { get; set; }
 
     /// <summary>
     /// Gets or sets the access zone required to expose the contributed pages.

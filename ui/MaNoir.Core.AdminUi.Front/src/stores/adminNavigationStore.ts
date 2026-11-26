@@ -13,8 +13,11 @@ interface AdminNavigationStoreState {
   domainsState: LoadState;
   domainMenus: Record<string, AdminDomainNavigationResponse>;
   domainStates: Record<string, LoadState>;
+  /** The domain last picked by the user; it breaks the tie when several domains contain the same page. */
+  selectedDomainId: string | null;
   loadDomains: () => Promise<void>;
   loadDomain: (domainId: string) => Promise<void>;
+  selectDomain: (domainId: string) => void;
   clear: () => void;
 }
 
@@ -23,6 +26,10 @@ export const useAdminNavigationStore = create<AdminNavigationStoreState>((set, g
   domainsState: 'idle',
   domainMenus: {},
   domainStates: {},
+  selectedDomainId: null,
+  selectDomain: (domainId: string) => {
+    set({ selectedDomainId: domainId });
+  },
   loadDomains: async () => {
     const { domainsState } = get();
     if (domainsState === 'loading' || domainsState === 'ready') {
@@ -85,6 +92,7 @@ export const useAdminNavigationStore = create<AdminNavigationStoreState>((set, g
       domainsState: 'idle',
       domainMenus: {},
       domainStates: {},
+      selectedDomainId: null,
     });
   },
 }));

@@ -51,14 +51,20 @@ export const resources = {
         ariaLabel: 'Domain switcher',
         current: 'Current domain: {{domain}}',
         more: 'More',
-        platform: {
-          label: 'General',
+        today: {
+          label: 'Today',
         },
-        homeAutomation: {
-          label: 'Home Automation',
+        kitchen: {
+          label: 'Kitchen',
         },
-        dailyLife: {
-          label: 'Daily Life',
+        home: {
+          label: 'Home',
+        },
+        projects: {
+          label: 'Projects & hobbies',
+        },
+        settings: {
+          label: 'Settings',
         },
       },
       navigation: {
@@ -136,8 +142,9 @@ export const resources = {
         },
       },
       extensions: {
-        domains: { all: 'All domains', Core: 'Core', HomeAutomation: 'Home automation' },
+        catalogGroups: { all: 'All groups', Core: 'Core', HomeAutomation: 'Home automation' },
         categories: { MainServices: 'Main services', Core: 'Core' },
+        requirements: { satisfied: 'Requires {{plugin}} · available', unsatisfied: 'Requires {{plugin}} · unavailable' },
         catalog: {
           eyebrow: 'Extensions · catalog',
           title: 'Discover your next plugin',
@@ -145,7 +152,7 @@ export const resources = {
           filtersLabel: 'Catalog filters',
           searchLabel: 'Search plugins',
           searchPlaceholder: 'Search by name, tag or capability',
-          domainsLabel: 'Plugin domains',
+          groupsLabel: 'Catalog groups',
           available: 'Available',
           installed: 'Installed',
           install: 'Install',
@@ -179,14 +186,15 @@ export const resources = {
           pluginCount: 'Plugins installed',
           contributionCount: 'Contributions',
           updates: 'Updates available',
-          domainsLabel: 'Installed plugin domains',
+          tagsLabel: 'Installed plugin tags',
+          allTags: 'All tags',
           loading: 'Loading installed plugins.',
           error: 'Installed plugins could not be loaded.',
           noDescription: 'No description published.',
           healthy: 'Healthy',
           attention: 'Attention',
           noComponents: 'Aucun composant runtime rapporte.',
-          empty: 'No installed plugin matches this domain.',
+          empty: 'No installed plugin matches this tag.',
         },
       },
       placesPage: {
@@ -588,14 +596,20 @@ export const resources = {
         ariaLabel: 'Changement de domaine',
         current: 'Domaine courant : {{domain}}',
         more: 'Plus',
-        platform: {
-          label: 'General',
+        today: {
+          label: 'Aujourd’hui',
         },
-        homeAutomation: {
-          label: 'Home Automation',
+        kitchen: {
+          label: 'Cuisine',
         },
-        dailyLife: {
-          label: 'Vie quotidienne',
+        home: {
+          label: 'Maison',
+        },
+        projects: {
+          label: 'Projets et loisirs',
+        },
+        settings: {
+          label: 'Réglages',
         },
       },
       navigation: {
@@ -673,8 +687,9 @@ export const resources = {
         },
       },
       extensions: {
-        domains: { all: 'Tous les domaines', Core: 'Core', HomeAutomation: 'Domotique' },
+        catalogGroups: { all: 'Tous les groupes', Core: 'Core', HomeAutomation: 'Domotique' },
         categories: { MainServices: 'Services principaux', Core: 'Core' },
+        requirements: { satisfied: 'Requiert {{plugin}} · disponible', unsatisfied: 'Requiert {{plugin}} · indisponible' },
         catalog: {
           eyebrow: 'Extensions · catalogue',
           title: 'Decouvrez votre prochain plugin',
@@ -682,7 +697,7 @@ export const resources = {
           filtersLabel: 'Filtres du catalogue',
           searchLabel: 'Rechercher des plugins',
           searchPlaceholder: 'Rechercher par nom, tag ou capacite',
-          domainsLabel: 'Domaines des plugins',
+          groupsLabel: 'Groupes du catalogue',
           available: 'Disponible',
           installed: 'Installe',
           install: 'Installer',
@@ -716,14 +731,15 @@ export const resources = {
           pluginCount: 'Plugins installes',
           contributionCount: 'Contributions',
           updates: 'Mises a jour disponibles',
-          domainsLabel: 'Domaines des plugins installes',
+          tagsLabel: 'Étiquettes des plugins installés',
+          allTags: 'Toutes les étiquettes',
           loading: 'Chargement des plugins installes.',
           error: 'Les plugins installes n ont pas pu etre charges.',
           noDescription: 'Aucune description publiee.',
           healthy: 'Sain',
           attention: 'Attention',
           noComponents: 'No runtime component reported.',
-          empty: 'Aucun plugin installe ne correspond a ce domaine.',
+          empty: 'Aucun plugin installé ne correspond à cette étiquette.',
         },
       },
       placesPage: {

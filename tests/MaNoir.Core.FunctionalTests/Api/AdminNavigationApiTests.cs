@@ -60,9 +60,9 @@ public sealed class AdminNavigationApiTests
         Assert.AreEqual(HttpStatusCode.OK, domainsResponse.StatusCode);
         Assert.IsNotNull(domains);
         Assert.AreEqual(1, domains.Domains.Count);
-        Assert.AreEqual("platform", domains.Domains[0].Id);
-        Assert.AreEqual("Platform", domains.Domains[0].Label);
-        Assert.AreEqual("platform", domains.Domains[0].Icon);
+        Assert.AreEqual("settings", domains.Domains[0].Id);
+        Assert.AreEqual("Réglages", domains.Domains[0].Label);
+        Assert.AreEqual("settings", domains.Domains[0].Icon);
         Assert.AreEqual("/platform/mesh/status", domains.Domains[0].Href);
 
         using HttpRequestMessage domainRequest = new(HttpMethod.Get, "/api/core/system/admin-navigation/domains/platform");
@@ -73,7 +73,7 @@ public sealed class AdminNavigationApiTests
 
         Assert.AreEqual(HttpStatusCode.OK, domainResponse.StatusCode);
         Assert.IsNotNull(domain);
-        Assert.AreEqual("platform", domain.Domain.Id);
+        Assert.AreEqual("settings", domain.Domain.Id);
         CollectionAssert.AreEqual(new[] { "Overview", "House", "People", "Monitoring", "Extensions", "System" }, domain.Sections.Select(section => section.Label).ToList());
         CollectionAssert.AreEqual(new[] { "Statut general" }, domain.Sections[0].Pages.Select(page => page.Label).ToList());
         CollectionAssert.AreEqual(new[] { "Lieux et pieces", "Ecrans associes", "Reglages locaux" }, domain.Sections[1].Pages.Select(page => page.Label).ToList());
@@ -106,7 +106,7 @@ public sealed class AdminNavigationApiTests
 
         Assert.AreEqual(HttpStatusCode.OK, domainsResponse.StatusCode);
         Assert.IsNotNull(domains);
-        CollectionAssert.AreEquivalent(new[] { "platform", "home-automation" }, domains.Domains.Select(domain => domain.Id).ToList());
+        CollectionAssert.AreEqual(new[] { "home", "settings" }, domains.Domains.Select(domain => domain.Id).ToList());
         Assert.IsNotNull(promotedUser);
         Assert.IsTrue(promotedUser.IsAdmin);
     }
@@ -137,9 +137,52 @@ public sealed class AdminNavigationApiTests
 
         Assert.AreEqual(HttpStatusCode.OK, domainResponse.StatusCode);
         Assert.IsNotNull(domain);
-        Assert.AreEqual("home-automation", domain.Domain.Id);
+        Assert.AreEqual("home", domain.Domain.Id);
         Assert.AreEqual("/admin", domain.Domain.Href);
         Assert.AreEqual("/admin", domain.Sections[0].Pages[0].Href);
+    }
+
+    [TestMethod]
+    [TestCategory("Functional")]
+    public async Task GetDomains_ShouldExposeConditionalCrossDomainContributionOnlyWhileRequiredPluginIsHealthy()
+    {
+        await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();
+        await mongoHost.StartAsync();
+        using ProcessEnvironmentVariableScope mongoScope = new("MONGODB_CONNECTIONSTRING", mongoHost.ConnectionString);
+
+        ContributionLogic contributionLogic = new ContributionLogic();
+        await contributionLogic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "meals", Label = "Meals" },
+        [
+            new ContributionDefinition()
+            {
+                Id = "meals.admin.pages",
+                Kind = ContributionKind.AdminUiPage,
+                Label = "Meals admin",
+                Requires = [" Inventory "],
+                AdminUi = new AdminUiContributionDefinitionData()
+                {
+                    Domains = ["today", "kitchen"],
+                    Pages = [new AdminUiPageDefinition() { Category = "Overview", Name = "Menu", RelativePath = "/meals" }]
+                }
+            }
+        ]);
+
+        AdminNavigationLogic navigationLogic = new AdminNavigationLogic();
+        AdminNavigationDomainsResponse withoutRequirement = await navigationLogic.GetDomainsAsync("root");
+
+        await contributionLogic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "inventory", Label = "Inventory" }, []);
+        AdminNavigationDomainsResponse withRequirement = await navigationLogic.GetDomainsAsync("root");
+
+        await new ContributionMongoOperations().UpdatePluginRuntimeStateAsync("inventory", []);
+        AdminNavigationDomainsResponse withUnhealthyRequirement = await navigationLogic.GetDomainsAsync("root");
+
+        InstalledPlugin reloadedPlugin = await contributionLogic.GetInstalledPluginAsync("meals");
+
+        Assert.AreEqual(0, withoutRequirement.Domains.Count);
+        CollectionAssert.AreEqual(new[] { "today", "kitchen" }, withRequirement.Domains.Select(domain => domain.Id).ToList());
+        Assert.AreEqual(0, withUnhealthyRequirement.Domains.Count);
+        CollectionAssert.AreEqual(new[] { "inventory" }, reloadedPlugin.Contributions[0].Requires);
+        CollectionAssert.AreEqual(new[] { "today", "kitchen" }, reloadedPlugin.Contributions[0].AdminUi.Domains);
     }
 
     private static async Task PublishCatalogsAsync()
@@ -167,7 +210,7 @@ public sealed class AdminNavigationApiTests
                 Label = "Home automation admin",
                 AdminUi = new AdminUiContributionDefinitionData()
                 {
-                    Domain = "Home Automation",
+                    Domains = ["Home Automation"],
                     AccessZoneId = "home-automation.admin-ui",
                     RequiredAccessLevel = AccessLevel.Read,
                     Pages =
