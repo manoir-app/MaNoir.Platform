@@ -398,8 +398,6 @@
 
 .topLogo {
   align-items: center;
-  background: var(--mn-prune);
-  border-radius: 50%;
   display: inline-flex;
   flex: 0 0 auto;
   height: 3rem;
@@ -410,14 +408,8 @@
 .topLogo :global(img),
 .topLogo :global(svg) {
   display: block;
-  filter: brightness(0) invert(1);
-  height: 1.5rem;
-  width: 1.5rem;
-}
-
-:global([data-theme="dark"]) .topLogo :global(img),
-:global([data-theme="mirror"]) .topLogo :global(img) {
-  filter: none;
+  height: 100%;
+  width: 100%;
 }
 
 .topBrand {
