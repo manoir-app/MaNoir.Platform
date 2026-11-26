@@ -5,7 +5,6 @@ import { DefaultAdminShell } from '@manoir-app/core-admin-ui-kit/default-admin-s
 import { ShellHeader } from '@manoir-app/core-admin-ui-kit/shell-header';
 import { SidebarNav } from '@manoir-app/core-admin-ui-kit/sidebar-nav';
 import { InlineTabs } from '@manoir-app/core-admin-ui-kit/inline-tabs';
-import manoirLogo from '../assets/logo.svg';
 import { DomainIcon } from './DomainIcon';
 import { hasPageIcon, PageIcon } from './PageIcon';
 import i18n, { resolveSupportedLanguage } from '../i18n';
@@ -274,7 +273,7 @@ export function AuthenticatedLayout() {
           {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
         </button>
       )}
-      topBarLogo={<img alt="" src={manoirLogo} />}
+      topBarLogo="M"
       topBarMeta={headerMeta}
       topBarNavigation={(
         <ShellHeader

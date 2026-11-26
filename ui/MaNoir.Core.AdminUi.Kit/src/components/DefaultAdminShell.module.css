@@ -398,18 +398,18 @@
 
 .topLogo {
   align-items: center;
+  background: var(--mn-prune);
+  border-radius: var(--mn-blob);
+  color: var(--mn-bg);
   display: inline-flex;
   flex: 0 0 auto;
+  font-family: var(--mn-font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
   height: 3rem;
   justify-content: center;
+  line-height: 1;
   width: 3rem;
-}
-
-.topLogo :global(img),
-.topLogo :global(svg) {
-  display: block;
-  height: 100%;
-  width: 100%;
 }
 
 .topBrand {
