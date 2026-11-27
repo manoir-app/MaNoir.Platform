@@ -252,7 +252,9 @@ export function AuthenticatedLayout() {
               aria-current={settingsItem.active ? 'page' : undefined}
               aria-label={t('navigation.platformSettings')}
               className="front-top-action"
-              onClick={settingsItem.onSelect}
+              onClick={settingsItem.onSelect ?? (() => {
+                if (settingsItem.href) window.location.assign(settingsItem.href);
+              })}
               title={t('navigation.platformSettings')}
               type="button"
             >

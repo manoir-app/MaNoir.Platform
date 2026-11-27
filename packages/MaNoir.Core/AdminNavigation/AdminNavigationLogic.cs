@@ -83,11 +83,11 @@ public sealed class AdminNavigationLogic
 
                     foreach (AdminUiPageDefinition page in contribution.AdminUi.Pages ?? [])
                     {
-                        string href = ResolvePageHref(page);
-                        if (page == null || string.IsNullOrWhiteSpace(href))
+                        (string href, bool isHostedByModule) = ResolvePageTarget(page, plugin.AdminUiPathPrefix);
+                        if (string.IsNullOrWhiteSpace(href))
                             continue;
 
-                        domain.AddPage(plugin, contribution, page, href);
+                        domain.AddPage(plugin, contribution, page, href, isHostedByModule);
                     }
                 }
             }
@@ -131,15 +131,22 @@ public sealed class AdminNavigationLogic
             ?? page.Name;
     }
 
-    private static string ResolvePageHref(AdminUiPageDefinition page)
+    /// <summary>
+    /// Resolves where a page lives. A relative path belongs to the plugin's own Admin UI: once that one is deployed
+    /// under a base path, it is another application than the Core Admin UI.
+    /// </summary>
+    private static (string Href, bool IsHostedByModule) ResolvePageTarget(AdminUiPageDefinition page, string adminUiPathPrefix)
     {
         if (!string.IsNullOrWhiteSpace(page?.RelativePath))
         {
             string relativePath = page.RelativePath.Trim();
-            return relativePath.StartsWith("/", StringComparison.Ordinal) ? relativePath : "/" + relativePath;
+            if (!relativePath.StartsWith("/", StringComparison.Ordinal))
+                relativePath = "/" + relativePath;
+
+            return (AdminUiPublicPath.Compose(adminUiPathPrefix, relativePath), AdminUiPublicPath.Normalize(adminUiPathPrefix) != null);
         }
 
-        return string.IsNullOrWhiteSpace(page?.Url) ? null : page.Url;
+        return (page?.Url, false);
     }
 
     private static string TryResolveLabel(IReadOnlyDictionary<string, string> labels, string culture)
@@ -171,7 +178,7 @@ public sealed class AdminNavigationLogic
 
         public bool HasPages => _sections.Any(section => section.Pages.Count > 0);
 
-        public void AddPage(InstalledPlugin plugin, ContributionDefinition contribution, AdminUiPageDefinition page, string href)
+        public void AddPage(InstalledPlugin plugin, ContributionDefinition contribution, AdminUiPageDefinition page, string href, bool isHostedByModule)
         {
             string category = string.IsNullOrWhiteSpace(page.Category) ? "General" : page.Category.Trim();
             string sectionId = ApplicationDomains.Slugify(category) ?? "general";
@@ -191,7 +198,8 @@ public sealed class AdminNavigationLogic
                 Name = page.Name,
                 Icon = page.Icon,
                 Label = ResolvePageLabel(page),
-                Href = href
+                Href = href,
+                IsHostedByModule = isHostedByModule
             });
         }
 
@@ -205,10 +213,11 @@ public sealed class AdminNavigationLogic
                     Pages = [.. section.Pages]
                 })];
 
-            string href = sections
+            // Opening a domain stays in the Core Admin UI whenever it has a page there.
+            AdminNavigationPage landingPage = sections
                 .SelectMany(section => section.Pages)
-                .Select(page => page.Href)
-                .FirstOrDefault(url => !string.IsNullOrWhiteSpace(url));
+                .OrderBy(page => page.IsHostedByModule)
+                .FirstOrDefault();
 
             return new AdminDomainNavigationResponse()
             {
@@ -217,7 +226,8 @@ public sealed class AdminNavigationLogic
                     Id = Id,
                     Label = Label,
                     Icon = Icon,
-                    Href = href
+                    Href = landingPage?.Href,
+                    IsHostedByModule = landingPage?.IsHostedByModule ?? false
                 },
                 Sections = sections
             };

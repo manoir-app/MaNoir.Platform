@@ -111,6 +111,8 @@ export interface AdminNavigationDomainSummary {
   label: string;
   icon: string;
   href?: string | null;
+  /** The page belongs to a module's own Admin UI: only a full page load reaches it. */
+  isHostedByModule: boolean;
 }
 
 export interface AdminNavigationDomainsResponse {
@@ -126,6 +128,8 @@ export interface AdminNavigationPage {
   icon?: string | null;
   label: string;
   href: string;
+  /** The page belongs to a module's own Admin UI: only a full page load reaches it. */
+  isHostedByModule: boolean;
 }
 
 export interface AdminNavigationSection {

@@ -60,6 +60,7 @@ export function useAuthenticatedLayoutViewModel() {
       label: t('domains.settings.label'),
       icon: 'settings',
       href: '/platform',
+      isHostedByModule: false,
     },
   ];
 
@@ -72,7 +73,7 @@ export function useAuthenticatedLayoutViewModel() {
 
   const domainTabItems = visibleDomains.map((item) => {
     const href = item.href ?? undefined;
-    const isExternal = Boolean(href && /^https?:\/\//i.test(href));
+    const isExternal = leavesThisApp(href, item.isHostedByModule);
 
     return {
       id: item.id,
@@ -92,12 +93,12 @@ export function useAuthenticatedLayoutViewModel() {
     id: section.id,
     title: section.label,
     items: section.pages.map((page) => {
-      const isExternal = /^https?:\/\//i.test(page.href);
+      const isExternal = leavesThisApp(page.href, page.isHostedByModule);
       return {
         id: page.id,
         iconKind: page.icon ?? page.name,
         label: page.label,
-        active: isActivePath(location.pathname, page.href),
+        active: !isExternal && isActivePath(location.pathname, page.href),
         href: isExternal ? page.href : undefined,
         onClick: !isExternal ? () => {
           void navigate(page.href);
@@ -125,9 +126,14 @@ export function useAuthenticatedLayoutViewModel() {
   };
 }
 
+// Links that this router cannot serve are followed by the browser: other sites and the modules' own Admin UIs.
+function leavesThisApp(href: string | null | undefined, isHostedByModule: boolean) {
+  return Boolean(href && (isHostedByModule || /^https?:\/\//i.test(href)));
+}
+
 function containsPath(domain: AdminNavigationDomainSummary, menu: AdminDomainNavigationResponse | undefined, path: string) {
-  return isActivePath(path, domain.href)
-    || Boolean(menu?.sections.some((section) => section.pages.some((page) => isActivePath(path, page.href))));
+  return (!domain.isHostedByModule && isActivePath(path, domain.href))
+    || Boolean(menu?.sections.some((section) => section.pages.some((page) => !page.isHostedByModule && isActivePath(path, page.href))));
 }
 
 function isActivePath(currentPath: string, href?: string | null) {

@@ -69,6 +69,7 @@ public sealed partial class ContributionLogic
                 DependencyRepositoryUrls = plugin.DependencyRepositoryUrls == null
                     ? []
                     : [.. plugin.DependencyRepositoryUrls],
+                AdminUiPathPrefix = plugin.AdminUiPathPrefix,
                 IsEnabled = plugin.IsEnabled,
                 IsHealthy = plugin.IsHealthy,
                 InstalledAtUtc = plugin.InstalledAtUtc,
@@ -192,6 +193,8 @@ public sealed partial class ContributionLogic
                 .Select(NormalizeRepositoryUrl)
                 .Where(repositoryUrl => repositoryUrl != null)
                 .Distinct(StringComparer.OrdinalIgnoreCase)];
+        // Not inherited from the previous publication: an Admin UI moved back to the site root publishes none.
+        plugin.AdminUiPathPrefix = AdminUiPublicPath.Normalize(plugin.AdminUiPathPrefix);
         plugin.InstalledAtUtc = existingPlugin?.InstalledAtUtc == default || existingPlugin == null
             ? (plugin.InstalledAtUtc == default ? now : plugin.InstalledAtUtc)
             : existingPlugin.InstalledAtUtc;

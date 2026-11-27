@@ -255,7 +255,8 @@ public sealed class AdminUiPageDefinition
     public string Icon { get; set; }
 
     /// <summary>
-    /// Gets or sets the page route relative to the Admin UI host.
+    /// Gets or sets the page route relative to the Admin UI host, without its deployment base path:
+    /// the navigation adds the one the plugin is published under.
     /// </summary>
     public string RelativePath { get; set; }
 

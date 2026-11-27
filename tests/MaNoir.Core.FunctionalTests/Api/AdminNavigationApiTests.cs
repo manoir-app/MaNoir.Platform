@@ -185,6 +185,47 @@ public sealed class AdminNavigationApiTests
         CollectionAssert.AreEqual(new[] { "today", "kitchen" }, reloadedPlugin.Contributions[0].AdminUi.Domains);
     }
 
+    [TestMethod]
+    [TestCategory("Functional")]
+    public async Task PublishPluginDescriptor_ShouldRecordTheBasePathGivenToThePublishingProcess()
+    {
+        await using MongoDbFunctionalTestHost mongoHost = new MongoDbFunctionalTestHost();
+        await mongoHost.StartAsync();
+        using ProcessEnvironmentVariableScope mongoScope = new("MONGODB_CONNECTIONSTRING", mongoHost.ConnectionString);
+        PluginDescriptor descriptor = new PluginDescriptor()
+        {
+            Id = "meals",
+            Label = "Meals",
+            Contributions =
+            [
+                new ContributionDefinition()
+                {
+                    Id = "meals.admin.pages",
+                    Kind = ContributionKind.AdminUiPage,
+                    Label = "Meals admin",
+                    AdminUi = new AdminUiContributionDefinitionData()
+                    {
+                        Domains = ["kitchen"],
+                        Pages = [new AdminUiPageDefinition() { Category = "Overview", Name = "Menu", RelativePath = "/menu" }]
+                    }
+                }
+            ]
+        };
+
+        using (new ProcessEnvironmentVariableScope("MANOIR_ADMINUI_PUBLIC_BASE_PATH", "/meals-app/"))
+            await new PluginRegistrationLogic().PublishPluginDescriptorAsync(descriptor);
+        AdminDomainNavigationResponse deployed = await new AdminNavigationLogic().GetDomainAsync("root", "kitchen");
+
+        using (new ProcessEnvironmentVariableScope("MANOIR_ADMINUI_PUBLIC_BASE_PATH", null))
+            await new PluginRegistrationLogic().PublishPluginDescriptorAsync(descriptor);
+        AdminDomainNavigationResponse local = await new AdminNavigationLogic().GetDomainAsync("root", "kitchen");
+
+        Assert.AreEqual("/meals-app/menu", deployed.Domain.Href);
+        Assert.IsTrue(deployed.Domain.IsHostedByModule);
+        Assert.AreEqual("/menu", local.Domain.Href);
+        Assert.IsFalse(local.Domain.IsHostedByModule);
+    }
+
     private static async Task PublishCatalogsAsync()
     {
         ContributionLogic contributionLogic = new ContributionLogic();

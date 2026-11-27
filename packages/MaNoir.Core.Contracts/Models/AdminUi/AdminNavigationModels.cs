@@ -21,6 +21,12 @@ public sealed class AdminNavigationDomainSummary
     public string Icon { get; set; }
 
     public string Href { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether <see cref="Href"/> belongs to a module's own Admin UI,
+    /// which a client reaches with a full page load.
+    /// </summary>
+    public bool IsHostedByModule { get; set; }
 }
 
 public sealed class AdminDomainNavigationResponse
@@ -56,4 +62,10 @@ public sealed class AdminNavigationPage
     public string Label { get; set; }
 
     public string Href { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether <see cref="Href"/> belongs to a module's own Admin UI,
+    /// which a client reaches with a full page load.
+    /// </summary>
+    public bool IsHostedByModule { get; set; }
 }
