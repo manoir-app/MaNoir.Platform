@@ -31,6 +31,15 @@ The main GitHub workflow is `build` in `.github/workflows/build.yml`.
 
 This strategy keeps continuous builds on `main`, then promotes a stable version without any additional commit.
 
+## Tests
+
+```bash
+dotnet test tests/MaNoir.Core.UnitTests/MaNoir.Core.UnitTests.csproj
+dotnet test tests/MaNoir.Core.FunctionalTests/MaNoir.Core.FunctionalTests.csproj
+```
+
+The functional tests need a running Docker engine: they start their own MongoDB, NATS and Mosquitto containers, so no local broker or database is required. The first run downloads the images. A container that is not ready within 60 seconds fails its test. The build workflow runs the unit tests only.
+
 ## Publishing
 
 ### NuGet

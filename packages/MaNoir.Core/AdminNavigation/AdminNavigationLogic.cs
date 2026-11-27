@@ -4,9 +4,7 @@ using MaNoir.Core.Contracts.Models.AdminUi;
 using MaNoir.Core.Contracts.Models.Contributions;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,7 +32,7 @@ public sealed class AdminNavigationLogic
     /// </summary>
     public async Task<AdminDomainNavigationResponse> GetDomainAsync(string userId, string domainId, CancellationToken cancellationToken = default)
     {
-        string normalizedDomainId = NormalizeDomainId(domainId);
+        string normalizedDomainId = ApplicationDomains.Resolve(domainId)?.Id;
         if (normalizedDomainId == null)
             return null;
 
@@ -46,30 +44,51 @@ public sealed class AdminNavigationLogic
     {
         ContributionLogic contributionLogic = new ContributionLogic();
         AuthorizationLogic authorizationLogic = new AuthorizationLogic();
-        List<InstalledPlugin> plugins = await contributionLogic.GetInstalledPluginsByContributionKindAsync(ContributionKind.AdminUiPage, cancellationToken);
+        List<InstalledPlugin> plugins = await contributionLogic.GetInstalledPluginsAsync(cancellationToken);
+
+        return await ComposeNavigationAsync(plugins, contribution => HasAccessAsync(userId, contribution, authorizationLogic, cancellationToken));
+    }
+
+    /// <summary>
+    /// Composes the domain navigation from the installed plugins.
+    /// A contribution is exposed in each of its domains when its required plugins are available and the access check succeeds.
+    /// </summary>
+    internal static async Task<List<AdminDomainNavigationResponse>> ComposeNavigationAsync(
+        IReadOnlyCollection<InstalledPlugin> plugins,
+        Func<ContributionDefinition, Task<bool>> hasAccessAsync)
+    {
+        HashSet<string> availablePluginIds = new(
+            plugins.Where(plugin => plugin?.Id != null && plugin.IsEnabled && plugin.IsHealthy).Select(plugin => plugin.Id),
+            StringComparer.OrdinalIgnoreCase);
         Dictionary<string, DomainBuilder> domainsById = new(StringComparer.OrdinalIgnoreCase);
 
-        foreach (InstalledPlugin plugin in plugins)
+        foreach (InstalledPlugin plugin in plugins.Where(plugin => plugin?.Contributions != null))
         {
-            foreach (ContributionDefinition contribution in plugin.Contributions.Where(contribution => contribution?.AdminUi != null))
+            IEnumerable<ContributionDefinition> adminUiContributions = plugin.Contributions
+                .Where(contribution => contribution?.Kind == ContributionKind.AdminUiPage && contribution.AdminUi != null)
+                .OrderBy(contribution => contribution.Id, StringComparer.OrdinalIgnoreCase);
+
+            foreach (ContributionDefinition contribution in adminUiContributions)
             {
-                if (!await CanExposeContributionAsync(userId, contribution, authorizationLogic, cancellationToken))
+                if (!AreRequirementsMet(contribution, availablePluginIds) || !await hasAccessAsync(contribution))
                     continue;
 
-                AdminDomainMetadata metadata = ResolveDomainMetadata(contribution.AdminUi.Domain);
-                if (!domainsById.TryGetValue(metadata.Id, out DomainBuilder domain))
+                foreach (ApplicationDomain applicationDomain in ApplicationDomains.ResolveAll(contribution.AdminUi.Domains))
                 {
-                    domain = new DomainBuilder(metadata);
-                    domainsById.Add(metadata.Id, domain);
-                }
+                    if (!domainsById.TryGetValue(applicationDomain.Id, out DomainBuilder domain))
+                    {
+                        domain = new DomainBuilder(applicationDomain);
+                        domainsById.Add(applicationDomain.Id, domain);
+                    }
 
-                foreach (AdminUiPageDefinition page in contribution.AdminUi.Pages ?? [])
-                {
-                    string href = ResolvePageHref(page);
-                    if (page == null || string.IsNullOrWhiteSpace(href))
-                        continue;
+                    foreach (AdminUiPageDefinition page in contribution.AdminUi.Pages ?? [])
+                    {
+                        string href = ResolvePageHref(page);
+                        if (page == null || string.IsNullOrWhiteSpace(href))
+                            continue;
 
-                    domain.AddPage(plugin, contribution, page, href);
+                        domain.AddPage(plugin, contribution, page, href);
+                    }
                 }
             }
         }
@@ -81,11 +100,15 @@ public sealed class AdminNavigationLogic
             .Select(domain => domain.Build())];
     }
 
-    private static async Task<bool> CanExposeContributionAsync(string userId, ContributionDefinition contribution, AuthorizationLogic authorizationLogic, CancellationToken cancellationToken)
+    private static bool AreRequirementsMet(ContributionDefinition contribution, HashSet<string> availablePluginIds)
     {
-        if (contribution?.AdminUi == null)
-            return false;
+        return (contribution.Requires ?? [])
+            .Where(pluginId => !string.IsNullOrWhiteSpace(pluginId))
+            .All(pluginId => availablePluginIds.Contains(pluginId.Trim()));
+    }
 
+    private static async Task<bool> HasAccessAsync(string userId, ContributionDefinition contribution, AuthorizationLogic authorizationLogic, CancellationToken cancellationToken)
+    {
         if (string.IsNullOrWhiteSpace(contribution.AdminUi.AccessZoneId))
             return true;
 
@@ -93,58 +116,6 @@ public sealed class AdminNavigationLogic
             return false;
 
         return await authorizationLogic.HasAccessAsync(userId, contribution.AdminUi.AccessZoneId, contribution.AdminUi.RequiredAccessLevel, cancellationToken);
-    }
-
-    private static AdminDomainMetadata ResolveDomainMetadata(string domain)
-    {
-        string normalizedDomainId = NormalizeDomainId(domain);
-
-        return normalizedDomainId switch
-        {
-            "platform" => new AdminDomainMetadata("platform", "Platform", "platform", 0),
-            "home-automation" => new AdminDomainMetadata("home-automation", "Home Automation", "home-automation", 100),
-            "daily-life" => new AdminDomainMetadata("daily-life", "Vie quotidienne", "daily-life", 200),
-            _ => new AdminDomainMetadata(normalizedDomainId ?? "general", string.IsNullOrWhiteSpace(domain) ? "General" : domain.Trim(), "generic", 500)
-        };
-    }
-
-    private static string NormalizeDomainId(string domain)
-    {
-        if (string.IsNullOrWhiteSpace(domain))
-            return null;
-
-        string trimmedDomain = domain.Trim();
-        string alias = trimmedDomain.ToLowerInvariant() switch
-        {
-            "core" => "platform",
-            "general" => "platform",
-            _ => trimmedDomain
-        };
-
-        StringBuilder builder = new();
-        bool previousWasSeparator = false;
-
-        foreach (char character in alias.Normalize(NormalizationForm.FormD))
-        {
-            UnicodeCategory category = CharUnicodeInfo.GetUnicodeCategory(character);
-            if (category == UnicodeCategory.NonSpacingMark)
-                continue;
-
-            if (char.IsLetterOrDigit(character))
-            {
-                builder.Append(char.ToLowerInvariant(character));
-                previousWasSeparator = false;
-                continue;
-            }
-
-            if (!previousWasSeparator && builder.Length > 0)
-            {
-                builder.Append('-');
-                previousWasSeparator = true;
-            }
-        }
-
-        return builder.ToString().Trim('-');
     }
 
     private static string ResolvePageLabel(AdminUiPageDefinition page)
@@ -177,19 +148,17 @@ public sealed class AdminNavigationLogic
         return string.IsNullOrWhiteSpace(match.Value) ? null : match.Value;
     }
 
-    private sealed record AdminDomainMetadata(string Id, string Label, string Icon, int Order);
-
     private sealed class DomainBuilder
     {
         private readonly Dictionary<string, SectionBuilder> _sectionsById = new(StringComparer.OrdinalIgnoreCase);
         private readonly List<SectionBuilder> _sections = [];
 
-        public DomainBuilder(AdminDomainMetadata metadata)
+        public DomainBuilder(ApplicationDomain domain)
         {
-            Id = metadata.Id;
-            Label = metadata.Label;
-            Icon = metadata.Icon;
-            Order = metadata.Order;
+            Id = domain.Id;
+            Label = domain.Label;
+            Icon = domain.Icon;
+            Order = domain.Order;
         }
 
         public string Id { get; }
@@ -205,7 +174,7 @@ public sealed class AdminNavigationLogic
         public void AddPage(InstalledPlugin plugin, ContributionDefinition contribution, AdminUiPageDefinition page, string href)
         {
             string category = string.IsNullOrWhiteSpace(page.Category) ? "General" : page.Category.Trim();
-            string sectionId = NormalizeDomainId(category) ?? "general";
+            string sectionId = ApplicationDomains.Slugify(category) ?? "general";
             if (!_sectionsById.TryGetValue(sectionId, out SectionBuilder section))
             {
                 section = new SectionBuilder(sectionId, category);
@@ -215,7 +184,7 @@ public sealed class AdminNavigationLogic
 
             section.Pages.Add(new AdminNavigationPage()
             {
-                Id = string.Concat(contribution.Id, ":", NormalizeDomainId(page.Name) ?? "page"),
+                Id = string.Concat(contribution.Id, ":", ApplicationDomains.Slugify(page.Name) ?? "page"),
                 ContributionId = contribution.Id,
                 PluginId = plugin.Id,
                 Category = category,

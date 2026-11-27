@@ -14,6 +14,14 @@ namespace MaNoir.Core.FunctionalTests.Mqtt;
 [DoNotParallelize]
 public sealed class MqttDataPublisherFunctionalTests
 {
+    // The connection is shared by the whole process: tests that publish indirectly leave it open on another
+    // broker, and Start() would then silently reuse it instead of reaching the test container.
+    [TestInitialize]
+    public void ResetSharedConnection()
+    {
+        MqttDataPublisher.Stop();
+    }
+
     [TestMethod]
     [TestCategory("Functional")]
     public async Task PublishMeshProperty_ShouldPublishToMosquittoBroker()

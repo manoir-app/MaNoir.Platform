@@ -45,7 +45,7 @@ public sealed class ContributionPersistenceTests
                 Tags = ["lighting", "home-automation"],
                 Integration = new IntegrationContributionDefinitionData()
                 {
-                    Domain = "DailyLife",
+                    Domains = ["DailyLife"],
                     Category = "HouseKeepingService",
                     ServiceDependencyKind = IntegrationServiceDependencyKind.Cloud,
                     RequiresExternalSubscription = true,
@@ -83,7 +83,7 @@ public sealed class ContributionPersistenceTests
                 CanCreateInstances = false,
                 AdminUi = new AdminUiContributionDefinitionData()
                 {
-                    Domain = "Core",
+                    Domains = ["Core"],
                     AccessZoneId = "core.admin-ui.sarah",
                     RequiredAccessLevel = AccessLevel.Read,
                     Pages =
@@ -119,7 +119,7 @@ public sealed class ContributionPersistenceTests
         Assert.IsFalse(string.IsNullOrWhiteSpace(reloadedPlugin.LastPublishedCatalogFingerprint));
         Assert.AreEqual(2, reloadedPlugin.Contributions.Count);
         Assert.AreEqual(2, definitions.Count);
-        Assert.AreEqual("DailyLife", integrationDefinition.Integration.Domain);
+        CollectionAssert.AreEqual(new[] { "DailyLife" }, integrationDefinition.Integration.Domains);
         Assert.AreEqual("HouseKeepingService", integrationDefinition.Integration.Category);
         Assert.AreEqual(IntegrationServiceDependencyKind.Cloud, integrationDefinition.Integration.ServiceDependencyKind);
         Assert.IsTrue(integrationDefinition.Integration.RequiresExternalSubscription);
@@ -127,7 +127,7 @@ public sealed class ContributionPersistenceTests
         Assert.AreEqual(2, integrationDefinition.Integration.PublishedEntityKinds.Count);
         Assert.AreEqual("Ampoules et luminaires pilotables.", integrationDefinition.Integration.PublishedEntityKinds.Single(entityKind => entityKind.Kind == "light").Descriptions["fr-FR"]);
         Assert.AreEqual("sarah", adminUiDefinition.PluginId);
-        Assert.AreEqual("Core", adminUiDefinition.AdminUi.Domain);
+        CollectionAssert.AreEqual(new[] { "Core" }, adminUiDefinition.AdminUi.Domains);
         Assert.AreEqual("core.admin-ui.sarah", adminUiDefinition.AdminUi.AccessZoneId);
         Assert.AreEqual(AccessLevel.Read, adminUiDefinition.AdminUi.RequiredAccessLevel);
         Assert.AreEqual(1, adminUiDefinition.AdminUi.Pages.Count);
@@ -156,7 +156,7 @@ public sealed class ContributionPersistenceTests
                 CanCreateInstances = true,
                 Integration = new IntegrationContributionDefinitionData()
                 {
-                    Domain = "DailyLife",
+                    Domains = ["DailyLife"],
                     Category = "HouseKeepingService",
                     ServiceDependencyKind = IntegrationServiceDependencyKind.Cloud,
                     RequiresExternalSubscription = true,
@@ -176,12 +176,12 @@ public sealed class ContributionPersistenceTests
                     ]
                 }
             },
-            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domain = "Core" } }
+            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domains = ["Core"] } }
         ]);
 
         InstalledPlugin sameCatalogPlugin = await logic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "sarah", Label = "Sarah", Version = "1.0.0" },
         [
-            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domain = "Core" } },
+            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domains = ["Core"] } },
             new ContributionDefinition()
             {
                 Id = "sarah.hue",
@@ -190,7 +190,7 @@ public sealed class ContributionPersistenceTests
                 CanCreateInstances = true,
                 Integration = new IntegrationContributionDefinitionData()
                 {
-                    Domain = "DailyLife",
+                    Domains = ["DailyLife"],
                     Category = "HouseKeepingService",
                     ServiceDependencyKind = IntegrationServiceDependencyKind.Cloud,
                     RequiresExternalSubscription = true,
@@ -214,7 +214,7 @@ public sealed class ContributionPersistenceTests
 
         InstalledPlugin changedCatalogPlugin = await logic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "sarah", Label = "Sarah", Version = "1.0.0" },
         [
-            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domain = "Core", Pages = [ new AdminUiPageDefinition() { Category = "General", Name = "Dashboard", Url = "/admin/core/sarah/dashboard" } ] } },
+            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domains = ["Core"], Pages = [ new AdminUiPageDefinition() { Category = "General", Name = "Dashboard", Url = "/admin/core/sarah/dashboard" } ] } },
             new ContributionDefinition()
             {
                 Id = "sarah.hue",
@@ -223,7 +223,7 @@ public sealed class ContributionPersistenceTests
                 CanCreateInstances = true,
                 Integration = new IntegrationContributionDefinitionData()
                 {
-                    Domain = "DailyLife",
+                    Domains = ["DailyLife"],
                     Category = "HouseKeepingService",
                     ServiceDependencyKind = IntegrationServiceDependencyKind.Cloud,
                     RequiresExternalSubscription = true,
@@ -262,7 +262,7 @@ public sealed class ContributionPersistenceTests
         await logic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "sarah", Label = "Sarah" },
         [
             new ContributionDefinition() { Id = "sarah.hue", Kind = ContributionKind.Integration, Label = "Hue", CanCreateInstances = true },
-            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domain = "Core" } }
+            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domains = ["Core"] } }
         ]);
 
         await logic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "erza", Label = "Erza" },
@@ -272,7 +272,7 @@ public sealed class ContributionPersistenceTests
 
         await logic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "aurore", Label = "Aurore" },
         [
-            new ContributionDefinition() { Id = "aurore.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domain = "Daily" } }
+            new ContributionDefinition() { Id = "aurore.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domains = ["Daily"] } }
         ]);
 
         List<InstalledPlugin> integrationPlugins = await logic.GetInstalledPluginsByContributionKindAsync(ContributionKind.Integration);
@@ -414,7 +414,7 @@ public sealed class ContributionPersistenceTests
         await logic.PublishPluginCatalogAsync(new InstalledPlugin() { Id = "sarah", Label = "Sarah" },
         [
             new ContributionDefinition() { Id = "sarah.hue", Kind = ContributionKind.Integration, Label = "Hue", CanCreateInstances = true, CanInstallMultipleTimes = false },
-            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domain = "Core" } }
+            new ContributionDefinition() { Id = "sarah.admin.pages", Kind = ContributionKind.AdminUiPage, Label = "Admin", CanCreateInstances = false, AdminUi = new AdminUiContributionDefinitionData() { Domains = ["Core"] } }
         ]);
 
         ContributionInstance firstInstance = await logic.UpsertContributionInstanceAsync(new ContributionInstance()

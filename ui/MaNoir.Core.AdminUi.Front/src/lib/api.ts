@@ -146,9 +146,14 @@ export interface ContributionDefinitionModel {
   label?: string | null;
   description?: string | null;
   tags: string[];
+  /** Ids of the plugins that must be installed, enabled and healthy for this contribution to be exposed. */
+  requires?: string[] | null;
+  adminUi?: { domains: string[] } | null;
+  integration?: { domains: string[] } | null;
 }
 
 export interface InstalledPluginModel {
+  /** The identifier that other contributions name in their `requires` list. */
   id: string;
   label?: string | null;
   version?: string | null;

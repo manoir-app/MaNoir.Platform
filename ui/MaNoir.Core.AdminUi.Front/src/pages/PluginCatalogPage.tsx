@@ -1,16 +1,30 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { catalogDomains, pluginCatalog, type CatalogPlugin } from '../data/pluginCatalog';
-import { getInstalledPlugins, getPluginInstallationStatus, installPlugin, validatePluginRepository, type PluginRepositoryValidationModel } from '../lib/api';
+import { PluginRequirements } from '../components/PluginRequirements';
+import { catalogGroups, pluginCatalog, type CatalogPlugin } from '../data/pluginCatalog';
+import { getInstalledPlugins, getPluginInstallationStatus, installPlugin, validatePluginRepository, type InstalledPluginModel, type PluginRepositoryValidationModel } from '../lib/api';
 import { Button } from '@manoir-app/core-admin-ui-kit/button';
 import { PageHeader } from '@manoir-app/core-admin-ui-kit/page-header';
 
+// An installed plugin is matched on its repository URL, or on its id when it declares none.
+function isSamePlugin(catalogPlugin: CatalogPlugin, installedPlugin: InstalledPluginModel) {
+  const installedRepositoryUrl = normalizeRepositoryUrl(installedPlugin.repositoryUrl);
+  return installedRepositoryUrl
+    ? installedRepositoryUrl === normalizeRepositoryUrl(catalogPlugin.repositoryUrl)
+    : installedPlugin.id.trim().toLocaleLowerCase() === catalogPlugin.id.toLocaleLowerCase();
+}
+
+function normalizeRepositoryUrl(repositoryUrl?: string | null) {
+  return repositoryUrl?.trim().replace(/\/+$/, '').toLocaleLowerCase();
+}
+
 export function PluginCatalogPage() {
   const { t } = useTranslation();
-  const [activeDomain, setActiveDomain] = useState('all');
+  const [activeGroup, setActiveGroup] = useState('all');
   const [query, setQuery] = useState('');
   const [selectedPlugin, setSelectedPlugin] = useState<CatalogPlugin | null>(null);
-  const [installedPluginKeys, setInstalledPluginKeys] = useState<Set<string>>(new Set());
+  // Null until the installed list is known, so that no requirement is reported as unsatisfied by mistake.
+  const [installedPlugins, setInstalledPlugins] = useState<InstalledPluginModel[] | null>(null);
   const [repositoryValidation, setRepositoryValidation] = useState<PluginRepositoryValidationModel | null>(null);
   const [isValidatingRepository, setIsValidatingRepository] = useState(false);
   const [isInstallingPlugin, setIsInstallingPlugin] = useState(false);
@@ -21,12 +35,7 @@ export function PluginCatalogPage() {
     let isCancelled = false;
     void getInstalledPlugins()
       .then((plugins) => {
-        if (!isCancelled) {
-          setInstalledPluginKeys(new Set(plugins.map((plugin) => {
-            const repositoryUrl = plugin.repositoryUrl?.trim().replace(/\/+$/, '').toLocaleLowerCase();
-            return repositoryUrl || plugin.id.trim().toLocaleLowerCase();
-          })));
-        }
+        if (!isCancelled) setInstalledPlugins(plugins);
       })
       .catch(() => {
         // The catalog remains usable when the installed-plugin endpoint is unavailable.
@@ -72,11 +81,11 @@ export function PluginCatalogPage() {
   const visiblePlugins = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase();
     return pluginCatalog.filter((plugin) => {
-      const matchesDomain = activeDomain === 'all' || plugin.domain === activeDomain;
+      const matchesGroup = activeGroup === 'all' || plugin.catalogGroup === activeGroup;
       const searchableText = [plugin.displayName, plugin.description, ...plugin.tags].join(' ').toLocaleLowerCase();
-      return matchesDomain && (!normalizedQuery || searchableText.includes(normalizedQuery));
+      return matchesGroup && (!normalizedQuery || searchableText.includes(normalizedQuery));
     });
-  }, [activeDomain, query]);
+  }, [activeGroup, query]);
 
   async function handleInstallPlugin() {
     const repositoryUrl = selectedPlugin?.repositoryUrl?.trim();
@@ -95,11 +104,7 @@ export function PluginCatalogPage() {
         const status = await getPluginInstallationStatus(response.operationId);
         setInstallationMessage(status.message ?? status.step ?? response.message ?? t('extensions.catalog.installDialog.accepted'));
         if (status.status === 'completed') {
-          const installedPlugins = await getInstalledPlugins();
-          setInstalledPluginKeys(new Set(installedPlugins.map((plugin) => {
-            const installedRepositoryUrl = plugin.repositoryUrl?.trim().replace(/\/+$/, '').toLocaleLowerCase();
-            return installedRepositoryUrl || plugin.id.trim().toLocaleLowerCase();
-          })));
+          setInstalledPlugins(await getInstalledPlugins());
           setSelectedPlugin(null);
           return;
         }
@@ -133,18 +138,18 @@ export function PluginCatalogPage() {
             placeholder={t('extensions.catalog.searchPlaceholder')}
           />
         </label>
-        <div className="front-extensions-tabs" role="tablist" aria-label={t('extensions.catalog.domainsLabel')}>
-          {catalogDomains.map((domain) => (
+        <div className="front-extensions-tabs" role="tablist" aria-label={t('extensions.catalog.groupsLabel')}>
+          {catalogGroups.map((group) => (
             <button
-              className={`front-extensions-tab ${activeDomain === domain ? 'front-extensions-tab-active' : ''}`}
-              key={domain}
-              onClick={() => setActiveDomain(domain)}
+              className={`front-extensions-tab ${activeGroup === group ? 'front-extensions-tab-active' : ''}`}
+              key={group}
+              onClick={() => setActiveGroup(group)}
               role="tab"
-              aria-selected={activeDomain === domain}
+              aria-selected={activeGroup === group}
               type="button"
             >
-              {t(`extensions.domains.${domain}` as never)}
-              <span>{domain === 'all' ? pluginCatalog.length : pluginCatalog.filter((plugin) => plugin.domain === domain).length}</span>
+              {t(`extensions.catalogGroups.${group}` as never)}
+              <span>{group === 'all' ? pluginCatalog.length : pluginCatalog.filter((plugin) => plugin.catalogGroup === group).length}</span>
             </button>
           ))}
         </div>
@@ -153,8 +158,12 @@ export function PluginCatalogPage() {
       <section className="front-plugin-list" aria-live="polite">
         {installationMessage && !selectedPlugin && <p className="front-plugin-repository-status">{installationMessage}</p>}
         {visiblePlugins.map((plugin, index) => {
-          const catalogKey = plugin.repositoryUrl?.trim().replace(/\/+$/, '').toLocaleLowerCase();
-          const isInstalled = Boolean(catalogKey && installedPluginKeys.has(catalogKey)) || installedPluginKeys.has(plugin.id.toLocaleLowerCase());
+          const installedPlugin = installedPlugins?.find((candidate) => isSamePlugin(plugin, candidate));
+          const isInstalled = Boolean(installedPlugin);
+          const requiredPluginIds = [...new Set([
+            ...(plugin.requires ?? []),
+            ...(installedPlugin?.contributions.flatMap((contribution) => contribution.requires ?? []) ?? []),
+          ])];
           const hasRepositoryUrl = Boolean(plugin.repositoryUrl?.trim());
           return (
             <article className="front-plugin-row" key={plugin.id}>
@@ -167,10 +176,15 @@ export function PluginCatalogPage() {
                 </div>
                 <p>{plugin.description}</p>
                 <div className="front-plugin-meta">
-                  <span>{t(`extensions.domains.${plugin.domain}` as never)}</span>
+                  <span>{t(`extensions.catalogGroups.${plugin.catalogGroup}` as never)}</span>
                   <span>{t(`extensions.categories.${plugin.category}` as never)}</span>
                   <span>{plugin.version}</span>
                 </div>
+                {installedPlugins && requiredPluginIds.length > 0 && (
+                  <div className="front-plugin-requirements">
+                    <PluginRequirements installedPlugins={installedPlugins} requiredPluginIds={requiredPluginIds} />
+                  </div>
+                )}
               </div>
               {isInstalled ? (
                 <span className="front-plugin-action-note">{t('extensions.catalog.installed')}</span>
