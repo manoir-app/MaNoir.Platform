@@ -74,6 +74,66 @@ public sealed class AdminNavigationCompositionTests
         Assert.AreEqual(0, navigation.Count);
     }
 
+    [TestMethod]
+    [DataRow("/home-automation", "/overview", "/home-automation/overview")]
+    [DataRow("home-automation/", "overview", "/home-automation/overview")]
+    [DataRow("/inventory", "/inventory/overview", "/inventory/overview")]
+    [DataRow("/inventory", "/inventory", "/inventory")]
+    [DataRow("/home", "/homework", "/home/homework")]
+    public async Task ComposeNavigation_ShouldPlaceModulePagesUnderTheirPublicBasePath(string basePath, string relativePath, string expectedHref)
+    {
+        InstalledPlugin plugin = CreatePlugin("meals", ["kitchen"]);
+        plugin.AdminUiPathPrefix = basePath;
+        plugin.Contributions[0].AdminUi.Pages[0].RelativePath = relativePath;
+
+        AdminDomainNavigationResponse domain = (await ComposeAsync(plugin)).Single();
+
+        Assert.AreEqual(expectedHref, domain.Sections.Single().Pages.Single().Href);
+        Assert.IsTrue(domain.Sections.Single().Pages.Single().IsHostedByModule);
+        Assert.AreEqual(expectedHref, domain.Domain.Href);
+        Assert.IsTrue(domain.Domain.IsHostedByModule);
+    }
+
+    [TestMethod]
+    [DataRow(null)]
+    [DataRow("/")]
+    public async Task ComposeNavigation_ShouldKeepPagesOfPluginsServedFromTheRoot(string basePath)
+    {
+        InstalledPlugin plugin = CreatePlugin("meals", ["kitchen"]);
+        plugin.AdminUiPathPrefix = basePath;
+
+        AdminNavigationPage page = (await ComposeAsync(plugin)).Single().Sections.Single().Pages.Single();
+
+        Assert.AreEqual("/meals", page.Href);
+        Assert.IsFalse(page.IsHostedByModule);
+    }
+
+    [TestMethod]
+    public async Task ComposeNavigation_ShouldNotPrefixPagesDeclaredWithAUrl()
+    {
+        InstalledPlugin plugin = CreatePlugin("core", ["settings"]);
+        plugin.AdminUiPathPrefix = "/platform";
+        plugin.Contributions[0].AdminUi.Pages = [new AdminUiPageDefinition() { Category = "Overview", Name = "Status", Url = "/status" }];
+
+        AdminNavigationPage page = (await ComposeAsync(plugin)).Single().Sections.Single().Pages.Single();
+
+        Assert.AreEqual("/status", page.Href);
+        Assert.IsFalse(page.IsHostedByModule);
+    }
+
+    [TestMethod]
+    public async Task ComposeNavigation_ShouldOpenADomainOnACorePageWhenItHasOne()
+    {
+        InstalledPlugin module = CreatePlugin("meals", ["settings"]);
+        module.AdminUiPathPrefix = "/meals-app";
+        InstalledPlugin core = CreatePlugin("core", ["settings"]);
+
+        AdminDomainNavigationResponse domain = (await ComposeAsync(module, core)).Single();
+
+        Assert.AreEqual("/core", domain.Domain.Href);
+        Assert.IsFalse(domain.Domain.IsHostedByModule);
+    }
+
     private static Task<List<AdminDomainNavigationResponse>> ComposeAsync(params InstalledPlugin[] plugins)
     {
         return AdminNavigationLogic.ComposeNavigationAsync(plugins, _ => Task.FromResult(true));

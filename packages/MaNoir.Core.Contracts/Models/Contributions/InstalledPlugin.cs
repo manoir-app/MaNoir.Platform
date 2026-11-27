@@ -58,6 +58,12 @@ public sealed class InstalledPlugin
     public List<string> DependencyRepositoryUrls { get; set; }
 
     /// <summary>
+    /// Gets or sets the public base path under which the plugin's Admin UI is deployed, for example "/home-automation".
+    /// Null when it is served from the site root.
+    /// </summary>
+    public string AdminUiPathPrefix { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether the plugin is enabled locally.
     /// </summary>
     public bool IsEnabled { get; set; }
@@ -168,6 +174,12 @@ public sealed class PluginDescriptor
     /// Gets or sets the repository URLs of the parent plugin catalogs this plugin depends on.
     /// </summary>
     public List<string> DependencyRepositoryUrls { get; set; }
+
+    /// <summary>
+    /// Gets or sets the public base path under which the plugin's Admin UI is deployed.
+    /// Leave it null to use the value Gaia gives the publishing process (MANOIR_ADMINUI_PUBLIC_BASE_PATH).
+    /// </summary>
+    public string AdminUiPathPrefix { get; set; }
 
     /// <summary>
     /// Gets or sets the contributions published by this plugin.

@@ -49,7 +49,10 @@ public sealed class PluginRegistrationLogic
             Description = pluginDescriptor.Description,
             Publisher = pluginDescriptor.Publisher,
             RepositoryUrl = pluginDescriptor.RepositoryUrl,
-            DependencyRepositoryUrls = pluginDescriptor.DependencyRepositoryUrls
+            DependencyRepositoryUrls = pluginDescriptor.DependencyRepositoryUrls,
+            // A plugin publishes from the process that serves its Admin UI, which knows where it is deployed.
+            AdminUiPathPrefix = pluginDescriptor.AdminUiPathPrefix
+                ?? Environment.GetEnvironmentVariable(AdminUiPublicPath.EnvironmentVariableName)
         }, pluginDescriptor.Contributions, cancellationToken);
 
         await new AuthorizationLogic().PublishAccessZoneDefinitionsAsync(pluginDescriptor.Id, pluginDescriptor.AccessZones, cancellationToken);
